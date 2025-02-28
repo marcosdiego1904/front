@@ -12,26 +12,10 @@ const Categories = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState<{ id: number; name: string } | null>(null);
   const [verses, setVerses] = useState<{ id: number; text_nlt: string; verse_reference: string; context_nlt: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  // Add this function to safely format image filenames
-  const getImageFileName = (categoryName: string) => {
-    // Replace ampersands and other special characters
-    const formattedName = categoryName
-      .toLowerCase()
-      .replace(/&/g, "and") // Replace & with "and"
-      .replace(/\s+/g, "-") // Replace spaces with hyphens
-      .replace(/[^a-z0-9-]/g, ""); // Remove any other special characters
-    
-    return `../../../images/${formattedName}.jpg`;
-  };
-
-  // Define a direct mapping for categories with special names
-  const categoryImageMap: { [key: string]: string } = {
-    "Relationships & Emotions": "../../../images/relationships-and-emotions.jpg",
-    "Hope & Salvation": "../../../images/hope-and-salvation.jpg",
-    "Struggles & Overcoming": "../../../images/struggles-and-overcoming.jpg",
-    // Add other categories with special characters as needed
-  };
+  
+  // Add this state to track which paths work
+  const [imagePaths, setImagePaths] = useState<{[key: number]: string}>({});
+  const [imageErrors, setImageErrors] = useState<{[key: number]: boolean}>({});
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -74,6 +58,49 @@ const Categories = () => {
     };
     fetchAllSubcategories();
   }, [categories]);
+
+  // Try multiple possible paths for images
+  const testImagePaths = (categoryId: number, categoryName: string) => {
+    // Format the category name for filenames
+    const formattedName = categoryName
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+    
+    // Try different paths - we'll add these as <img> tags and see which ones load
+    const possiblePaths = [
+      `/images/${formattedName}.jpg`,                  // Absolute from root
+      `./images/${formattedName}.jpg`,                 // From current directory
+      `../images/${formattedName}.jpg`,                // One level up
+      `../../images/${formattedName}.jpg`,             // Two levels up
+      `../../../images/${formattedName}.jpg`,          // Three levels up
+      `/assets/images/${formattedName}.jpg`,           // Common assets folder
+      `/public/images/${formattedName}.jpg`,           // Public folder
+      `/static/images/${formattedName}.jpg`,           // Static folder
+      `${process.env.PUBLIC_URL}/images/${formattedName}.jpg` // Using PUBLIC_URL
+    ];
+    
+    console.log(`Testing image paths for category: ${categoryName} (${categoryId})`);
+    possiblePaths.forEach(path => {
+      console.log(`  - Trying path: ${path}`);
+    });
+    
+    // Return a default path for now - the hidden img tags will help determine which one works
+    return `/images/${formattedName}.jpg`;
+  };
+
+  // Handle image load success
+  const handleImageLoad = (categoryId: number, path: string) => {
+    console.log(`✅ SUCCESS: Image loaded for category ${categoryId} with path: ${path}`);
+    setImagePaths(prev => ({...prev, [categoryId]: path}));
+  };
+
+  // Handle image load error
+  const handleImageError = (categoryId: number, path: string) => {
+    console.log(`❌ ERROR: Failed to load image for category ${categoryId} with path: ${path}`);
+    setImageErrors(prev => ({...prev, [categoryId]: true}));
+  };
 
   const toggleCategory = (categoryId: number) => {
     setOpenCategories((prev) =>
@@ -123,42 +150,67 @@ const Categories = () => {
               <p>Loading categories...</p>
             ) : (
               <div className="categories-container">
-                {categories.map((category) => (
-                  <div key={category.id} className="category-wrapper">
-                    <div
-                      className="category-card"
-                      style={{ 
-                        backgroundImage: `url(${
-                          // Use the direct mapping if available, otherwise use the formatting function
-                          categoryImageMap[category.name] || getImageFileName(category.name)
-                        })` 
-                      }}
-                      onClick={() => toggleCategory(category.id)}
-                    >
-                      <div className="overlay"></div>
-                      <h2>{category.name}</h2>
-                      <span className="toggle-icon">{openCategories.includes(category.id) ? "▲" : "▼"}</span>
-                    </div>
-
-                    {openCategories.includes(category.id) && (
-                      <div className="subcategory-container">
-                        {subcategories[category.id]?.length > 0 ? (
-                          subcategories[category.id].map((sub) => (
-                            <button
-                              key={sub.id}
-                              className="subcategory-button"
-                              onClick={() => handleSubcategoryClick(sub)}
-                            >
-                              {sub.name}
-                            </button>
-                          ))
-                        ) : (
-                          <p>Loading subcategories...</p>
-                        )}
+                {categories.map((category) => {
+                  // For each category, test all possible image paths
+                  const imagePath = imagePaths[category.id] || testImagePaths(category.id, category.name);
+                  
+                  // For debugging, we'll add hidden images with different paths
+                  const testPaths = [
+                    `/images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`,
+                    `../images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`,
+                    `../../images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`,
+                    `../../../images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`
+                  ];
+                  
+                  return (
+                    <div key={category.id} className="category-wrapper">
+                      {/* Add hidden test images to see which paths work */}
+                      {testPaths.map((path, index) => (
+                        <img 
+                          key={index}
+                          src={path} 
+                          alt="" 
+                          style={{display: 'none'}} 
+                          onLoad={() => handleImageLoad(category.id, path)}
+                          onError={() => handleImageError(category.id, path)}
+                        />
+                      ))}
+                      
+                      <div
+                        className="category-card"
+                        style={{ 
+                          // Fall back to a gradient if image fails
+                          backgroundImage: imageErrors[category.id] 
+                            ? 'linear-gradient(135deg, #007bff, #004bb3)' 
+                            : `url(${imagePath})` 
+                        }}
+                        onClick={() => toggleCategory(category.id)}
+                      >
+                        <div className="overlay"></div>
+                        <h2>{category.name}</h2>
+                        <span className="toggle-icon">{openCategories.includes(category.id) ? "▲" : "▼"}</span>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      {openCategories.includes(category.id) && (
+                        <div className="subcategory-container">
+                          {subcategories[category.id]?.length > 0 ? (
+                            subcategories[category.id].map((sub) => (
+                              <button
+                                key={sub.id}
+                                className="subcategory-button"
+                                onClick={() => handleSubcategoryClick(sub)}
+                              >
+                                {sub.name}
+                              </button>
+                            ))
+                          ) : (
+                            <p>Loading subcategories...</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </>
