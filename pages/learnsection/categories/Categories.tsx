@@ -17,6 +17,15 @@ const Categories = () => {
   const [imagePaths, setImagePaths] = useState<{[key: number]: string}>({});
   const [imageErrors, setImageErrors] = useState<{[key: number]: boolean}>({});
 
+  // Format category name for filenames
+  const formatCategoryName = (name: string) => {
+    return name
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -58,37 +67,6 @@ const Categories = () => {
     };
     fetchAllSubcategories();
   }, [categories]);
-
-  // Try multiple possible paths for images
-  const testImagePaths = (categoryId: number, categoryName: string) => {
-    // Format the category name for filenames
-    const formattedName = categoryName
-      .toLowerCase()
-      .replace(/&/g, "and")
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-    
-    // Try different paths - we'll add these as <img> tags and see which ones load
-    const possiblePaths = [
-      `/images/${formattedName}.jpg`,                  // Absolute from root
-      `./images/${formattedName}.jpg`,                 // From current directory
-      `../images/${formattedName}.jpg`,                // One level up
-      `../../images/${formattedName}.jpg`,             // Two levels up
-      `../../../images/${formattedName}.jpg`,          // Three levels up
-      `/assets/images/${formattedName}.jpg`,           // Common assets folder
-      `/public/images/${formattedName}.jpg`,           // Public folder
-      `/static/images/${formattedName}.jpg`,           // Static folder
-      `${process.env.PUBLIC_URL}/images/${formattedName}.jpg` // Using PUBLIC_URL
-    ];
-    
-    console.log(`Testing image paths for category: ${categoryName} (${categoryId})`);
-    possiblePaths.forEach(path => {
-      console.log(`  - Trying path: ${path}`);
-    });
-    
-    // Return a default path for now - the hidden img tags will help determine which one works
-    return `/images/${formattedName}.jpg`;
-  };
 
   // Handle image load success
   const handleImageLoad = (categoryId: number, path: string) => {
@@ -151,20 +129,25 @@ const Categories = () => {
             ) : (
               <div className="categories-container">
                 {categories.map((category) => {
-                  // For each category, test all possible image paths
-                  const imagePath = imagePaths[category.id] || testImagePaths(category.id, category.name);
+                  const formattedName = formatCategoryName(category.name);
                   
-                  // For debugging, we'll add hidden images with different paths
+                  // Define test paths (without process.env reference)
                   const testPaths = [
-                    `/images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`,
-                    `../images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`,
-                    `../../images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`,
-                    `../../../images/${category.name.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-")}.jpg`
+                    `/images/${formattedName}.jpg`,
+                    `./images/${formattedName}.jpg`,
+                    `../images/${formattedName}.jpg`,
+                    `../../images/${formattedName}.jpg`,
+                    `../../../images/${formattedName}.jpg`,
+                    `/assets/images/${formattedName}.jpg`,
+                    `/public/images/${formattedName}.jpg`
                   ];
+                  
+                  // Default to the first path, but use a found working path if we have one
+                  const imagePath = imagePaths[category.id] || `/images/${formattedName}.jpg`;
                   
                   return (
                     <div key={category.id} className="category-wrapper">
-                      {/* Add hidden test images to see which paths work */}
+                      {/* Hidden test images to see which paths work */}
                       {testPaths.map((path, index) => (
                         <img 
                           key={index}
@@ -179,8 +162,8 @@ const Categories = () => {
                       <div
                         className="category-card"
                         style={{ 
-                          // Fall back to a gradient if image fails
-                          backgroundImage: imageErrors[category.id] 
+                          // Use the image path if it worked, otherwise fall back to a gradient
+                          backgroundImage: imageErrors[category.id] && !imagePaths[category.id]
                             ? 'linear-gradient(135deg, #007bff, #004bb3)' 
                             : `url(${imagePath})` 
                         }}
