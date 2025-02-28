@@ -12,18 +12,23 @@ const Categories = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState<{ id: number; name: string } | null>(null);
   const [verses, setVerses] = useState<{ id: number; text_nlt: string; verse_reference: string; context_nlt: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  
-  // Add this state to track which paths work
-  const [imagePaths, setImagePaths] = useState<{[key: number]: string}>({});
   const [imageErrors, setImageErrors] = useState<{[key: number]: boolean}>({});
 
-  // Format category name for filenames
-  const formatCategoryName = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/&/g, "and")
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
+  // Create a direct mapping from category names to their exact image filenames
+  const categoryToImageMap: { [key: string]: string } = {
+    "Christian Life": "/images/christian-life.jpg",
+    "Relationships & Emotions": "/images/relationships-&-emotions.jpg",
+    "Spiritual Strength": "/images/spiritual-strength.jpg",
+    "Struggles & Overcoming": "/images/struggles-&-overcoming.jpg",
+    "Hope & Salvation": "/images/hope-&-salvation.jpg",
+    "God in Action": "/images/god-in-action.jpg",
+    // Add any other categories you have
+  };
+
+  // Function to handle image errors
+  const handleImageError = (categoryId: number) => {
+    console.log(`Error loading image for category ID: ${categoryId}`);
+    setImageErrors(prev => ({...prev, [categoryId]: true}));
   };
 
   useEffect(() => {
@@ -68,18 +73,6 @@ const Categories = () => {
     fetchAllSubcategories();
   }, [categories]);
 
-  // Handle image load success
-  const handleImageLoad = (categoryId: number, path: string) => {
-    console.log(`✅ SUCCESS: Image loaded for category ${categoryId} with path: ${path}`);
-    setImagePaths(prev => ({...prev, [categoryId]: path}));
-  };
-
-  // Handle image load error
-  const handleImageError = (categoryId: number, path: string) => {
-    console.log(`❌ ERROR: Failed to load image for category ${categoryId} with path: ${path}`);
-    setImageErrors(prev => ({...prev, [categoryId]: true}));
-  };
-
   const toggleCategory = (categoryId: number) => {
     setOpenCategories((prev) =>
       prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
@@ -112,6 +105,22 @@ const Categories = () => {
     navigate("/learn", { state: { selectedVerse: verse } });
   };
 
+  // Get a gradient background for fallback
+  const getGradientBackground = (categoryId: number): string => {
+    const gradientColors = [
+      'linear-gradient(135deg, #4A00E0, #8E2DE2)', // Purple
+      'linear-gradient(135deg, #2193b0, #6dd5ed)', // Blue
+      'linear-gradient(135deg, #11998e, #38ef7d)', // Green
+      'linear-gradient(135deg, #F2994A, #F2C94C)', // Orange
+      'linear-gradient(135deg, #ee0979, #ff6a00)', // Red-Orange
+      'linear-gradient(135deg, #8A2387, #E94057, #F27121)' // Vivid gradient
+    ];
+    
+    // Use category ID to select a gradient (modulo to prevent out of bounds)
+    const colorIndex = (categoryId - 1) % gradientColors.length;
+    return gradientColors[colorIndex];
+  };
+
   return (
     <div className="main-cont">
       <div className="categories-section">
@@ -129,46 +138,30 @@ const Categories = () => {
             ) : (
               <div className="categories-container">
                 {categories.map((category) => {
-                  const formattedName = formatCategoryName(category.name);
-                  
-                  // Define test paths (without process.env reference)
-                  const testPaths = [
-                    `/images/${formattedName}.jpg`,
-                    `./images/${formattedName}.jpg`,
-                    `../images/${formattedName}.jpg`,
-                    `../../images/${formattedName}.jpg`,
-                    `../../../images/${formattedName}.jpg`,
-                    `/assets/images/${formattedName}.jpg`,
-                    `/public/images/${formattedName}.jpg`
-                  ];
-                  
-                  // Default to the first path, but use a found working path if we have one
-                  const imagePath = imagePaths[category.id] || `/images/${formattedName}.jpg`;
+                  // Get the image path from our mapping
+                  const imagePath = categoryToImageMap[category.name];
                   
                   return (
                     <div key={category.id} className="category-wrapper">
-                      {/* Hidden test images to see which paths work */}
-                      {testPaths.map((path, index) => (
-                        <img 
-                          key={index}
-                          src={path} 
-                          alt="" 
-                          style={{display: 'none'}} 
-                          onLoad={() => handleImageLoad(category.id, path)}
-                          onError={() => handleImageError(category.id, path)}
-                        />
-                      ))}
-                      
                       <div
                         className="category-card"
                         style={{ 
-                          // Use the image path if it worked, otherwise fall back to a gradient
-                          backgroundImage: imageErrors[category.id] && !imagePaths[category.id]
-                            ? 'linear-gradient(135deg, #007bff, #004bb3)' 
-                            : `url(${imagePath})` 
+                          backgroundImage: imageErrors[category.id] || !imagePath 
+                            ? getGradientBackground(category.id) 
+                            : `url(${imagePath})`
                         }}
                         onClick={() => toggleCategory(category.id)}
                       >
+                        {/* Hidden image to detect loading errors */}
+                        {imagePath && (
+                          <img 
+                            src={imagePath} 
+                            alt="" 
+                            style={{display: 'none'}} 
+                            onError={() => handleImageError(category.id)}
+                          />
+                        )}
+                        
                         <div className="overlay"></div>
                         <h2>{category.name}</h2>
                         <span className="toggle-icon">{openCategories.includes(category.id) ? "▲" : "▼"}</span>
