@@ -110,7 +110,7 @@ const Categories = () => {
                   <div key={category.id} className="category-wrapper">
                     <div
                       className="category-card"
-                      style={{ backgroundImage: `url(/images/${category.name.toLowerCase().replace(/\s+/g, "-")}.jpg)` }}
+                      style={{ backgroundImage: `url(../../../images/${category.name.toLowerCase().replace(/\s+/g, "-")}.jpg)` }}
                       onClick={() => toggleCategory(category.id)}
                     >
                       <div className="overlay"></div>
