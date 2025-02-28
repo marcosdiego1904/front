@@ -1,0 +1,38 @@
+.memory-input {
+    width: 100%;
+    height: 150px;
+    font-size: 1rem;
+    padding: 10px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: white;
+    color: black;
+  }
+  
+  .correct-word {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .incorrect-word {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .verse-citation {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .continue-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  

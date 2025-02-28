@@ -1,0 +1,144 @@
+/* 🌍 General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 🎨 Main Container */
+.main-container2 {
+  background-color: #16223d;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 50px;
+}
+
+/* 📌 Intro Section */
+.intro-section {
+  background-color: white;
+  width: 90%;
+  max-width: 1100px;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+/* 🔹 Title */
+.title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #16223d;
+}
+
+/* ✨ Instruction */
+.instruction {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* 📌 Progress Tracker */
+.progress {
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #f9f9f9;
+  color: #333;
+  padding: 18px 8px;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 10px auto;
+}
+
+/* 📜 Verse Part */
+.verse-part {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  padding: 15px;
+  border-left: 5px solid #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 10px;
+  max-width: 90%;
+  margin: 10px auto;
+}
+
+/* 📌 Button Group */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* 🎨 Botón General */
+.button {
+  width: 200px; /* Todos los botones tendrán el mismo tamaño */
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-align: center;
+}
+
+/* 🔙 Previous Button */
+.prev-button {
+  background-color: #6c757d;
+}
+
+.prev-button:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+/* 🔜 Next Button */
+.next-button {
+  background-color: #007bff;
+}
+
+.next-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* ✅ Continue Button */
+.continue-button {
+  background-color: #28a745;
+}
+
+.continue-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* ⬅ Back Button */
+.back-button {
+  background-color: #d48900;
+}
+
+.back-button:hover {
+  background-color: #b67500;
+  transform: scale(1.05);
+}
+
+/* 📱 Responsive Adjustments */
+@media (max-width: 600px) {
+  .button-group {
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .button {
+      width: 100%; /* Los botones ocupan todo el ancho en móviles */
+  }
+}

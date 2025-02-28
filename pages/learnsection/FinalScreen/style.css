@@ -1,0 +1,108 @@
+/* 🌍 General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 🎨 Main Container */
+.main-container4 {
+  background-color: #16223d;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 50px;
+}
+
+/* 📌 Final Screen */
+.final-container {
+  background-color: white;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 20px;
+}
+
+.final-container h1 {
+  font-size: 2rem;
+  color: #2C3E50;
+}
+
+.final-container p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* 📌 Button Group */
+.final-buttons, .button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* 🎨 General Button Style */
+.button {
+  width: 200px;
+  height: 50px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🏠 Home Button */
+.home-btn {
+  background-color: #007bff;
+}
+
+.home-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* 🔄 Restart Button */
+.restart-btn {
+  background-color: #28a745;
+}
+
+.restart-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* 🔙 Back Button */
+.back-button {
+  background-color: #d48900;
+}
+
+.back-button:hover {
+  background-color: #b67500;
+  transform: scale(1.05);
+}
+
+/* 📱 Responsive Adjustments */
+@media (max-width: 600px) {
+  .final-buttons, .button-group {
+      flex-direction: column;
+      gap: 15px;
+  }
+
+  .button {
+      width: 100%;
+  }
+}

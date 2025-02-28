@@ -1,0 +1,142 @@
+/* 🌍 General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 🎨 Main Container */
+.main-container1 {
+    background-color: #16223d;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 50px;
+}
+
+/* 📌 Intro Section */
+.intro-section {
+    background-color: white;
+    width: 90%;
+    max-width: 1100px;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+/* 🔙 Return Button */
+.return-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.return-button:hover {
+    background-color: #0056b3;
+}
+
+/* 📌 Header (to align return button) */
+.header {
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* ✨ Verse Section */
+.cite {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #16223d;
+}
+
+.verse {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #444;
+}
+
+.context {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* 🚀 Start Learning Button */
+.start-learning-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.start-learning-btn:hover {
+    background-color: #218838;
+}
+
+/* ⬇ Toggle Explanation */
+.toggle-explanation {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.toggle-explanation:hover {
+    color: #0056b3;
+}
+
+/* 📚 Explanation Content */
+.explanation-content {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.explanation-content h3 {
+    color: #16223d;
+    margin-bottom: 10px;
+}
+
+.explanation-content h4 {
+    color: #007bff;
+    margin-top: 15px;
+}
+
+.explanation-content p {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* 📱 Responsive Adjustments */
+@media (max-width: 600px) {
+    .return-button {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+    }
+    
+    .intro-section {
+        padding: 20px;
+    }
+}

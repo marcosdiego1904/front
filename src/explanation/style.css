@@ -1,0 +1,64 @@
+/* Explanation Section */
+.explanation-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .toggle-explanation {
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .toggle-explanation:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  .explanation-content {
+    background: white;
+    color: #16223d;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .explanation-content h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #007bff;
+  }
+  
+  .explanation-content h4 {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #2C3E50;
+  }
+  
+  .explanation-content p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  
+  /* Fade-in Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

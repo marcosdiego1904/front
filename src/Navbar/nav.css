@@ -1,0 +1,213 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Navbar General */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(22, 34, 61, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+}
+
+/* Contenedor */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.navbar-brand {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Botón de Menú */
+.menu-toggle {
+  display: none; /* Oculto en escritorio */
+  flex-direction: column;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.menu-toggle .bar {
+  display: block;
+  width: 30px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Animación del menú */
+.menu-toggle.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Menú */
+.nav-links {
+  display: flex;
+}
+
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 10px 15px;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #ffc107;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex; /* Se muestra solo en móvil */
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: rgba(22, 34, 61, 0.9);
+    flex-direction: column;
+    text-align: center;
+    display: none;
+  }
+
+  .nav-links.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-links ul {
+    flex-direction: column;
+    padding: 10px 0;
+  }
+
+  .nav-link {
+    padding: 15px;
+  }
+}
+.navbar-toggler {
+  /* Puedes dejarlo vacío o quitarlo si ya no necesitas fondo custom */
+  background-color: transparent; 
+  border: none;
+}
+/* General para los nav-links */
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  padding: 5px 10px;
+  transition: color 0.3s ease; /* Suave transición de color */
+}
+
+/* Línea debajo del enlace activo */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; /* Espaciado respecto al texto */
+  left: 50%;
+  width: 0; /* Oculta la línea inicialmente */
+  height: 2px; /* Grosor de la línea */
+  background-color: transparent;
+  transition: width 0.3s ease, left 0.3s ease, background-color 0.3s ease;
+}
+
+/* Cuando el link está activo o al hacer hover */
+.nav-link.active::after,
+.nav-link:hover::after {
+  width: 100%; /* Línea ocupa todo el ancho */
+  left: 0;
+  background-color: #ffc107; /* Amarillo dorado */
+}
+
+/* Cambio de color al estar activo */
+.nav-link.active {
+  color: #ffc107 !important; /* Amarillo dorado */
+}
+
+/* Cambio de color al hacer hover */
+.nav-link:hover {
+  color: #ffc107 !important;
+}
+.logo{
+  text-decoration: none;
+  color: white;
+  width: 20%;
+  text-align: center;
+  font-size: 29px;
+  font-family: "Bangers", serif;
+  font-style: normal;
+  font-weight: 400;
+}
+.navbar-nav{
+  margin-left: 20px;
+}
+@media (max-width: 430px){
+  .logo{
+    width: 50%;
+  }
+  .navbar-nav{
+    margin-left: 0px;
+  }
+}
+@media (max-width: 414px){
+  .logo{
+    width: 60%;
+  }
+  .navbar-nav{
+    margin-left: 0px;
+  }
+}
+@media (min-width: 1025px) {
+  .logo{
+  
+  width: 16%;
+  text-align: center;
+  font-size: 29px;
+ 
+  font-family: "Bangers", serif;
+  font-style: normal;
+  font-weight: 400;
+}
+.navbar-nav{
+  margin-left: 50px;
+}
+}

@@ -1,0 +1,309 @@
+/* Estilos generales */
+.categories-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    min-height: 100vh;
+    justify-content: flex-start;
+    position: relative;
+    margin-top: 10px;
+}
+
+/* Texto de introducción */
+.cat-text {
+    max-width: 90%;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 120px;
+}
+
+.cat-text h1 {
+    font-weight: 600;
+}
+
+.cat-text p {
+    font-size: 15px;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* Contenedor de categorías */
+.categories-container {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+    justify-content: center;
+}
+
+@media (min-width: 1024px) {
+    .categories-container {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto;
+        justify-items: center;
+        
+    }
+}
+
+
+/* Tarjetas de categoría */
+.category-card {
+    position: relative;
+    min-width: 250px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Overlay oscuro para legibilidad */
+.category-card .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+}
+
+/* Hover en desktop */
+@media (min-width: 768px) {
+    .categories-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        overflow: hidden;
+    }
+
+    .category-card {
+        min-width: auto;
+        height: 180px;
+        width: 300px;
+    }
+
+    .category-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .category-card:hover .overlay {
+        background: rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Texto dentro de la tarjeta */
+.category-card h2 {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.category-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.toggle-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* Estilos para las subcategorías */
+.subcategory-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+    margin-top: 10px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.subcategory-button {
+    background: linear-gradient(135deg, #007bff, #004bb3);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+    width: 90%;
+    text-align: center;
+}
+
+.subcategory-button:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80);
+    transform: scale(1.05);
+}
+
+/* Efecto de entrada suave */
+.styled-subcategories {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease-in-out;
+}
+
+.styled-subcategories.open {
+    opacity: 1;
+    transform: translateY(0);
+}
+@media (min-width: 1280px) {
+    .categories-container {
+        grid-template-columns: repeat(3,3fr);
+        max-width: 1250px;
+        
+    }
+}
+
+    
+.verses-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    margin-top: 220px;
+  }
+  
+  .back-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    transition: background 0.3s;
+  }
+  
+  .back-button:hover {
+    background: #0056b3;
+  }
+  
+  .verses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    width: 100%;
+  }
+  
+  .verse-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .verse-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .verse-text {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .verse-reference {
+    font-size: 1.1rem;
+    color: #555;
+    text-align: center;
+    margin-top: 5px;
+    font-style: italic;
+  }
+  
+  .verse-context {
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .verses-list {
+      width: 90%;
+    }
+  
+    .verse-text {
+      font-size: 1.1rem;
+    }
+  
+    .verse-reference {
+      font-size: 1rem;
+    }
+  }
+  .verse-card {
+    background: #08192d; /* Azul muy oscuro */
+    color: white; /* Texto blanco */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4); /* Sombra más fuerte */
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .verse-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .verse-text {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff; /* Blanco */
+  }
+  
+  .verse-reference {
+    font-size: 1.1rem;
+    color: #64b5f6; /* Azul claro para resaltar la referencia */
+    text-align: center;
+    margin-top: 5px;
+    font-style: italic;
+  }
+  
+  .verse-context {
+    font-size: 1rem;
+    color: #90caf9; /* Azul grisáceo claro para el contexto */
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 1023px){
+    .cat-text{
+      margin-top: 0px;
+    }
+  }  
+  
+    
