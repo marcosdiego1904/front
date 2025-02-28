@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Para redirigir a la sección de aprendizaje
+import { useNavigate } from "react-router-dom";
 import { getCategories, getSubcategories, getVerses } from "../../../src/services/api";
 import "./style.css";
 
 const Categories = () => {
-  const navigate = useNavigate(); // Hook para manejar la navegación
+  const navigate = useNavigate();
 
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [subcategories, setSubcategories] = useState<{ [key: number]: { id: number; category_id: number; name: string }[] }>({});
@@ -13,23 +13,41 @@ const Categories = () => {
   const [verses, setVerses] = useState<{ id: number; text_nlt: string; verse_reference: string; context_nlt: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  // Add this function to safely format image filenames
+  const getImageFileName = (categoryName: string) => {
+    // Replace ampersands and other special characters
+    const formattedName = categoryName
+      .toLowerCase()
+      .replace(/&/g, "and") // Replace & with "and"
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/[^a-z0-9-]/g, ""); // Remove any other special characters
+    
+    return `../../../images/${formattedName}.jpg`;
+  };
+
+  // Define a direct mapping for categories with special names
+  const categoryImageMap: { [key: string]: string } = {
+    "Relationships & Emotions": "../../../images/relationships-and-emotions.jpg",
+    "Hope & Salvation": "../../../images/hope-and-salvation.jpg",
+    "Struggles & Overcoming": "../../../images/struggles-and-overcoming.jpg",
+    // Add other categories with special characters as needed
+  };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
         console.log("Categorías recibidas:", data);
         
-        // Verifica si data es un array y si no lo es, asegúrate de convertirlo
         if (Array.isArray(data)) {
           setCategories(data);
         } else if (data && typeof data === 'object') {
-          // Si es un objeto, trata de convertirlo en array
           const categoriesArray = Object.values(data);
           console.log("Convertido a array:", categoriesArray);
           setCategories(categoriesArray as { id: number; name: string }[]);
         } else {
           console.error("El formato de datos recibido no es compatible:", data);
-          setCategories([]); // Establece un array vacío como fallback
+          setCategories([]);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -84,9 +102,8 @@ const Categories = () => {
     setVerses([]);
   };
 
-  // 🔥 Función para seleccionar un versículo y navegar a la sección de aprendizaje
   const handleVerseClick = (verse: { id: number; text_nlt: string; verse_reference: string; context_nlt: string }) => {
-    console.log("Navegando con versículo:", verse); // Para verificar en consola
+    console.log("Navegando con versículo:", verse);
     navigate("/learn", { state: { selectedVerse: verse } });
   };
 
@@ -98,7 +115,7 @@ const Categories = () => {
             <div className="cat-text">
               <h1>We want to help you find the perfect verse for you</h1>
               <p>
-                That’s why we’ve organized the verses into categories that reflect the situations and emotions we face as Christians.
+                That's why we've organized the verses into categories that reflect the situations and emotions we face as Christians.
               </p>
             </div>
 
@@ -110,7 +127,12 @@ const Categories = () => {
                   <div key={category.id} className="category-wrapper">
                     <div
                       className="category-card"
-                      style={{ backgroundImage: `url(../../../images/${category.name.toLowerCase().replace(/\s+/g, "-")}.jpg)` }}
+                      style={{ 
+                        backgroundImage: `url(${
+                          // Use the direct mapping if available, otherwise use the formatting function
+                          categoryImageMap[category.name] || getImageFileName(category.name)
+                        })` 
+                      }}
                       onClick={() => toggleCategory(category.id)}
                     >
                       <div className="overlay"></div>
@@ -155,8 +177,8 @@ const Categories = () => {
                     <div 
                       key={verse.id} 
                       className="verse-card"
-                      onClick={() => handleVerseClick(verse)} // Click para seleccionar versículo
-                      style={{ cursor: "pointer" }} // Indica que es clickeable
+                      onClick={() => handleVerseClick(verse)}
+                      style={{ cursor: "pointer" }}
                     >
                       <p className="verse-text">"{verse.text_nlt}"</p>
                       <p className="verse-reference">- {verse.verse_reference}</p>
