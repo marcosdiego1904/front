@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCategories, getSubcategories, getVerses } from "../../../src/services/api";
+import {
+  getCategories,
+  getSubcategories,
+  getVerses,
+} from "../../../src/services/api";
 import "./style.css";
 
 const Categories = () => {
   const navigate = useNavigate();
 
-  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
-  const [subcategories, setSubcategories] = useState<{ [key: number]: { id: number; category_id: number; name: string }[] }>({});
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
+  const [subcategories, setSubcategories] = useState<{
+    [key: number]: { id: number; category_id: number; name: string }[];
+  }>({});
   const [openCategories, setOpenCategories] = useState<number[]>([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<{ id: number; name: string } | null>(null);
-  const [verses, setVerses] = useState<{ id: number; text_nlt: string; verse_reference: string; context_nlt: string }[]>([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [verses, setVerses] = useState<
+    {
+      id: number;
+      text_nlt: string;
+      verse_reference: string;
+      context_nlt: string;
+    }[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true); // Start with loading set to true
-  const [imageErrors, setImageErrors] = useState<{[key: number]: boolean}>({});
+  const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>(
+    {}
+  );
 
   // Create a direct mapping from category names to their exact image filenames
   const categoryToImageMap: { [key: string]: string } = {
@@ -26,7 +46,7 @@ const Categories = () => {
 
   // Preload images to improve perceived performance
   const preloadImages = () => {
-    Object.values(categoryToImageMap).forEach(url => {
+    Object.values(categoryToImageMap).forEach((url) => {
       const img = new Image();
       img.src = url;
     });
@@ -35,21 +55,22 @@ const Categories = () => {
   // Function to handle image errors
   const handleImageError = (categoryId: number) => {
     console.log(`Error loading image for category ID: ${categoryId}`);
-    setImageErrors(prev => ({...prev, [categoryId]: true}));
+    setImageErrors((prev) => ({ ...prev, [categoryId]: true }));
   };
 
   useEffect(() => {
     // Start preloading images immediately
     preloadImages();
-    
+
     // Check if we have cached categories data
-    const cachedCategories = localStorage.getItem('categoriesData');
-    const cachedSubcategories = localStorage.getItem('subcategoriesData');
-    const cacheTimestamp = localStorage.getItem('cacheTimestamp');
-    
+    const cachedCategories = localStorage.getItem("categoriesData");
+    const cachedSubcategories = localStorage.getItem("subcategoriesData");
+    const cacheTimestamp = localStorage.getItem("cacheTimestamp");
+
     // Use cache if it exists and is less than 1 hour old
-    const cacheExpired = !cacheTimestamp || (Date.now() - parseInt(cacheTimestamp)) > 3600000;
-    
+    const cacheExpired =
+      !cacheTimestamp || Date.now() - parseInt(cacheTimestamp) > 3600000;
+
     if (cachedCategories && cachedSubcategories && !cacheExpired) {
       try {
         setCategories(JSON.parse(cachedCategories));
@@ -62,33 +83,45 @@ const Categories = () => {
         // If there's an error parsing the cache, continue to fetch from API
       }
     }
-    
+
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
         console.log("Categorías recibidas:", data);
-        
+
         let processedCategories: { id: number; name: string }[] = [];
         if (Array.isArray(data)) {
           processedCategories = data;
-        } else if (data && typeof data === 'object') {
-          processedCategories = Object.values(data) as { id: number; name: string }[];
+        } else if (data && typeof data === "object") {
+          processedCategories = Object.values(data) as {
+            id: number;
+            name: string;
+          }[];
           console.log("Convertido a array:", processedCategories);
         } else {
           console.error("El formato de datos recibido no es compatible:", data);
           processedCategories = [];
         }
-        
+
         setCategories(processedCategories);
-        
+
         // Cache the categories
-        localStorage.setItem('categoriesData', JSON.stringify(processedCategories));
-        
+        localStorage.setItem(
+          "categoriesData",
+          JSON.stringify(processedCategories)
+        );
+
         // Fetch subcategories in parallel
         if (processedCategories.length > 0) {
           const fetchAllSubcategories = async () => {
-            const subMap: { [key: number]: { id: number; category_id: number; name: string }[] } = {};
-            
+            const subMap: {
+              [key: number]: {
+                id: number;
+                category_id: number;
+                name: string;
+              }[];
+            } = {};
+
             // Use Promise.all to fetch all subcategories in parallel
             await Promise.all(
               processedCategories.map(async (category) => {
@@ -96,20 +129,23 @@ const Categories = () => {
                   const data = await getSubcategories(category.id);
                   subMap[category.id] = data;
                 } catch (error) {
-                  console.error(`Error fetching subcategories for category ${category.id}:`, error);
+                  console.error(
+                    `Error fetching subcategories for category ${category.id}:`,
+                    error
+                  );
                 }
               })
             );
-            
+
             setSubcategories(subMap);
-            
+
             // Cache the subcategories
-            localStorage.setItem('subcategoriesData', JSON.stringify(subMap));
-            localStorage.setItem('cacheTimestamp', Date.now().toString());
-            
+            localStorage.setItem("subcategoriesData", JSON.stringify(subMap));
+            localStorage.setItem("cacheTimestamp", Date.now().toString());
+
             setLoading(false);
           };
-          
+
           fetchAllSubcategories();
         } else {
           setLoading(false);
@@ -120,17 +156,22 @@ const Categories = () => {
         setCategories([]);
       }
     };
-    
+
     fetchCategories();
   }, []);
 
   const toggleCategory = (categoryId: number) => {
     setOpenCategories((prev) =>
-      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
     );
   };
 
-  const handleSubcategoryClick = async (subcategory: { id: number; name: string }) => {
+  const handleSubcategoryClick = async (subcategory: {
+    id: number;
+    name: string;
+  }) => {
     setLoading(true);
     setSelectedSubcategory(subcategory);
 
@@ -151,7 +192,12 @@ const Categories = () => {
     setVerses([]);
   };
 
-  const handleVerseClick = (verse: { id: number; text_nlt: string; verse_reference: string; context_nlt: string }) => {
+  const handleVerseClick = (verse: {
+    id: number;
+    text_nlt: string;
+    verse_reference: string;
+    context_nlt: string;
+  }) => {
     console.log("Navegando con versículo:", verse);
     navigate("/learn", { state: { selectedVerse: verse } });
   };
@@ -159,14 +205,14 @@ const Categories = () => {
   // Get a gradient background for fallback
   const getGradientBackground = (categoryId: number): string => {
     const gradientColors = [
-      'linear-gradient(135deg, #4A00E0, #8E2DE2)', // Purple
-      'linear-gradient(135deg, #2193b0, #6dd5ed)', // Blue
-      'linear-gradient(135deg, #11998e, #38ef7d)', // Green
-      'linear-gradient(135deg, #F2994A, #F2C94C)', // Orange
-      'linear-gradient(135deg, #ee0979, #ff6a00)', // Red-Orange
-      'linear-gradient(135deg, #8A2387, #E94057, #F27121)' // Vivid gradient
+      "linear-gradient(135deg, #4A00E0, #8E2DE2)", // Purple
+      "linear-gradient(135deg, #2193b0, #6dd5ed)", // Blue
+      "linear-gradient(135deg, #11998e, #38ef7d)", // Green
+      "linear-gradient(135deg, #F2994A, #F2C94C)", // Orange
+      "linear-gradient(135deg, #ee0979, #ff6a00)", // Red-Orange
+      "linear-gradient(135deg, #8A2387, #E94057, #F27121)", // Vivid gradient
     ];
-    
+
     // Use category ID to select a gradient (modulo to prevent out of bounds)
     const colorIndex = (categoryId - 1) % gradientColors.length;
     return gradientColors[colorIndex];
@@ -211,7 +257,8 @@ const Categories = () => {
             <div className="cat-text">
               <h1>We want to help you find the perfect verse for you</h1>
               <p>
-                That's why we've organized the verses into categories that reflect the situations and emotions we face as Christians.
+                That's why we've organized the verses into categories that
+                reflect the situations and emotions we face as Christians.
               </p>
             </div>
 
@@ -222,31 +269,34 @@ const Categories = () => {
                 {categories.map((category) => {
                   // Get the image path from our mapping
                   const imagePath = categoryToImageMap[category.name];
-                  
+
                   return (
                     <div key={category.id} className="category-wrapper">
                       <div
                         className="category-card"
-                        style={{ 
-                          backgroundImage: imageErrors[category.id] || !imagePath 
-                            ? getGradientBackground(category.id) 
-                            : `url(${imagePath})`
+                        style={{
+                          backgroundImage:
+                            imageErrors[category.id] || !imagePath
+                              ? getGradientBackground(category.id)
+                              : `url(${imagePath})`,
                         }}
                         onClick={() => toggleCategory(category.id)}
                       >
                         {/* Hidden image to detect loading errors */}
                         {imagePath && (
-                          <img 
-                            src={imagePath} 
-                            alt="" 
-                            style={{display: 'none'}} 
+                          <img
+                            src={imagePath}
+                            alt=""
+                            style={{ display: "none" }}
                             onError={() => handleImageError(category.id)}
                           />
                         )}
-                        
+
                         <div className="overlay"></div>
                         <h2>{category.name}</h2>
-                        <span className="toggle-icon">{openCategories.includes(category.id) ? "▲" : "▼"}</span>
+                        <span className="toggle-icon">
+                          {openCategories.includes(category.id) ? "▲" : "▼"}
+                        </span>
                       </div>
 
                       {openCategories.includes(category.id) && (
@@ -273,9 +323,24 @@ const Categories = () => {
             )}
           </>
         ) : (
+          // Replace the verses-section div in your Categories.tsx file with this updated version:
+
           <div className="verses-section">
-            <button className="back-button" onClick={handleReturn}>← Return</button>
+            <button className="back-button" onClick={handleReturn}>
+              ← Return
+            </button>
             <h1>{selectedSubcategory.name}</h1>
+
+            {/* Added guidance text for users */}
+            {!loading && verses.length > 0 && (
+              <div className="verse-guidance">
+                <p className="verse-guide-text">
+                  <span className="verse-guide-icon">👆</span>
+                  Click on a verse to begin memorizing it
+                </p>
+              </div>
+            )}
+
             {loading ? (
               renderLoadingVerses() // Use skeleton UI for verses
             ) : (
@@ -284,14 +349,16 @@ const Categories = () => {
                   <p>No verses available.</p>
                 ) : (
                   verses.map((verse) => (
-                    <div 
-                      key={verse.id} 
+                    <div
+                      key={verse.id}
                       className="verse-card"
                       onClick={() => handleVerseClick(verse)}
                       style={{ cursor: "pointer" }}
                     >
                       <p className="verse-text">"{verse.text_nlt}"</p>
-                      <p className="verse-reference">- {verse.verse_reference}</p>
+                      <p className="verse-reference">
+                        - {verse.verse_reference}
+                      </p>
                       <p className="verse-context">{verse.context_nlt}</p>
                     </div>
                   ))

@@ -392,4 +392,72 @@
   background: rgba(255, 255, 255, 0.1);
   margin: 0 auto;
   border-radius: 4px;
+}/* Add these styles to your style.css file */
+
+.verse-guidance {
+  margin: 15px 0;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+.verse-guide-text {
+  color: #64b5f6;
+  font-size: 1rem;
+  animation: pulse 2s infinite;
+  padding: 8px 15px;
+  background-color: rgba(8, 25, 45, 0.6);
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.verse-guide-icon {
+  display: inline-block;
+  margin-right: 8px;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+  .verse-guide-text {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+  
+  .verse-guidance {
+    margin: 10px 0;
+  }
+  
+  .verse-guide-icon {
+    margin-right: 5px;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 320px) {
+  .verse-guide-text {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
 }
