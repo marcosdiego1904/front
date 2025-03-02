@@ -27,7 +27,7 @@ interface AuthProviderProps {
 }
 
 // API base URL - update this with your actual backend URL from Railway
-const API_URL = 'mysql://root:cLytbcVXOiloQxifsSqXyvrvyeNvIhSV@crossover.proxy.rlwy.net:14951/railway'; // TODO: Update this!
+const API_URL = 'https://back-e1qy.onrender.com'; // TODO: Update this!
 
 // Create context with a default value
 const AuthContext = createContext<AuthContextType | null>(null);
