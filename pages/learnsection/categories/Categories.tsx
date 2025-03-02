@@ -11,7 +11,7 @@ const Categories = () => {
   const [openCategories, setOpenCategories] = useState<number[]>([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState<{ id: number; name: string } | null>(null);
   const [verses, setVerses] = useState<{ id: number; text_nlt: string; verse_reference: string; context_nlt: string }[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true); // Start with loading set to true
   const [imageErrors, setImageErrors] = useState<{[key: number]: boolean}>({});
 
   // Create a direct mapping from category names to their exact image filenames
@@ -22,7 +22,14 @@ const Categories = () => {
     "Struggles & Overcoming": "/images/struggles-&-overcoming.jpg",
     "Hope & Salvation": "/images/hope-&-salvation.jpg",
     "God in Action": "/images/god-in-action.jpg",
-    // Add any other categories you have
+  };
+
+  // Preload images to improve perceived performance
+  const preloadImages = () => {
+    Object.values(categoryToImageMap).forEach(url => {
+      const img = new Image();
+      img.src = url;
+    });
   };
 
   // Function to handle image errors
@@ -32,46 +39,90 @@ const Categories = () => {
   };
 
   useEffect(() => {
+    // Start preloading images immediately
+    preloadImages();
+    
+    // Check if we have cached categories data
+    const cachedCategories = localStorage.getItem('categoriesData');
+    const cachedSubcategories = localStorage.getItem('subcategoriesData');
+    const cacheTimestamp = localStorage.getItem('cacheTimestamp');
+    
+    // Use cache if it exists and is less than 1 hour old
+    const cacheExpired = !cacheTimestamp || (Date.now() - parseInt(cacheTimestamp)) > 3600000;
+    
+    if (cachedCategories && cachedSubcategories && !cacheExpired) {
+      try {
+        setCategories(JSON.parse(cachedCategories));
+        setSubcategories(JSON.parse(cachedSubcategories));
+        setLoading(false);
+        console.log("Using cached data");
+        return; // Skip API calls if using cached data
+      } catch (error) {
+        console.error("Error parsing cached data:", error);
+        // If there's an error parsing the cache, continue to fetch from API
+      }
+    }
+    
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
         console.log("Categorías recibidas:", data);
         
+        let processedCategories: { id: number; name: string }[] = [];
         if (Array.isArray(data)) {
-          setCategories(data);
+          processedCategories = data;
         } else if (data && typeof data === 'object') {
-          const categoriesArray = Object.values(data);
-          console.log("Convertido a array:", categoriesArray);
-          setCategories(categoriesArray as { id: number; name: string }[]);
+          processedCategories = Object.values(data) as { id: number; name: string }[];
+          console.log("Convertido a array:", processedCategories);
         } else {
           console.error("El formato de datos recibido no es compatible:", data);
-          setCategories([]);
+          processedCategories = [];
+        }
+        
+        setCategories(processedCategories);
+        
+        // Cache the categories
+        localStorage.setItem('categoriesData', JSON.stringify(processedCategories));
+        
+        // Fetch subcategories in parallel
+        if (processedCategories.length > 0) {
+          const fetchAllSubcategories = async () => {
+            const subMap: { [key: number]: { id: number; category_id: number; name: string }[] } = {};
+            
+            // Use Promise.all to fetch all subcategories in parallel
+            await Promise.all(
+              processedCategories.map(async (category) => {
+                try {
+                  const data = await getSubcategories(category.id);
+                  subMap[category.id] = data;
+                } catch (error) {
+                  console.error(`Error fetching subcategories for category ${category.id}:`, error);
+                }
+              })
+            );
+            
+            setSubcategories(subMap);
+            
+            // Cache the subcategories
+            localStorage.setItem('subcategoriesData', JSON.stringify(subMap));
+            localStorage.setItem('cacheTimestamp', Date.now().toString());
+            
+            setLoading(false);
+          };
+          
+          fetchAllSubcategories();
+        } else {
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
+        setLoading(false);
         setCategories([]);
       }
     };
+    
     fetchCategories();
   }, []);
-
-  useEffect(() => {
-    const fetchAllSubcategories = async () => {
-      if (categories.length === 0) return;
-
-      const subMap: { [key: number]: { id: number; category_id: number; name: string }[] } = {};
-      for (const category of categories) {
-        try {
-          const data = await getSubcategories(category.id);
-          subMap[category.id] = data;
-        } catch (error) {
-          console.error(`Error fetching subcategories for category ${category.id}:`, error);
-        }
-      }
-      setSubcategories(subMap);
-    };
-    fetchAllSubcategories();
-  }, [categories]);
 
   const toggleCategory = (categoryId: number) => {
     setOpenCategories((prev) =>
@@ -121,6 +172,37 @@ const Categories = () => {
     return gradientColors[colorIndex];
   };
 
+  // Enhanced loading state with skeleton UI
+  const renderLoadingState = () => {
+    return (
+      <div className="categories-container">
+        {[1, 2, 3, 4, 5, 6].map((placeholder) => (
+          <div key={placeholder} className="category-wrapper">
+            <div className="category-card skeleton-card">
+              <div className="overlay"></div>
+              <div className="skeleton-title"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Enhanced loading state for verses
+  const renderLoadingVerses = () => {
+    return (
+      <div className="verses-list">
+        {[1, 2, 3].map((placeholder) => (
+          <div key={placeholder} className="verse-card skeleton-verse">
+            <div className="skeleton-verse-text"></div>
+            <div className="skeleton-verse-reference"></div>
+            <div className="skeleton-verse-context"></div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="main-cont">
       <div className="categories-section">
@@ -133,8 +215,8 @@ const Categories = () => {
               </p>
             </div>
 
-            {categories.length === 0 ? (
-              <p>Loading categories...</p>
+            {loading || categories.length === 0 ? (
+              renderLoadingState() // Use skeleton UI instead of text
             ) : (
               <div className="categories-container">
                 {categories.map((category) => {
@@ -195,7 +277,7 @@ const Categories = () => {
             <button className="back-button" onClick={handleReturn}>← Return</button>
             <h1>{selectedSubcategory.name}</h1>
             {loading ? (
-              <p>Loading verses...</p>
+              renderLoadingVerses() // Use skeleton UI for verses
             ) : (
               <div className="verses-list">
                 {verses.length === 0 ? (
