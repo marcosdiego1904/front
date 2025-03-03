@@ -7,6 +7,9 @@ interface User {
   email: string;
   created_at?: string;
   last_login?: string;
+  firstName?: string; // Added these properties to match
+  lastName?: string;  // what your UserProfile component expects
+  bio?: string;
 }
 
 interface AuthContextType {
@@ -20,6 +23,7 @@ interface AuthContextType {
   getUserProfile: () => Promise<User | null>;
   getAuthHeader: () => Record<string, string>;
   isAuthenticated: boolean;
+  updateUserProfile: (userData: Partial<User>) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -177,6 +181,53 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Update user profile - ADDED IMPLEMENTATION HERE
+  const updateUserProfile = async (userData: Partial<User>): Promise<void> => {
+    if (!token || !user) {
+      setError('Authentication required');
+      throw new Error('Authentication required');
+    }
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(`${API_URL}/api/user/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update profile');
+      }
+      
+      // Update the user in state and localStorage
+      const updatedUser = { ...user, ...userData };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+        // If we get a 401 or 403, logout the user
+        if (err.message.includes('401') || err.message.includes('403')) {
+          logout();
+        }
+      } else {
+        setError('An unknown error occurred');
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Function to get auth header for API requests
   const getAuthHeader = (): Record<string, string> => {
     return token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -193,6 +244,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     getUserProfile,
     getAuthHeader,
     isAuthenticated: !!user && !!token,
+    updateUserProfile, // ADDED FUNCTION TO CONTEXT VALUE
   };
 
   return (

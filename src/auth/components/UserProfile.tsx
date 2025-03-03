@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './DashboardStyles.css';
 
-interface UserProfileProps {
-  // You can extend this interface with additional props if needed
-}
+export interface User {
+    id?: string;
+    email?: string;
+    // Add these properties:
+    firstName?: string;
+    lastName?: string;
+    bio?: string;
+    // Any other properties you have
+  }
 
-const UserProfile: React.FC<UserProfileProps> = () => {
+const UserProfile: React.FC<User> = () => {
   const { user, updateUserProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
