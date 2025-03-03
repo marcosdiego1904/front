@@ -1,5 +1,6 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import '../context/AuthStyles.css';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -39,67 +40,79 @@ const ForgotPassword: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Forgot your password?</h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Enter your email address and we'll send you instructions to reset your password.
-          </p>
+    <div className="auth-container">
+      <div className="auth-form-wrapper">
+        <div className="auth-logo-container">
+          <div className="lamp-icon">
+            {/* SVG Lamp Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8,4 C8,2.895 8.895,2 10,2 L14,2 C15.105,2 16,2.895 16,4 L16,5 L8,5 L8,4 Z" fill="#ffc107"/>
+              <path d="M9,5 L15,5 L15,10 C15,12.761 12.761,16 10,16 L9,5 Z" fill="#ffc107"/>
+              <path d="M10,16 L14,16 C12.5,18.5 11.5,18.5 10,16 Z" fill="#ffc107"/>
+              <path d="M11.5,16 L11.5,20" stroke="#ffc107" strokeWidth="2"/>
+              <path d="M9,20 L14,20" stroke="#ffc107" strokeWidth="2"/>
+              <path d="M8,5 C7,7 7,15 10,16" stroke="#ffc107" strokeWidth="0.5" strokeDasharray="1,1"/>
+              <path d="M16,5 C17,7 17,15 14,16" stroke="#ffc107" strokeWidth="0.5" strokeDasharray="1,1"/>
+            </svg>
+          </div>
+          <h1 className="auth-title">Lamp to my feet</h1>
         </div>
         
+        <h2 className="auth-subtitle">Forgot your password?</h2>
+        
         {successMessage ? (
-          <div className="rounded-md bg-green-50 p-4">
-            <div className="flex">
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-green-800">{successMessage}</h3>
-                <div className="mt-4 text-center">
-                  <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-                    Return to login
-                  </Link>
-                </div>
-              </div>
+          <div className="auth-success-message">
+            <span>{successMessage}</span>
+            <div className="mt-4 text-center">
+              <Link to="/login" className="auth-link">
+                Return to login
+              </Link>
             </div>
           </div>
         ) : (
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setEmail(e.target.value);
-                    if (formError) setFormError('');
-                  }}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    formError ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-                />
+          <>
+            <p className="auth-description">
+              Enter your email address and we'll send you instructions to reset your password.
+            </p>
+            
+            <form className="auth-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="email">Email address</label>
+                <div className="input-with-icon">
+                  <i className="icon-email">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </i>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    className={formError ? 'input-error' : ''}
+                    placeholder="Your email address"
+                    value={email}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      setEmail(e.target.value);
+                      if (formError) setFormError('');
+                    }}
+                  />
+                </div>
                 {formError && (
-                  <p className="mt-2 text-sm text-red-600">{formError}</p>
+                  <p className="error-text">{formError}</p>
                 )}
               </div>
-            </div>
-            
-            <div>
+              
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-                }`}
+                className={`auth-button ${isSubmitting ? 'loading' : ''}`}
               >
                 {isSubmitting ? (
                   <>
-                    <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <span className="spinner">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -110,15 +123,13 @@ const ForgotPassword: React.FC = () => {
                   'Send Reset Instructions'
                 )}
               </button>
-            </div>
-            
-            <div className="text-center">
-              <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Back to login
-              </Link>
-            </div>
-          </form>
+            </form>
+          </>
         )}
+        
+        <div className="auth-footer">
+          <p>Remember your password? <Link to="/login" className="auth-link">Sign in</Link></p>
+        </div>
       </div>
     </div>
   );
