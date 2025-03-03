@@ -1,269 +1,241 @@
-import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import './DashboardStyles.css';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext'; // Adjust the path as needed
 
-export interface User {
-    id?: string;
-    email?: string;
-    // Add these properties:
-    firstName?: string;
-    lastName?: string;
-    bio?: string;
-    // Any other properties you have
-  }
-
-const UserProfile: React.FC<User> = () => {
-  const { user, updateUserProfile } = useAuth();
+const UserProfile = () => {
+  const { user, updateUserProfile, loading: authLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  
   const [formData, setFormData] = useState({
-    username: user?.username || '',
-    email: user?.email || '',
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
-    bio: user?.bio || '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    bio: ''
   });
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        username: user.username || '',
+        bio: user.bio || ''
+      });
+    }
+  }, [user]);
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+    setLoading(true);
     
     try {
-      // Call your updateUserProfile function from Auth context
-      // This is a placeholder, implementation depends on your backend
-      if (updateUserProfile) {
-        await updateUserProfile(formData);
-        setSuccessMessage("Profile updated successfully!");
-        setIsEditing(false);
-      } else {
-        throw new Error("Update profile function not available");
-      }
+      await updateUserProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        bio: formData.bio
+      });
+      
+      setIsEditing(false);
     } catch (error) {
-      setErrorMessage("Failed to update profile. Please try again.");
-      console.error(error);
+      console.error('Error updating profile:', error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
-  
-  const cancelEdit = () => {
-    // Reset form data to original user data
-    setFormData({
-      username: user?.username || '',
-      email: user?.email || '',
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
-      bio: user?.bio || '',
-    });
+
+  const handleCancel = () => {
+    // Reset form data to user data
+    if (user) {
+      setFormData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        username: user.username || '',
+        bio: user.bio || ''
+      });
+    }
     setIsEditing(false);
-    setErrorMessage("");
   };
-  
+
+  if (authLoading || !user) {
+    return (
+      <div className="user-profile-section">
+        <div className="up-profile-content">
+          <p>Cargando perfil...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const getInitials = () => {
+    if (formData.firstName && formData.lastName) {
+      return `${formData.firstName[0]}${formData.lastName[0]}`.toUpperCase();
+    } else if (formData.username) {
+      return formData.username[0].toUpperCase();
+    }
+    return 'U';
+  };
+
   return (
-    <div className="dashboard-container">
-      {/* Sidebar would be included in a layout component */}
-      
-      <div className="dashboard-main">
-        <header className="dashboard-header">
-          <h1>User Profile</h1>
-          <div className="user-profile">
-            <div className="user-avatar">
-              {user?.username?.charAt(0).toUpperCase() || 'U'}
+    <div className="user-profile-section">
+      <div className="up-profile-content">
+        <div className="up-profile-card">
+          <div className="up-profile-header">
+            <div className="up-profile-avatar-large">
+              {getInitials()}
             </div>
-            <div className="user-info">
-              <span className="user-name">{user?.username || 'User'}</span>
-              <span className="user-email">{user?.email || 'user@example.com'}</span>
+            <div className="up-profile-info">
+              <h2>{formData.firstName} {formData.lastName}</h2>
+              <div className="up-username">@{formData.username}</div>
+              {!isEditing && (
+                <button 
+                  className="up-edit-profile-btn"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Editar Perfil
+                </button>
+              )}
             </div>
           </div>
-        </header>
-        
-        <div className="profile-content">
-          {successMessage && (
-            <div className="auth-success-message">
-              {successMessage}
-            </div>
-          )}
-          
-          {errorMessage && (
-            <div className="auth-error-message">
-              {errorMessage}
-            </div>
-          )}
-          
-          <div className="profile-card">
-            <div className="profile-header">
-              <div className="profile-avatar-large">
-                {formData.firstName?.charAt(0) || formData.username?.charAt(0) || 'U'}
-              </div>
-              <div className="profile-info">
-                <h2>{formData.firstName} {formData.lastName}</h2>
-                <p className="username">@{formData.username}</p>
-                {!isEditing && (
-                  <button 
-                    className="edit-profile-btn"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit Profile
-                  </button>
-                )}
-              </div>
-            </div>
-            
-            {isEditing ? (
-              <form className="profile-form" onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
+
+          {isEditing ? (
+            <form className="up-profile-form" onSubmit={handleSubmit}>
+              <div className="up-form-row">
+                <div className="up-form-group">
+                  <label htmlFor="firstName">Nombre</label>
                   <input
                     type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
                   />
                 </div>
-                
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                <div className="up-form-group">
+                  <label htmlFor="lastName">Apellido</label>
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    disabled // Email is typically not changed directly
-                  />
-                  <span className="input-note">Contact support to change your email address</span>
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="bio">Bio</label>
-                  <textarea
-                    id="bio"
-                    name="bio"
-                    rows={4}
-                    value={formData.bio}
-                    onChange={handleChange}
-                    placeholder="Tell us about yourself..."
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
                   />
                 </div>
+              </div>
+
+              <div className="up-form-group">
+                <label htmlFor="username">Nombre de usuario</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  disabled
+                />
+                <span className="up-input-note">
+                  El nombre de usuario no se puede cambiar.
+                </span>
+              </div>
+
+              <div className="up-form-group">
+                <label htmlFor="email">Correo electrónico</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  disabled
+                />
+                <span className="up-input-note">
+                  El correo electrónico no se puede cambiar.
+                </span>
+              </div>
+
+              <div className="up-form-group">
+                <label htmlFor="bio">Biografía</label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleInputChange}
+                  placeholder="Cuéntanos sobre ti..."
+                />
+              </div>
+
+              <div className="up-form-actions">
+                <button
+                  type="button"
+                  className="up-cancel-button"
+                  onClick={handleCancel}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="submit" 
+                  className={`up-save-button ${loading ? 'up-loading' : ''}`}
+                  disabled={loading}
+                >
+                  {loading && (
+                    <span className="up-spinner">⟳</span>
+                  )}
+                  Guardar Cambios
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="up-profile-details">
+              <div className="up-detail-group">
+                <h3>Información Personal</h3>
                 
-                <div className="form-actions">
-                  <button
-                    type="button"
-                    className="cancel-button"
-                    onClick={cancelEdit}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className={`save-button ${isLoading ? 'loading' : ''}`}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <span className="spinner">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                        </span>
-                        Saving...
-                      </>
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="profile-details">
-                <div className="detail-group">
-                  <h3>Profile Information</h3>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Name</span>
-                    <span className="detail-value">
-                      {formData.firstName && formData.lastName 
-                        ? `${formData.firstName} ${formData.lastName}` 
-                        : 'Not provided'}
-                    </span>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Username</span>
-                    <span className="detail-value">@{formData.username}</span>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Email</span>
-                    <span className="detail-value">{formData.email}</span>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Bio</span>
-                    <p className="detail-value bio-text">
-                      {formData.bio || 'No bio provided yet.'}
-                    </p>
+                <div className="up-detail-item">
+                  <div className="up-detail-label">Nombre</div>
+                  <div className="up-detail-value">
+                    {formData.firstName} {formData.lastName || 'No especificado'}
                   </div>
                 </div>
                 
-                <div className="detail-group">
-                  <h3>Account Security</h3>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Password</span>
-                    <span className="detail-value">
-                      ********
-                      <button className="link-button">Change password</button>
-                    </span>
+                <div className="up-detail-item">
+                  <div className="up-detail-label">Usuario</div>
+                  <div className="up-detail-value">@{formData.username}</div>
+                </div>
+                
+                <div className="up-detail-item">
+                  <div className="up-detail-label">Email</div>
+                  <div className="up-detail-value">{formData.email}</div>
+                </div>
+                
+                <div className="up-detail-item">
+                  <div className="up-detail-label">Miembro desde</div>
+                  <div className="up-detail-value">
+                    {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'No disponible'}
                   </div>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Account Created</span>
-                    <span className="detail-value">January 15, 2023</span>
+                </div>
+                
+                <div className="up-detail-item">
+                  <div className="up-detail-label">Último acceso</div>
+                  <div className="up-detail-value">
+                    {user.last_login ? new Date(user.last_login).toLocaleDateString() : 'No disponible'}
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+              
+              <div className="up-detail-group">
+                <h3>Biografía</h3>
+                <div className="up-detail-value up-bio-text">
+                  {formData.bio || 'No has agregado una biografía todavía.'}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
