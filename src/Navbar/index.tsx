@@ -63,7 +63,7 @@ const Navbar = () => {
             </ul>
             
             {/* Auth buttons/user info - right side */}
-            <ul className="navbar-nav ms-auto">
+            <ul className="navbar-nav ms-lg-auto">
               {isAuthenticated ? (
                 <>
                   <li className="nav-item">
@@ -86,7 +86,7 @@ const Navbar = () => {
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink to="/register" className="nav-link btn btn-outline-warning btn-sm ms-2">
+                    <NavLink to="/register" className="nav-link  ">
                       Register
                     </NavLink>
                   </li>
