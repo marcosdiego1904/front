@@ -758,3 +758,67 @@
     box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
   }
 }
+/* Dashboard Sidebar Fix */
+.dashboard-sidebar {
+  width: 260px;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 70px; /* Adjusted to account for navbar height */
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  overflow-y: auto; /* Allow scrolling if content is too tall */
+}
+
+/* Adjust the main content area to match the sidebar */
+.dashboard-main {
+  flex: 1;
+  margin-left: 260px;
+  padding: 2rem;
+  background-color: var(--bg-light);
+  margin-top: 70px; /* Add top margin to account for navbar */
+}
+
+/* Adjust the sidebar header spacing */
+.sidebar-header {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 992px) {
+  .dashboard-sidebar {
+    transform: translateX(-100%);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    top: 70px; /* Keep the top position consistent */
+  }
+  
+  .dashboard-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .dashboard-main {
+    margin-left: 0;
+    margin-top: 70px; /* Keep consistent with desktop */
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    top: 85px; /* Position below navbar */
+  }
+}
+
+/* Small screen adjustments */
+@media (max-width: 576px) {
+  .dashboard-main {
+    padding: 1.5rem;
+    margin-top: 70px; /* Keep consistent */
+  }
+}
