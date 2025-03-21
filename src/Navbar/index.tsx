@@ -42,7 +42,7 @@ const Navbar = () => {
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#16223d" }}>
         <div className="container-fluid">
           <NavLink to="/" className="logo">
-            Lamp to my feet <img src={imag} alt="" />
+            <img src={imag} alt="Lamp Icon" className="logo-icon" />
           </NavLink>
 
           <button
@@ -145,10 +145,10 @@ const Navbar = () => {
       {isAuthenticated && (
         <div className={`mobile-sidebar ${sidebarVisible ? 'show' : ''}`}>
           <div className="sidebar-header">
+            <h1 className="sidebar-title">Lamp to my feet</h1>
             <div className="lamp-icon">
               <img src={imag} alt="Lamp Icon" className="sidebar-lamp-icon" />
             </div>
-            <h1 className="sidebar-title">Lamp to my feet</h1>
           </div>
           
           <nav className="sidebar-nav">
