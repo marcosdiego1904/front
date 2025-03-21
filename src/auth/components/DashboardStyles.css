@@ -822,3 +822,9 @@
     margin-top: 70px; /* Keep consistent */
   }
 }
+.dashboard-sidebar {
+  top: var(--navbar-height);
+}
+.dashboard-main {
+  margin-top: var(--navbar-height);
+}
