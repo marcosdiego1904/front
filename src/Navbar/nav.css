@@ -5,6 +5,20 @@
   box-sizing: border-box;
 }
 
+/* Variables de colores */
+:root {
+  --primary-blue: #16223d;
+  --primary-blue-light: #223356;
+  --primary-blue-dark: #0d1525;
+  --accent-gold: #ffc107;
+  --accent-gold-light: #ffda6a;
+  --accent-gold-dark: #e6a800;
+  --text-light: #f8f9fa;
+  --text-muted: #b0b6be;
+  --bg-light: #f8f9fa;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Navbar General */
 .navbar {
   position: fixed;
@@ -180,6 +194,156 @@
 .navbar-nav{
   margin-left: 20px;
 }
+
+/* Mobile Sidebar */
+.mobile-sidebar {
+  width: 260px;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 90;
+  transition: transform 0.3s ease;
+  padding-top: 70px; /* Espacio para la navbar fija */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar header */
+.sidebar-header {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-lamp-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.5));
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin: 0;
+  text-align: center;
+  font-family: "Bangers", serif;
+}
+
+/* Sidebar navigation */
+.sidebar-nav {
+  flex: 1;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-item {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--accent-gold);
+}
+
+.sidebar-link.active {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left: 3px solid var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle-button {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--accent-gold);
+  color: var(--primary-blue);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1010;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.sidebar-toggle-button:hover {
+  background-color: var(--accent-gold-light);
+  transform: scale(1.05);
+}
+
+.sidebar-toggle-button:active {
+  transform: scale(0.95);
+}
+
+/* Overlay para cerrar sidebar */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 80;
+  backdrop-filter: blur(3px);
+}
+
+/* Ajustes responsivos */
 @media (max-width: 430px){
   .logo{
     width: 50%;
@@ -187,7 +351,23 @@
   .navbar-nav{
     margin-left: 0px;
   }
+  
+  /* Mostrar sidebar en pantallas pequeñas */
+  .mobile-sidebar {
+    transform: translateX(-100%); /* Oculto por defecto */
+  }
+  
+  /* Mostrar sidebar cuando se hace clic en el botón de menú */
+  .mobile-sidebar.show {
+    transform: translateX(0);
+  }
+  
+  /* Mostrar botón de toggle en pantallas pequeñas */
+  .sidebar-toggle-button {
+    display: flex;
+  }
 }
+
 @media (max-width: 414px){
   .logo{
     width: 60%;
@@ -196,18 +376,22 @@
     margin-left: 0px;
   }
 }
+
 @media (min-width: 1025px) {
   .logo{
+    width: 16%;
+    text-align: center;
+    font-size: 29px;
+    font-family: "Bangers", serif;
+    font-style: normal;
+    font-weight: 400;
+  }
+  .navbar-nav{
+    margin-left: 50px;
+  }
   
-  width: 16%;
-  text-align: center;
-  font-size: 29px;
- 
-  font-family: "Bangers", serif;
-  font-style: normal;
-  font-weight: 400;
-}
-.navbar-nav{
-  margin-left: 50px;
-}
+  /* Ocultar sidebar en pantallas grandes */
+  .mobile-sidebar {
+    display: none;
+  }
 }
