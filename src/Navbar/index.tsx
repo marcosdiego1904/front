@@ -130,78 +130,10 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Botón para mostrar/ocultar sidebar en pantallas pequeñas */}
-      {isAuthenticated && (
-        <button 
-          className="sidebar-toggle-button" 
-          onClick={toggleSidebar}
-          aria-label="Toggle sidebar"
-        >
-          <i className={`bi ${sidebarVisible ? 'bi-x' : 'bi-list'}`}></i>
-        </button>
-      )}
+     
 
-      {/* Sidebar para pantallas pequeñas - Solo visible cuando el usuario está autenticado */}
-      {isAuthenticated && (
-        <div className={`mobile-sidebar ${sidebarVisible ? 'show' : ''}`}>
-          <div className="sidebar-header">
-            <h1 className="sidebar-title">Lamp to my feet</h1>
-            <div className="lamp-icon">
-              <img src={imag} alt="Lamp Icon" className="sidebar-lamp-icon" />
-            </div>
-          </div>
-          
-          <nav className="sidebar-nav">
-            <ul>
-              <li className="sidebar-item">
-                <NavLink 
-                  to="/dashboard" 
-                  className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
-                  onClick={() => setSidebarVisible(false)}
-                >
-                  <i className="bi bi-grid me-2"></i>
-                  Dashboard
-                </NavLink>
-              </li>
-              <li className="sidebar-item">
-                <NavLink 
-                  to="/profile" 
-                  className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
-                  onClick={() => setSidebarVisible(false)}
-                >
-                  <i className="bi bi-person me-2"></i>
-                  Profile
-                </NavLink>
-              </li>
-              <li className="sidebar-item">
-                <NavLink 
-                  to="/settings" 
-                  className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
-                  onClick={() => setSidebarVisible(false)}
-                >
-                  <i className="bi bi-gear me-2"></i>
-                  Settings
-                </NavLink>
-              </li>
-            </ul>
-          </nav>
-          
-          <div className="sidebar-footer">
-            <button onClick={handleLogout} className="logout-button">
-              <i className="bi bi-box-arrow-right me-2"></i>
-              Logout
-            </button>
-          </div>
-        </div>
-      )}
+   
       
-      {/* Overlay para cerrar el sidebar al hacer clic fuera de él */}
-      {sidebarVisible && (
-        <div 
-          className="sidebar-overlay" 
-          onClick={() => setSidebarVisible(false)}
-        ></div>
-      )}
     </>
   );
 };

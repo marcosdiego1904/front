@@ -32,11 +32,12 @@
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 0;
+    top: 0; /* Adjusted to account for fixed header */
     left: 0;
     bottom: 0;
     z-index: 100;
     transition: transform 0.3s ease;
+    margin-top: 0px;
   }
   
   /* Sidebar header */
