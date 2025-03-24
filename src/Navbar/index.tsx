@@ -41,9 +41,10 @@ const Navbar = () => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#16223d" }}>
         <div className="container-fluid">
-          <NavLink to="/" className="logo">
-            <img src={imag} alt="Lamp Icon" className="logo-icon" />
-          </NavLink>
+        <NavLink to="/" className="logo">
+             Lamp to my feet 
+             <img src={imag} alt="Lamp Icon" className="logo-icon" />
+           </NavLink>
 
           <button
             className="navbar-toggler" 
