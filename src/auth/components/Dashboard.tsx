@@ -39,14 +39,11 @@ const Dashboard: React.FC = () => {
       console.error('Logout failed:', error);
     }
   };
-  // Add this to your Dashboard component
-
   
-
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-    {/** */}  <div className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
+      <div className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="lamp-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
