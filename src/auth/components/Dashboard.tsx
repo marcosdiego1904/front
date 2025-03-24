@@ -40,19 +40,9 @@ const Dashboard: React.FC = () => {
     }
   };
   // Add this to your Dashboard component
-useEffect(() => {
-  const updateSidebarPosition = () => {
-    const navbarHeight = document.querySelector('.navbar').offsetHeight;
-    document.documentElement.style.setProperty('--navbar-height', `${navbarHeight}px`);
-  };
+
   
-  updateSidebarPosition();
-  window.addEventListener('resize', updateSidebarPosition);
-  
-  return () => {
-    window.removeEventListener('resize', updateSidebarPosition);
-  };
-}, []);
+
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
