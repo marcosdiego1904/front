@@ -32,6 +32,7 @@ const LearnSection = () => {
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
+  const restartLesson = () => setStep(1);
 
   return (
     <main className="">
@@ -74,10 +75,13 @@ const LearnSection = () => {
             prevStep={prevStep}
           />
         )}
-        {step === 6 && <FinalScreen onRestart={() => setStep(1)} />}
-        {/*step > 1 && step < 6 && (
-         
-        )*/}
+        {step === 6 && (
+          <FinalScreen 
+            onRestart={restartLesson}
+            prevStep={prevStep}
+            verse={selectedVerse} // Pass the complete verse object to FinalScreen
+          />
+        )}
       </div>
     </main>
   );
