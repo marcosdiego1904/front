@@ -100,17 +100,37 @@ const FinalScreen = ({ onRestart, prevStep, verse }: Props) => {
 
   return (
     <main className="main-container4">
-      <div className="final-container">
-        <h1>🎉 Congratulations! 🎉</h1>
-        <p>You have successfully completed the memorization process.</p>
-        <p>Keep practicing to strengthen your memory!</p>
+      <div className="memorization-final-container">
+        {/* Decorative elements */}
+        <div className="memorization-decoration memorization-decoration-1"></div>
+        <div className="memorization-decoration memorization-decoration-2"></div>
+
+        <h1 className="memorization-header">
+          <span className="memorization-confetti-icon">🎉</span> 
+          Congratulations! 
+          <span className="memorization-confetti-icon">🎉</span>
+        </h1>
+        
+        <p className="memorization-description">
+          You have successfully completed the memorization process.
+        </p>
+        
+        <p className="memorization-tip">
+          Keep practicing to strengthen your memory!
+        </p>
 
         {/* Show verse saving status for logged-in users */}
         {isAuthenticated && verse && (
-          <div className={`save-status ${saveStatus.success === false ? 'save-error' : ''}`}>
+          <div className={`memorization-status-message ${
+            saveStatus.success === true 
+              ? 'memorization-success-message' 
+              : saveStatus.success === false 
+                ? 'memorization-error-message' 
+                : ''
+          }`}>
             {saveStatus.isSaving ? (
-              <div className="saving-indicator">
-                <div className="spinner"></div>
+              <div className="memorization-loading-indicator">
+                <div className="memorization-spinner"></div>
                 <span>{saveStatus.message}</span>
               </div>
             ) : (
@@ -121,24 +141,37 @@ const FinalScreen = ({ onRestart, prevStep, verse }: Props) => {
 
         {/* Not logged in message */}
         {!isAuthenticated && verse && (
-          <div className="login-prompt">
+          <div className="memorization-login-container">
             <p>Sign in to save your memorized verses and track your progress!</p>
-            <button onClick={() => navigate("/login")} className="login-link">Sign in</button>
+            <button 
+              onClick={() => navigate("/login")} 
+              className="memorization-login-button"
+            >
+              Sign in
+            </button>
           </div>
         )}
 
-        <div className="final-buttons">
-          <button className="button home-btn" onClick={handleGoHome}>
+        <div className="memorization-buttons-container">
+          <button 
+            className="memorization-button memorization-home-button" 
+            onClick={handleGoHome}
+          >
             Go to Home
           </button>
+          
           {onRestart && (
-            <button className="button restart-btn" onClick={onRestart}>
+            <button 
+              className="memorization-button memorization-restart-button" 
+              onClick={onRestart}
+            >
               Restart Lesson 🔁
             </button>
           )}
+          
           {isAuthenticated && (
             <button 
-              className="button profile-btn" 
+              className="memorization-button memorization-profile-button" 
               onClick={handleViewProfile}
             >
               View Profile
@@ -148,8 +181,13 @@ const FinalScreen = ({ onRestart, prevStep, verse }: Props) => {
 
         {/* Back Button */}
         {prevStep && (
-          <div className="button-group">
-            <button className="button back-button" onClick={prevStep}>← Back</button>
+          <div className="memorization-navigation-container">
+            <button 
+              className="memorization-back-button" 
+              onClick={prevStep}
+            >
+              ← Back
+            </button>
           </div>
         )}
       </div>
