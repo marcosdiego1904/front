@@ -199,7 +199,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           {/* Metrics Cards */}
-          <div className="metrics-grid">
+          {/*<div className="metrics-grid">
             <DashboardCard 
               title="Daily Progress" 
               value="75%" 
@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
                 </svg>
               }
             />
-          </div>
+          </div>*/}
           
           {/* User Rank Section */}
           <div className="user-rank-section">
@@ -324,7 +324,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           {/* Recent Activity Section */}
-          <div className="activity-section">
+          {/**<div className="activity-section">
             <div className="section-header">
               <h3>Recent Activity</h3>
               <button className="view-all-btn">View All</button>
@@ -372,7 +372,7 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
