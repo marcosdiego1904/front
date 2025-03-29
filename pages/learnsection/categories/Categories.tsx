@@ -221,12 +221,12 @@ const Categories = () => {
   // Enhanced loading state with skeleton UI
   const renderLoadingState = () => {
     return (
-      <div className="categories-container">
+      <div className="cat-categories-container">
         {[1, 2, 3, 4, 5, 6].map((placeholder) => (
-          <div key={placeholder} className="category-wrapper">
-            <div className="category-card skeleton-card">
-              <div className="overlay"></div>
-              <div className="skeleton-title"></div>
+          <div key={placeholder} className="cat-category-wrapper">
+            <div className="cat-category-card cat-skeleton-card">
+              <div className="cat-overlay"></div>
+              <div className="cat-skeleton-title"></div>
             </div>
           </div>
         ))}
@@ -237,12 +237,12 @@ const Categories = () => {
   // Enhanced loading state for verses
   const renderLoadingVerses = () => {
     return (
-      <div className="verses-list">
+      <div className="cat-verses-list">
         {[1, 2, 3].map((placeholder) => (
-          <div key={placeholder} className="verse-card skeleton-verse">
-            <div className="skeleton-verse-text"></div>
-            <div className="skeleton-verse-reference"></div>
-            <div className="skeleton-verse-context"></div>
+          <div key={placeholder} className="cat-verse-card cat-skeleton-verse">
+            <div className="cat-skeleton-verse-text"></div>
+            <div className="cat-skeleton-verse-reference"></div>
+            <div className="cat-skeleton-verse-context"></div>
           </div>
         ))}
       </div>
@@ -251,10 +251,10 @@ const Categories = () => {
 
   return (
     <div className="main-cont">
-      <div className="categories-section">
+      <div className="cat-categories-section">
         {!selectedSubcategory ? (
           <>
-            <div className="cat-text">
+            <div className="cat-intro-text">
               <h1>We want to help you find the perfect verse for you</h1>
               <p>
                 That's why we've organized the verses into categories that
@@ -265,15 +265,15 @@ const Categories = () => {
             {loading || categories.length === 0 ? (
               renderLoadingState() // Use skeleton UI instead of text
             ) : (
-              <div className="categories-container">
+              <div className="cat-categories-container">
                 {categories.map((category) => {
                   // Get the image path from our mapping
                   const imagePath = categoryToImageMap[category.name];
 
                   return (
-                    <div key={category.id} className="category-wrapper">
+                    <div key={category.id} className="cat-category-wrapper">
                       <div
-                        className="category-card"
+                        className="cat-category-card"
                         style={{
                           backgroundImage:
                             imageErrors[category.id] || !imagePath
@@ -292,20 +292,20 @@ const Categories = () => {
                           />
                         )}
 
-                        <div className="overlay"></div>
+                        <div className="cat-overlay"></div>
                         <h2>{category.name}</h2>
-                        <span className="toggle-icon">
+                        <span className="cat-toggle-icon">
                           {openCategories.includes(category.id) ? "▲" : "▼"}
                         </span>
                       </div>
 
                       {openCategories.includes(category.id) && (
-                        <div className="subcategory-container">
+                        <div className="cat-subcategory-container">
                           {subcategories[category.id]?.length > 0 ? (
                             subcategories[category.id].map((sub) => (
                               <button
                                 key={sub.id}
-                                className="subcategory-button"
+                                className="cat-subcategory-button"
                                 onClick={() => handleSubcategoryClick(sub)}
                               >
                                 {sub.name}
@@ -323,19 +323,17 @@ const Categories = () => {
             )}
           </>
         ) : (
-          // Replace the verses-section div in your Categories.tsx file with this updated version:
-
-          <div className="verses-section">
-            <button className="back-button" onClick={handleReturn}>
+          <div className="cat-verses-section">
+            <button className="cat-back-button" onClick={handleReturn}>
               ← Return
             </button>
             <h1>{selectedSubcategory.name}</h1>
 
             {/* Added guidance text for users */}
             {!loading && verses.length > 0 && (
-              <div className="verse-guidance">
-                <p className="verse-guide-text">
-                  <span className="verse-guide-icon">👆</span>
+              <div className="cat-verse-guidance">
+                <p className="cat-verse-guide-text">
+                  <span className="cat-verse-guide-icon">👆</span>
                   Click on a verse to begin memorizing it
                 </p>
               </div>
@@ -344,22 +342,22 @@ const Categories = () => {
             {loading ? (
               renderLoadingVerses() // Use skeleton UI for verses
             ) : (
-              <div className="verses-list">
+              <div className="cat-verses-list">
                 {verses.length === 0 ? (
                   <p>No verses available.</p>
                 ) : (
                   verses.map((verse) => (
                     <div
                       key={verse.id}
-                      className="verse-card"
+                      className="cat-verse-card"
                       onClick={() => handleVerseClick(verse)}
                       style={{ cursor: "pointer" }}
                     >
-                      <p className="verse-text">"{verse.text_nlt}"</p>
-                      <p className="verse-reference">
+                      <p className="cat-verse-text">"{verse.text_nlt}"</p>
+                      <p className="cat-verse-reference">
                         - {verse.verse_reference}
                       </p>
-                      <p className="verse-context">{verse.context_nlt}</p>
+                      <p className="cat-verse-context">{verse.context_nlt}</p>
                     </div>
                   ))
                 )}
