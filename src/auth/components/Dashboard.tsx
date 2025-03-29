@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+import API_BASE_URL from '../../config/api';
 import './DashboardStyles.css';
 
 interface DashboardCardProps {
@@ -8,6 +10,20 @@ interface DashboardCardProps {
   value: string | number;
   change?: string;
   isPositive?: boolean;
+}
+
+interface MemorizedVerse {
+  id: number;
+  verseReference: string;
+  verseText: string;
+  dateMemorized: string;
+}
+
+interface UserRank {
+  rank: string;
+  progress: number;
+  nextRank: string;
+  versesToNextRank: number;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({ title, icon, value, change, isPositive }) => {
@@ -28,8 +44,53 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ title, icon, value, chang
 };
 
 const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, getAuthHeader, isAuthenticated } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [memorizedVerses, setMemorizedVerses] = useState<MemorizedVerse[]>([]);
+  const [userRank, setUserRank] = useState<UserRank>({
+    rank: "Beginner",
+    progress: 0,
+    nextRank: "Bronze",
+    versesToNextRank: 5
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!isAuthenticated) return;
+      
+      setIsLoading(true);
+      try {
+        // Fetch memorized verses
+        const versesResponse = await axios.get(
+          `${API_BASE_URL}/user/memorized-verses`,
+          { headers: getAuthHeader() }
+        );
+        
+        setMemorizedVerses(versesResponse.data.verses || []);
+        
+        // Fetch user rank (assumption: this endpoint will be implemented)
+        const rankResponse = await axios.get(
+          `${API_BASE_URL}/user/rank`,
+          { headers: getAuthHeader() }
+        );
+        
+        setUserRank(rankResponse.data || {
+          rank: "Beginner",
+          progress: 0,
+          nextRank: "Bronze",
+          versesToNextRank: 5
+        });
+        
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchUserData();
+  }, [isAuthenticated, getAuthHeader]);
   
   const handleLogout = async () => {
     try {
@@ -189,6 +250,77 @@ const Dashboard: React.FC = () => {
                 </svg>
               }
             />
+          </div>
+          
+          {/* User Rank Section */}
+          <div className="user-rank-section">
+            <div className="section-header">
+              <h3>Your Current Rank</h3>
+            </div>
+            
+            <div className="rank-card">
+              <div className="rank-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                <span className="rank-title">{userRank.rank}</span>
+              </div>
+              <div className="rank-progress">
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${userRank.progress}%` }}
+                  ></div>
+                </div>
+                <div className="rank-info">
+                  <span>{userRank.versesToNextRank} more verse{userRank.versesToNextRank !== 1 ? 's' : ''} to reach {userRank.nextRank}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Memorized Verses Section */}
+          <div className="memorized-verses-section">
+            <div className="section-header">
+              <h3>Memorized Verses</h3>
+              <button className="view-all-btn">View All</button>
+            </div>
+            
+            {isLoading ? (
+              <div className="loading-spinner">
+                <div className="spinner"></div>
+                <span>Loading your verses...</span>
+              </div>
+            ) : memorizedVerses.length > 0 ? (
+              <div className="verses-list">
+                {memorizedVerses.slice(0, 5).map((verse) => (
+                  <div key={verse.id} className="verse-item">
+                    <div className="verse-reference">{verse.verseReference}</div>
+                    <div className="verse-text">"{verse.verseText}"</div>
+                    <div className="verse-date">
+                      Memorized on {new Date(verse.dateMemorized).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))}
+                {memorizedVerses.length > 5 && (
+                  <div className="more-verses">
+                    + {memorizedVerses.length - 5} more verse{memorizedVerses.length - 5 !== 1 ? 's' : ''}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  </svg>
+                </div>
+                <p>You haven't memorized any verses yet. Start your first memorization lesson today!</p>
+                <a href="/learn" className="start-lesson-btn">Start a Lesson</a>
+              </div>
+            )}
           </div>
           
           {/* Recent Activity Section */}
