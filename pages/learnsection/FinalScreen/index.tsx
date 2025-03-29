@@ -99,7 +99,7 @@ const FinalScreen = ({ onRestart, prevStep, verse }: Props) => {
   const handleViewProfile = () => navigate("/profile");
 
   return (
-    <main className="main-container4">
+    
       <div className="memorization-final-container">
         {/* Decorative elements */}
         <div className="memorization-decoration memorization-decoration-1"></div>
@@ -191,7 +191,7 @@ const FinalScreen = ({ onRestart, prevStep, verse }: Props) => {
           </div>
         )}
       </div>
-    </main>
+   
   );
 };
 
