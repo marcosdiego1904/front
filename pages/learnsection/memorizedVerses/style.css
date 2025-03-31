@@ -1,235 +1,172 @@
-/* src/auth/components/MemorizedVerses.css */
+/* memorizedVerses.css */
 
 .memorized-verses-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 1.5rem;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .section-title {
-    font-size: 1.8rem;
-    color: var(--primary-blue);
-    text-align: center;
-    margin-bottom: 1.5rem;
-    position: relative;
-  }
-  
-  .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background-color: var(--accent-gold);
-    border-radius: 2px;
-  }
-  
-  /* Loading state */
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-  }
-  
-  .verse-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(22, 34, 61, 0.1);
-    border-top-color: var(--primary-blue);
-    border-radius: 50%;
-    animation: verse-spin 1s linear infinite;
-    margin-bottom: 1rem;
-  }
-  
-  @keyframes verse-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  /* Error message */
-  .error-message {
-    background-color: rgba(220, 53, 69, 0.1);
-    color: #dc3545;
+  width: 100%;
+}
+
+.verses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.verse-item {
+  padding: 1.25rem;
+  border-radius: 8px;
+  background-color: rgba(22, 34, 61, 0.03);
+  border-left: 3px solid #ffc107;
+  transition: all 0.2s ease;
+}
+
+.verse-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.verse-reference {
+  font-weight: 700;
+  color: #16223d;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.verse-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.verse-date {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.more-verses {
+  text-align: center;
+  padding: 1rem;
+  font-weight: 500;
+}
+
+.more-verses a {
+  color: #ffc107;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.more-verses a:hover {
+  color: #e6a800;
+  text-decoration: underline;
+}
+
+/* Loading state */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(22, 34, 61, 0.1);
+  border-radius: 50%;
+  border-top-color: #ffc107;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  background-color: rgba(22, 34, 61, 0.03);
+  border-radius: 8px;
+}
+
+.empty-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.empty-icon svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+  color: #16223d;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+}
+
+.start-lesson-btn {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background-color: #ffc107;
+  color: #16223d;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.start-lesson-btn:hover {
+  background-color: #e6a800;
+}
+
+/* Error state */
+.error-message {
+  padding: 1.5rem;
+  text-align: center;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-radius: 8px;
+}
+
+/* Dashboard specific styles */
+.dashboard-mode .verse-item {
+  padding: 1rem;
+}
+
+.dashboard-mode .verse-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  /* Add ellipsis for long verses in dashboard */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashboard-mode .verse-reference {
+  font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .verse-item {
     padding: 1rem;
-    border-radius: 6px;
-    text-align: center;
-    border-left: 4px solid #dc3545;
-  }
-  
-  /* No verses message */
-  .no-verses-message {
-    text-align: center;
-    padding: 2rem;
-    background-color: rgba(0, 123, 255, 0.05);
-    border-radius: 10px;
-  }
-  
-  .browse-verses-btn {
-    display: inline-block;
-    background-color: var(--primary-blue);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    margin-top: 1rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-  }
-  
-  .browse-verses-btn:hover {
-    background-color: var(--primary-blue-light);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Auth required message */
-  .auth-required {
-    text-align: center;
-    padding: 2rem;
-    background-color: rgba(255, 193, 7, 0.1);
-    border-radius: 10px;
-  }
-  
-  .login-btn {
-    display: inline-block;
-    background-color: var(--accent-gold);
-    color: var(--primary-blue);
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    margin-top: 1rem;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-  
-  .login-btn:hover {
-    background-color: var(--accent-gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Verses list */
-  .verses-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .verse-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-  
-  .verse-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .verse-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    background-color: var(--primary-blue);
-    color: white;
-  }
-  
-  .verse-info {
-    flex: 1;
-  }
-  
-  .verse-reference {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-  
-  .memorized-date {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
-  }
-  
-  .expand-icon {
-    font-size: 1.5rem;
-    font-weight: bold;
-    transition: transform 0.3s ease;
-  }
-  
-  .verse-card.expanded .expand-icon {
-    transform: rotate(180deg);
-  }
-  
-  .verse-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-  }
-  
-  .verse-card.expanded .verse-content {
-    max-height: 500px;
-    padding: 1.5rem;
   }
   
   .verse-text {
-    font-size: 1.1rem;
-    font-weight: 500;
-    font-style: italic;
-    margin-bottom: 1rem;
-  }
-  
-  .verse-context {
     font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 1.5rem;
   }
-  
-  .verse-actions {
-    display: flex;
-    justify-content: flex-end;
+}
+
+@media (max-width: 576px) {
+  .empty-state,
+  .loading-spinner {
+    padding: 2rem 1rem;
   }
-  
-  .practice-again-btn {
-    background-color: var(--accent-gold);
-    color: var(--primary-blue);
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .practice-again-btn:hover {
-    background-color: var(--accent-gold-light);
-    transform: scale(1.05);
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .memorized-verses-container {
-      padding: 1rem;
-    }
-    
-    .section-title {
-      font-size: 1.5rem;
-    }
-    
-    .verse-header {
-      padding: 0.75rem 1rem;
-    }
-    
-    .verse-card.expanded .verse-content {
-      padding: 1rem;
-    }
-  }
-  .fixh3{
-    color: white !important;
-  }
+}

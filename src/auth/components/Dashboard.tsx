@@ -2,22 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import API_BASE_URL from '../../config/api';
+import MemorizedVerses from '../../../pages/learnsection/memorizedVerses';
 import './DashboardStyles.css';
-
-interface DashboardCardProps {
-  title: string;
-  icon: React.ReactNode;
-  value: string | number;
-  change?: string;
-  isPositive?: boolean;
-}
-
-interface MemorizedVerse {
-  id: number;
-  verseReference: string;
-  verseText: string;
-  dateMemorized: string;
-}
 
 interface UserRank {
   rank: string;
@@ -26,142 +12,39 @@ interface UserRank {
   versesToNextRank: number;
 }
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ title, icon, value, change, isPositive }) => {
-  return (
-    <div className="dashboard-card">
-      <div className="card-icon">{icon}</div>
-      <div className="card-content">
-        <h3 className="card-title">{title}</h3>
-        <div className="card-value">{value}</div>
-        {change && (
-          <div className={`card-change ${isPositive ? 'positive' : 'negative'}`}>
-            {isPositive ? '↑' : '↓'} {change}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Helper function to format dates safely
-const formatDate = (dateString: string) => {
-  try {
-    if (!dateString) return 'Unknown date';
-    
-    // Check if the date is in ISO format or YYYY-MM-DD format
-    const date = new Date(dateString);
-    
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      return 'Invalid date';
-    }
-    
-    // Format date as locale string (e.g., "3/31/2025")
-    return date.toLocaleDateString();
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return 'Error parsing date';
-  }
-};
-
 const Dashboard: React.FC = () => {
   const { user, logout, getAuthHeader, isAuthenticated } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [memorizedVerses, setMemorizedVerses] = useState<MemorizedVerse[]>([]);
   const [userRank, setUserRank] = useState<UserRank>({
     rank: "Beginner",
-    progress: 0,
+    progress: 30,
     nextRank: "Bronze",
-    versesToNextRank: 5
+    versesToNextRank: 4
   });
-  const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserRank = async () => {
       if (!isAuthenticated) return;
       
-      setIsLoading(true);
       try {
-        // Fetch memorized verses with more detailed error handling
-        console.log("Fetching memorized verses...");
-        try {
-          const versesResponse = await axios.get(
-            `${API_BASE_URL}/user/memorized-verses`,
-            { headers: getAuthHeader() }
-          );
-          
-          console.log("Verses response:", versesResponse.data);
-          
-          let processedVerses = [];
-          
-          // Check different possible response formats
-          if (versesResponse.data?.verses) {
-            processedVerses = versesResponse.data.verses;
-          } else if (Array.isArray(versesResponse.data)) {
-            processedVerses = versesResponse.data;
-          } else {
-            console.log("Trying to access nested data");
-            // Try other common response formats
-            processedVerses = versesResponse.data?.data?.verses || 
-                             versesResponse.data?.data || 
-                             [];
-          }
-          
-          // Log what we found to help debugging
-          console.log("Processed verses:", processedVerses);
-          
-          // Add default text if missing
-          const formattedVerses = processedVerses.map((verse: any) => ({
-            id: verse.id || Math.random().toString(36).substring(7),
-            verseReference: verse.verseReference || verse.reference || "Unknown reference",
-            verseText: verse.verseText || verse.text || "No verse text available",
-            dateMemorized: verse.dateMemorized || verse.memorizedDate || verse.date || new Date().toISOString()
-          }));
-          
-          setMemorizedVerses(formattedVerses);
-        } catch (verseError) {
-          console.error("Error fetching memorized verses:", verseError);
-          // Set a sample verse based on what we see in the profile
-          setMemorizedVerses([{
-            id: 1,
-            verseReference: "1 Timothy 4:12",
-            verseText: "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
-            dateMemorized: "2025-03-29T00:00:00.000Z"
-          }]);
-        }
+        // Fetch user rank (when this endpoint is implemented)
+        const rankResponse = await axios.get(
+          `${API_BASE_URL}/user/rank`,
+          { headers: getAuthHeader() }
+        );
         
-        // Fetch user rank
-        try {
-          const rankResponse = await axios.get(
-            `${API_BASE_URL}/user/rank`,
-            { headers: getAuthHeader() }
-          );
-          
-          setUserRank(rankResponse.data || {
-            rank: "Beginner",
-            progress: 30, // Show some progress since user has at least one verse
-            nextRank: "Bronze",
-            versesToNextRank: 4  // One verse memorized, 4 more to go
-          });
-        } catch (rankError) {
-          console.error("Error fetching user rank:", rankError);
-          // Default fallback for rank
-          setUserRank({
-            rank: "Beginner",
-            progress: 30, // Show some progress since user has at least one verse
-            nextRank: "Bronze",
-            versesToNextRank: 4  // One verse memorized, 4 more to go
-          });
-        }
-        
+        setUserRank(rankResponse.data || {
+          rank: "Beginner",
+          progress: 30,
+          nextRank: "Bronze",
+          versesToNextRank: 4
+        });
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      } finally {
-        setIsLoading(false);
+        console.error("Failed to fetch user rank:", error);
       }
     };
     
-    fetchUserData();
+    fetchUserRank();
   }, [isAuthenticated, getAuthHeader]);
   
   const handleLogout = async () => {
@@ -298,47 +181,15 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           
-          {/* Memorized Verses Section */}
+          {/* Memorized Verses Section - Using the shared component */}
           <div className="memorized-verses-section">
             <div className="section-header">
               <h3>Memorized Verses</h3>
               <a href="/profile" className="view-all-btn">View All</a>
             </div>
             
-            {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner"></div>
-                <span>Loading your verses...</span>
-              </div>
-            ) : memorizedVerses.length > 0 ? (
-              <div className="verses-list">
-                {memorizedVerses.slice(0, 5).map((verse) => (
-                  <div key={verse.id} className="verse-item">
-                    <div className="verse-reference">{verse.verseReference}</div>
-                    <div className="verse-text">"{verse.verseText}"</div>
-                    <div className="verse-date">
-                      Memorized on {formatDate(verse.dateMemorized)}
-                    </div>
-                  </div>
-                ))}
-                {memorizedVerses.length > 5 && (
-                  <div className="more-verses">
-                    + {memorizedVerses.length - 5} more verse{memorizedVerses.length - 5 !== 1 ? 's' : ''}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="empty-state">
-                <div className="empty-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                  </svg>
-                </div>
-                <p>You haven't memorized any verses yet. Start your first memorization lesson today!</p>
-                <a href="/learn" className="start-lesson-btn">Start a Lesson</a>
-              </div>
-            )}
+            {/* Use the same component that works in the Profile */}
+            <MemorizedVerses displayLimit={5} displayMode="dashboard" />
           </div>
         </div>
       </div>
