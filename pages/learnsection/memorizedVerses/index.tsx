@@ -1,181 +1,135 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../src/auth/context/AuthContext';
-import axios from 'axios';
-import API_BASE_URL from '../../../src/config/api';
-import './style.css'; // Make sure to create this CSS file
+import { getMemorizedVerses, getVerseById } from '../../../src/services/api';
+import './style.css';
 
 interface MemorizedVerse {
   id: number;
-  verseReference: string;
-  verseText: string;
-  dateMemorized: string;
+  verse_id: number;
+  verse_reference: string;
+  verse_text: string;
+  context_text: string;
+  memorized_date: string;
 }
 
-interface MemorizedVersesProps {
-  displayLimit?: number;
-  displayMode?: 'dashboard' | 'profile'; // Add display mode for styling
-}
-
-const MemorizedVerses: React.FC<MemorizedVersesProps> = ({ 
-  displayLimit,
-  displayMode = 'profile'
-}) => {
-  const { getAuthHeader, isAuthenticated } = useAuth();
+const MemorizedVerses: React.FC = () => {
+  const { isAuthenticated, getAuthHeader } = useAuth();
   const [verses, setVerses] = useState<MemorizedVerse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [expandedVerse, setExpandedVerse] = useState<number | null>(null);
+  
   useEffect(() => {
     const fetchMemorizedVerses = async () => {
       if (!isAuthenticated) {
-        setIsLoading(false);
+        setLoading(false);
         return;
       }
-
+      
       try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `${API_BASE_URL}/user/memorized-verses`,
-          { headers: getAuthHeader() }
-        );
-
-        console.log('API Response:', response.data);
-
-        // Handle different response formats
-        let versesData = [];
-        if (response.data.verses) {
-          versesData = response.data.verses;
-        } else if (Array.isArray(response.data)) {
-          versesData = response.data;
-        } else if (response.data.data && Array.isArray(response.data.data)) {
-          versesData = response.data.data;
-        } else {
-          console.error('Unexpected API response format:', response.data);
-          setError('Failed to load verses. Unexpected data format.');
-          setVerses([]);
-        }
-
-        // For testing - if in development mode and no verses found
-        if (versesData.length === 0 && process.env.NODE_ENV === 'development') {
-          versesData = [
-            {
-              id: 1,
-              verseReference: '1 Timothy 4:12',
-              verseText: 'Don\'t let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.',
-              dateMemorized: new Date().toISOString()
-            }
-          ];
-        }
-
-        setVerses(versesData);
+        setLoading(true);
         setError(null);
+        
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Authentication token not found');
+        }
+        
+        const data = await getMemorizedVerses(token);
+        setVerses(data);
       } catch (err) {
         console.error('Error fetching memorized verses:', err);
         setError('Failed to load your memorized verses. Please try again later.');
-        
-        // For testing - if in development mode
-        if (process.env.NODE_ENV === 'development') {
-          setVerses([
-            {
-              id: 1,
-              verseReference: '1 Timothy 4:12',
-              verseText: 'Don\'t let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.',
-              dateMemorized: new Date().toISOString()
-            }
-          ]);
-        }
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-
+    
     fetchMemorizedVerses();
-  }, [isAuthenticated, getAuthHeader]);
-
-  // Format date helper
-  const formatDate = (dateString: string) => {
-    try {
-      if (!dateString) return 'Unknown date';
-      
-      const date = new Date(dateString);
-      
-      // Check if date is valid
-      if (isNaN(date.getTime())) {
-        return dateString;
-      }
-      
-      return date.toLocaleDateString();
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return dateString;
-    }
+  }, [isAuthenticated]);
+  
+  const toggleVerseExpansion = (id: number) => {
+    setExpandedVerse(expandedVerse === id ? null : id);
   };
-
-  // Helper to limit verses for dashboard display
-  const displayVerses = displayLimit ? verses.slice(0, displayLimit) : verses;
-
-  // Apply className based on display mode
-  const containerClass = displayMode === 'dashboard' 
-    ? 'memorized-verses-container dashboard-mode' 
-    : 'memorized-verses-container';
-
-  if (isLoading) {
+  
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+  
+  if (!isAuthenticated) {
     return (
-      <div className={containerClass}>
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <span>Loading your verses...</span>
+      <div className="memorized-verses-container">
+        <div className="auth-required">
+          <h3>Sign In Required</h3>
+          <p>Please sign in to view your memorized verses.</p>
+          <a href="/login" className="login-btn">Sign In</a>
         </div>
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className={containerClass}>
-        <div className="error-message">
-          <p>{error}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (verses.length === 0) {
-    return (
-      <div className={containerClass}>
-        <div className="empty-state">
-          <div className="empty-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-            </svg>
-          </div>
-          <p>You haven't memorized any verses yet. Start your first memorization lesson today!</p>
-          <a href="/learn" className="start-lesson-btn">Start a Lesson</a>
-        </div>
-      </div>
-    );
-  }
-
+  
   return (
-    <div className={containerClass}>
-      <div className="verses-list">
-        {displayVerses.map((verse) => (
-          <div key={verse.id} className="verse-item">
-            <div className="verse-reference">{verse.verseReference}</div>
-            <div className="verse-text">"{verse.verseText}"</div>
-            <div className="verse-date">
-              Memorized on {formatDate(verse.dateMemorized)}
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="memorized-verses-container">
+      <h2 className="section-title">My Memorized Verses</h2>
       
-      {displayLimit && verses.length > displayLimit && (
-        <div className="more-verses">
-          <a href="/profile">
-            + {verses.length - displayLimit} more verse{verses.length - displayLimit !== 1 ? 's' : ''}
-          </a>
+      {loading ? (
+        <div className="loading-container">
+          <div className="verse-spinner"></div>
+          <p>Loading your memorized verses...</p>
+        </div>
+      ) : error ? (
+        <div className="error-message">
+          {error}
+        </div>
+      ) : verses.length === 0 ? (
+        <div className="no-verses-message">
+          <p>You haven't memorized any verses yet.</p>
+          <p>Start learning a verse to add it to your collection!</p>
+          <a href="/" className="browse-verses-btn">Browse Verses</a>
+        </div>
+      ) : (
+        <div className="verses-list">
+          {verses.map(verse => (
+            <div 
+              key={verse.id} 
+              className={`verse-card ${expandedVerse === verse.id ? 'expanded' : ''}`}
+            >
+              <div 
+                className="verse-header" 
+                onClick={() => toggleVerseExpansion(verse.id)}
+              >
+                <div className="verse-info">
+                  <h3 className="fixh3">{verse.verse_reference}</h3>
+                  <span className="memorized-date">
+                    Memorized: {formatDate(verse.memorized_date)}
+                  </span>
+                </div>
+                <div className="expand-icon">
+                  {expandedVerse === verse.id ? '−' : '+'}
+                </div>
+              </div>
+              
+              <div className="verse-content">
+                <p className="verse-text">"{verse.verse_text}"</p>
+                {verse.context_text && (
+                  <p className="verse-context">{verse.context_text}</p>
+                )}
+                <div className="verse-actions">
+                  <button 
+                    className="practice-again-btn"
+                    onClick={() => window.location.href = `/learn?verseId=${verse.verse_id}`}
+                  >
+                    Practice Again
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
