@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../src/auth/context/AuthContext';
 import axios from 'axios';
 import API_BASE_URL from '../../../src/config/api';
-import './memorizedVerses.css'; // Make sure to create this CSS file
+import './style.css'; // Make sure to create this CSS file
 
 interface MemorizedVerse {
   id: number;
