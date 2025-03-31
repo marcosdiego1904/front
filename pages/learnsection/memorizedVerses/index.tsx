@@ -104,7 +104,7 @@ const MemorizedVerses: React.FC = () => {
                 onClick={() => toggleVerseExpansion(verse.id)}
               >
                 <div className="verse-info">
-                  <h3 className="verse-reference">{verse.verse_reference}</h3>
+                  <h3 className="fixh3">{verse.verse_reference}</h3>
                   <span className="memorized-date">
                     Memorized: {formatDate(verse.memorized_date)}
                   </span>
