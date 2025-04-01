@@ -44,7 +44,7 @@
   }
   
   .rank-phrase {
-    color: var(--text-muted);
+    color: rgb(63, 61, 61);
     font-size: 0.9rem;
     text-align: center;
     font-style: italic;
