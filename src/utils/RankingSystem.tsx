@@ -8,7 +8,7 @@ import hello from './images/hello.png'
 import lantern from './images/lion.png'
 import lion from './images/path.png'
 import scroll from './images/scroll.png'
-import weakness from './images/weaknessh.png'
+import weakness from './images/weakness.png'
 import christian from './images/christian.png'
 // Define the biblical rank interface
 export interface BiblicalRank {
