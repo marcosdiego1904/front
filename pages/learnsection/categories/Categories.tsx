@@ -324,7 +324,7 @@ const Categories = () => {
           </>
         ) : (
           <div className="cat-verses-section">
-            <button className="cat-back-button mt-4" onClick={handleReturn}>
+            <button className="cat-back-button" onClick={handleReturn}>
               ← Return
             </button>
             <h1>{selectedSubcategory.name}</h1>
