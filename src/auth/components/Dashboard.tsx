@@ -1,8 +1,13 @@
+// src/auth/components/Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import API_BASE_URL from '../../config/api';
 import './DashboardStyles.css';
+import '../../components/RankingStyles.css';
+import RankCard from '../../components/RankCard';
+import LevelUpNotification from '../../components/LevelUpNotification';
+import { calculateUserRank, canLevelUp, biblicalRanks, BiblicalRank } from '../../utils/RankingSystem';
 
 interface MemorizedVerse {
   id: number;
@@ -30,6 +35,17 @@ const Dashboard: React.FC = () => {
     nextRank: "Bronze",
     versesToNextRank: 5
   });
+  const [biblicalUserRank, setBiblicalUserRank] = useState<{
+    currentRank: BiblicalRank;
+    progress: number;
+    versesToNextRank: number;
+  }>({
+    currentRank: biblicalRanks[0],
+    progress: 0,
+    versesToNextRank: 5
+  });
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [nextRank, setNextRank] = useState<BiblicalRank | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -78,7 +94,29 @@ const Dashboard: React.FC = () => {
         
         setMemorizedVerses(formattedVerses);
         
-        // Fetch user rank data
+        // Calculate biblical rank based on verses count
+        const versesCount = formattedVerses.length;
+        const calculatedRank = calculateUserRank(versesCount);
+        setBiblicalUserRank(calculatedRank);
+        
+        // Find next rank
+        if (calculatedRank.currentRank.nextLevel) {
+          const nextRankIndex = biblicalRanks.findIndex(rank => 
+            rank.level === calculatedRank.currentRank.nextLevel
+          );
+          if (nextRankIndex !== -1) {
+            setNextRank(biblicalRanks[nextRankIndex]);
+          }
+        }
+        
+        // Check if level up is available
+        const levelUpAvailable = canLevelUp(versesCount);
+        if (levelUpAvailable) {
+          // Not showing immediately to avoid annoying users
+          // They can click the level up button when they're ready
+        }
+        
+        // Fetch user rank data for backward compatibility
         try {
           const rankResponse = await axios.get(
             `${API_BASE_URL}/user/rank`,
@@ -160,8 +198,45 @@ const Dashboard: React.FC = () => {
     }
   };
   
+  const handleLevelUp = () => {
+    if (canLevelUp(memorizedVerses.length)) {
+      setShowLevelUp(true);
+    }
+  };
+  
+  const handleCloseNotification = () => {
+    setShowLevelUp(false);
+    
+    // Recalculate rank after level up
+    const versesCount = memorizedVerses.length;
+    const calculatedRank = calculateUserRank(versesCount);
+    setBiblicalUserRank(calculatedRank);
+    
+    // Find next rank
+    if (calculatedRank.currentRank.nextLevel) {
+      const nextRankIndex = biblicalRanks.findIndex(rank => 
+        rank.level === calculatedRank.currentRank.nextLevel
+      );
+      if (nextRankIndex !== -1) {
+        setNextRank(biblicalRanks[nextRankIndex]);
+      } else {
+        setNextRank(null);
+      }
+    } else {
+      setNextRank(null);
+    }
+  };
+  
   return (
     <div className="dashboard-container">
+      {/* Level Up Notification */}
+      <LevelUpNotification 
+        show={showLevelUp}
+        onClose={handleCloseNotification}
+        currentRank={biblicalUserRank.currentRank}
+        nextRank={nextRank}
+      />
+      
       {/* Sidebar */}
       <div className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
@@ -266,32 +341,27 @@ const Dashboard: React.FC = () => {
             <p>Here's what's happening with your account today.</p>
           </div>
           
-          {/* User Rank Section */}
+          {/* Biblical User Rank Section */}
           <div className="user-rank-section">
             <div className="section-header">
-              <h3>Your Current Rank</h3>
+              <h3>Your Biblical Journey</h3>
             </div>
             
-            <div className="rank-card">
-              <div className="rank-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="8" r="7"></circle>
-                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                </svg>
-                <span className="rank-title">{userRank.rank}</span>
+            {isLoading ? (
+              <div className="loading-spinner">
+                <div className="spinner"></div>
+                <span>Calculating your journey progress...</span>
               </div>
-              <div className="rank-progress">
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: `${userRank.progress}%` }}
-                  ></div>
-                </div>
-                <div className="rank-info">
-                  <span>{userRank.versesToNextRank} more verse{userRank.versesToNextRank !== 1 ? 's' : ''} to reach {userRank.nextRank}</span>
-                </div>
-              </div>
-            </div>
+            ) : (
+              <RankCard
+                currentRank={biblicalUserRank.currentRank}
+                progress={biblicalUserRank.progress}
+                versesToNextRank={biblicalUserRank.versesToNextRank}
+                versesCount={memorizedVerses.length}
+                onLevelUp={handleLevelUp}
+                canLevelUp={canLevelUp(memorizedVerses.length)}
+              />
+            )}
           </div>
           
           {/* Memorized Verses Section */}

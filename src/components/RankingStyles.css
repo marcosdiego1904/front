@@ -1,0 +1,280 @@
+/* src/components/RankingStyles.css */
+
+/* Rank Card Styles */
+.rank-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .rank-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background-color: rgba(22, 34, 61, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .rank-badge:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 193, 7, 0.2);
+  }
+  
+  .rank-badge svg {
+    width: 50px;
+    height: 50px;
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+  }
+  
+  .rank-title {
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .rank-phrase {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 80%;
+  }
+  
+  .rank-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .progress-bar {
+    height: 12px;
+    background-color: rgba(22, 34, 61, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+    border-radius: 6px;
+    transition: width 1s ease;
+  }
+  
+  .rank-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  
+  .verses-count {
+    font-weight: 600;
+    color: var(--primary-blue);
+  }
+  
+  .level-up-btn {
+    background-color: var(--accent-gold);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+    align-self: flex-start;
+    animation: pulse 2s infinite;
+  }
+  
+  .level-up-btn:hover {
+    background-color: var(--accent-gold-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+    }
+  }
+  
+  /* Level Up Notification Styles */
+  .level-up-notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .level-up-show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .level-up-hide {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .level-up-content {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: slideUp 0.5s forwards;
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .level-up-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .level-up-header h3 {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+    margin: 0;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  
+  .level-transition {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .old-level, .new-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .level-icon {
+    background-color: rgba(22, 34, 61, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .level-icon svg {
+    width: 40px;
+    height: 40px;
+    color: var(--accent-gold);
+  }
+  
+  .new-level .level-icon {
+    background-color: rgba(255, 193, 7, 0.1);
+    animation: glow 2s infinite alternate;
+  }
+  
+  .level-name {
+    font-weight: 600;
+    color: var(--primary-blue);
+  }
+  
+  .level-arrow svg {
+    width: 30px;
+    height: 30px;
+    color: var(--accent-gold);
+    animation: arrowMove 1s infinite alternate;
+  }
+  
+  @keyframes arrowMove {
+    from {
+      transform: translateX(-5px);
+    }
+    to {
+      transform: translateX(5px);
+    }
+  }
+  
+  .level-up-message {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 193, 7, 0.1);
+    border-radius: 8px;
+    font-style: italic;
+  }
+  
+  .continue-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .continue-btn:hover {
+    background-color: var(--primary-blue-light);
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive adjustments */
+  @media (min-width: 768px) {
+    .rank-card {
+      flex-direction: row;
+    }
+    
+    .rank-badge {
+      min-width: 200px;
+    }
+    
+    .rank-phrase {
+      max-width: 100%;
+    }
+  }
