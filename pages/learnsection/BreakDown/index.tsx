@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./style.css";
 
 interface Props {
   verse: string;
@@ -10,10 +9,9 @@ interface Props {
 const fragmentVerse = (verse: string): string[] => {
   return verse
     .split(/[,;.:]/) // Split by common punctuation
-    .map(fragment => fragment.trim().replace(/^["“”]|["“”]$/g, "")) // Remove surrounding quotes
+    .map(fragment => fragment.trim().replace(/^["""]|["""]$/g, "")) // Remove surrounding quotes
     .filter(Boolean);
 };
-
 
 const VerseBreakdownSection = ({ verse, onNext, prevStep }: Props) => {
   const verseParts = fragmentVerse(verse);
@@ -33,42 +31,58 @@ const VerseBreakdownSection = ({ verse, onNext, prevStep }: Props) => {
 
   return (
     <main className="main-container2">
-      <div className="intro-section">
-        {/* Título */}
+      <div className="intro-section breakdown-section">
+        {/* Encabezado */}
         <h1 className="title">Breaking it Down: Memorizing Step by Step</h1>
 
-        {/* Instrucción */}
-        <p className="instruction">
+        {/* Instrucción más compacta */}
+        <p className="instruction breakdown-instruction">
           Let's make it easier! Read each fragment out loud and focus on its meaning.
         </p>
 
-        {/* Barra de progreso */}
-        <p className="progress">Fragment {currentIndex + 1} of {verseParts.length}</p>
-
-        {/* Mostrar solo la parte actual del versículo */}
-        <p className="verse-part">{verseParts[currentIndex]}</p>
-
-        {/* Contenedor de botones */}
-        <div className="button-group">
-          {currentIndex > 0 && (
-            <button className="button prev-button" onClick={prevFragment}>
-              ← Previous
-            </button>
-          )}
-
-          {currentIndex < verseParts.length - 1 ? (
-            <button className="button next-button" onClick={nextFragment}>
-              Next Fragment →
-            </button>
-          ) : (
-            <button className="button continue-button" onClick={onNext}>
-              Continue to the Next Step
-            </button>
-          )}
+        {/* Contenedor del fragmento de versículo */}
+        <div className="fragment-container">
+          {/* Barra de progreso mejorada */}
+          <div className="fragment-progress-bar">
+            <div 
+              className="fragment-progress-fill" 
+              style={{ width: `${((currentIndex + 1) / verseParts.length) * 100}%` }}
+            ></div>
+          </div>
+          
+          <p className="fragment-counter">Fragment {currentIndex + 1} of {verseParts.length}</p>
+          
+          {/* Fragmento actual del versículo con mejor visualización */}
+          <div className="verse-fragment-wrapper">
+            <p className="verse-fragment">{verseParts[currentIndex]}</p>
+          </div>
         </div>
 
-        {/* Botón de regreso */}
-        <button className="button back-button" onClick={prevStep}>← Back</button>
+        {/* Navegación entre fragmentos */}
+        <div className="fragment-navigation">
+          <div className="button-group">
+            {currentIndex > 0 ? (
+              <button className="button prev-button" onClick={prevFragment}>
+                ← Previous
+              </button>
+            ) : (
+              <div className="button-placeholder"></div>
+            )}
+
+            {currentIndex < verseParts.length - 1 ? (
+              <button className="button next-button" onClick={nextFragment}>
+                Next Fragment →
+              </button>
+            ) : (
+              <button className="button continue-button" onClick={onNext}>
+                Continue to Next Step
+              </button>
+            )}
+          </div>
+          
+          {/* Botón de regreso */}
+          <button className="button back-button" onClick={prevStep}>← Back</button>
+        </div>
       </div>
     </main>
   );

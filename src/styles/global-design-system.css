@@ -924,3 +924,140 @@
       margin: var(--space-xs) auto 0;
     }
   }
+  /* Estilos específicos para la sección de fragmentación de versículos */
+.breakdown-section {
+    gap: var(--space-md);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .breakdown-instruction {
+    margin-bottom: var(--space-sm);
+  }
+  
+  /* Contenedor mejorado para fragmentos */
+  .fragment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: var(--space-sm) 0;
+    padding: var(--space-md);
+    background-color: var(--bg-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* Barra de progreso mejorada */
+  .fragment-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: var(--space-xs) 0 var(--space-sm);
+  }
+  
+  .fragment-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue-light), var(--accent-blue));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  
+  /* Contador de fragmentos */
+  .fragment-counter {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--accent-blue);
+    background-color: rgba(0, 123, 255, 0.1);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 20px;
+    margin: var(--space-xs) 0 var(--space-md);
+  }
+  
+  /* Contenedor para el fragmento actual */
+  .verse-fragment-wrapper {
+    width: 100%;
+    margin: var(--space-sm) 0;
+    padding: var(--space-sm);
+    background-color: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+  }
+  
+  /* Estilo para el fragmento actual */
+  .verse-fragment {
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.5;
+    text-align: center;
+    padding: var(--space-sm);
+    background-color: white;
+    border-left: 4px solid var(--accent-blue);
+    border-radius: var(--radius-sm);
+    max-width: 90%;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  /* Navegación entre fragmentos */
+  .fragment-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: var(--space-md);
+  }
+  
+  /* Espacio reservado para mantener la alineación cuando no hay botón previo */
+  .button-placeholder {
+    width: 200px;
+    height: 50px;
+  }
+  
+  /* Botón de regreso con posición mejorada */
+  .back-button {
+    margin-top: var(--space-md);
+  }
+  
+  /* Animación de aparición */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .fragment-container {
+      padding: var(--space-sm);
+    }
+    
+    .verse-fragment-wrapper {
+      min-height: 120px;
+    }
+    
+    .verse-fragment {
+      font-size: var(--font-size-lg);
+      padding: var(--space-xs);
+    }
+    
+    .button-placeholder {
+      display: none;
+    }
+    
+    .button-group {
+      justify-content: center;
+    }
+  }
