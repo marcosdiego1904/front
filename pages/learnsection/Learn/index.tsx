@@ -8,6 +8,7 @@ import FillInTheBlanksSection from "../FillBlanks";
 import WriteFromMemorySection from '../WriteSection';
 import FinalScreen from "../FinalScreen";
 import "./style.css";
+import '../../../src/components/ProgressTracker.css';
 
 const LearnSection = () => {
   const location = useLocation();
@@ -25,6 +26,18 @@ const LearnSection = () => {
 
   const [step, setStep] = useState(1);
 
+  // Define step names for the progress tracker
+  const stepNames = [
+    "Introduction",
+    "Read Aloud",
+    "Break Down",
+    "Fill Blanks",
+    "Write",
+    "Complete"
+  ];
+  
+  const totalSteps = stepNames.length;
+
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
   if (!selectedVerse) {
     return <p>Loading...</p>;
@@ -34,9 +47,59 @@ const LearnSection = () => {
   const prevStep = () => setStep(step - 1);
   const restartLesson = () => setStep(1);
 
+  // Compact Progress Tracker Component - Defined inline for simplicity
+  const ProgressTracker = () => (
+    <div className="progress-tracker-container">
+      <div className="progress-steps">
+        {stepNames.map((name, index) => (
+          <div 
+            key={index}
+            className={`progress-step ${
+              index + 1 === step 
+                ? "active" 
+                : index + 1 < step 
+                  ? "completed" 
+                  : ""
+            }`}
+          >
+            <div className="step-circle">
+              {index + 1 < step ? (
+                <span className="checkmark">✓</span>
+              ) : (
+                index + 1
+              )}
+            </div>
+            <span className="step-name">{name}</span>
+            {index < totalSteps - 1 && (
+              <div 
+                className={`step-connector ${
+                  index + 1 < step ? "completed" : ""
+                }`}
+              ></div>
+            )}
+          </div>
+        ))}
+      </div>
+      
+      <div className="progress-text">
+        Step {step} of {totalSteps}: {stepNames[step - 1]}
+      </div>
+      
+      <div className="progress-bar-container">
+        <div 
+          className="progress-bar-fill"
+          style={{ width: `${((step - 1) / (totalSteps - 1)) * 100}%` }}
+        ></div>
+      </div>
+    </div>
+  );
+
   return (
-    <main className="">
-      <div className="">
+    <main className="learn-main-container">
+      {/* Always show the tracker */}
+      <ProgressTracker />
+      
+      <div className="learn-content-container">
         {step === 1 && (
           <IntroSection
             onNext={nextStep}

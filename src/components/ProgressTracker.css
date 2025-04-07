@@ -1,0 +1,169 @@
+/* Compact Progress Tracker Styles */
+.progress-tracker-container {
+    width: 100%;
+    padding: 8px 15px;
+    background-color: rgba(11, 21, 37, 0.95); /* Semi-transparent dark blue */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  /* Compact steps display */
+  .progress-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+    max-width: 600px; /* Reduced width */
+  }
+  
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+  }
+  
+  /* Smaller circles */
+  .step-circle {
+    width: 22px; /* Smaller circles */
+    height: 22px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    margin-bottom: 2px; /* Reduced margin */
+    font-size: 0.7rem; /* Smaller font */
+  }
+  
+  /* Completed step */
+  .progress-step.completed .step-circle {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  /* Active step */
+  .progress-step.active .step-circle {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Smaller step names */
+  .step-name {
+    font-size: 0.65rem; /* Smaller font */
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    max-width: 60px; /* Reduced width */
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .progress-step.active .step-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+  }
+  
+  .progress-step.completed .step-name {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Thinner connector lines */
+  .step-connector {
+    position: absolute;
+    top: 11px; /* Adjusted for smaller circles */
+    right: -50%;
+    width: 100%;
+    height: 1px; /* Thinner line */
+    background-color: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+  }
+  
+  .step-connector.completed {
+    background-color: #28a745;
+  }
+  
+  /* Simplified progress info - hide text except on desktop */
+  .progress-text {
+    display: none; /* Hide text by default */
+  }
+  
+  @media (min-width: 768px) {
+    .progress-text {
+      display: block;
+      text-align: center;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+      margin-top: 5px;
+    }
+  }
+  
+  /* Thinner progress bar */
+  .progress-bar-container {
+    width: 100%;
+    height: 3px; /* Very thin bar */
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 1.5px;
+    overflow: hidden;
+    max-width: 600px; /* Match steps width */
+    margin: 5px auto 0;
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    background-color: #007bff;
+    transition: width 0.5s ease;
+    border-radius: 1.5px;
+  }
+  
+  /* Add padding to main containers to prevent overlap with fixed tracker */
+  .main-container1,
+  .main-container2,
+  .main-container3,
+  .memorization-final-container {
+    margin-top: 60px !important;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .step-name {
+      display: none; /* Hide names on mobile */
+    }
+    
+    .progress-steps {
+      max-width: 300px; /* Even more compact on mobile */
+    }
+    
+    .step-circle {
+      width: 18px;
+      height: 18px;
+      font-size: 0.65rem;
+    }
+    
+    .progress-tracker-container {
+      padding: 5px 10px;
+    }
+    
+    .main-container1,
+    .main-container2,
+    .main-container3,
+    .memorization-final-container {
+      margin-top: 40px !important;
+    }
+  }

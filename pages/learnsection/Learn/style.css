@@ -101,3 +101,41 @@ h1 {
       font-size: 1.2rem;
   }
 }
+/* Add these styles to your existing Learn/style.css */
+
+/* Container for the entire learn section with positioning context */
+.learn-main-container {
+  position: relative;
+  background-color: #16223d;
+  min-height: 100vh;
+  padding-top: 0; /* The tracker's height is accounted for by margins on child elements */
+}
+
+/* Container for the content sections */
+.learn-content-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+/* If you're using normalize.css or reset.css, add these global resets to fix any margins */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Make sure the existing section containers have z-index lower than the tracker */
+.main-container1, 
+.main-container2,
+.main-container3,
+.memorization-final-container {
+  position: relative;
+  z-index: 1; /* Lower than the tracker's z-index (1000) */
+}
+
+/* Fix for the buttons that might be hidden behind the tracker */
+.return-button,
+.back-button {
+  margin-top: 5px;
+}
