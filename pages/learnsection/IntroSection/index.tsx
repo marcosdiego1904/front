@@ -19,7 +19,7 @@ const IntroSection = ({ cite, verse, context, onNext }: Props) => {
             <div className="intro-section">
                 {/* Botón de regreso */}
                 <div className="header">
-                    <button className="return-button" onClick={() => navigate(-1)}>← Return</button>
+                    <button className="return-button" onClick={() => navigate(-1)}>Return</button>
                 </div>
 
                 {/* Información principal */}
