@@ -1317,3 +1317,165 @@
       gap: var(--space-md);
     }
   }
+  /* Estilos para la sección de introducción */
+.intro-section {
+    position: relative;
+  }
+  
+  /* Estilo mejorado para el botón de retorno */
+  .header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: var(--space-md);
+  }
+  
+  .return-button {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .return-button:hover {
+    background-color: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .return-button:before {
+    content: "←";
+    margin-right: 6px;
+    font-size: 14px;
+  }
+  
+  /* Estilo mejorado para el botón Start Learning */
+  .start-learning-btn {
+    background: linear-gradient(45deg, var(--accent-blue), var(--accent-blue-light));
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    margin: var(--space-md) auto;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .start-learning-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .start-learning-btn:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  
+  .start-learning-btn:hover:after {
+    transform: translateX(100%);
+  }
+  
+  /* Estilo mejorado para el botón de explicación */
+  .toggle-explanation {
+    background-color: transparent;
+    color: var(--accent-blue);
+    border: none;
+    padding: 8px 12px;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-align: center;
+    position: relative;
+    margin: var(--space-sm) auto;
+    display: block;
+    font-weight: 500;
+  }
+  
+  .toggle-explanation:hover {
+    color: var(--accent-blue-dark);
+    text-decoration: underline;
+  }
+  
+  /* Contenido de explicación mejorado */
+  .explanation-content {
+    background-color: var(--bg-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin: var(--space-md) 0;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--accent-blue);
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .explanation-content h3 {
+    color: var(--accent-blue);
+    margin-top: 0;
+    font-size: var(--font-size-lg);
+  }
+  
+  .explanation-content h4 {
+    color: var(--primary-blue);
+    margin-top: var(--space-md);
+    font-size: var(--font-size-md);
+  }
+  
+  .explanation-content p {
+    color: var(--text-medium);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+  }
+  
+  .explanation-content .bold {
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+    margin-top: var(--space-lg);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Media queries para responsividad */
+  @media (max-width: 768px) {
+    .start-learning-btn {
+      padding: 12px 20px;
+      font-size: var(--font-size-sm);
+      max-width: 250px;
+    }
+    
+    .explanation-content {
+      padding: var(--space-md);
+    }
+  }
