@@ -1267,3 +1267,53 @@
       padding: var(--space-md); /* Padding más compacto en móviles */
     }
   }
+  /* Estilos para botones deshabilitados */
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .prev-button:disabled {
+    background-color: #8aa0bd; /* Un color más claro para indicar que está deshabilitado */
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .prev-button:disabled:hover {
+    background-color: #8aa0bd;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Asegura que los botones tengan el mismo ancho para mayor consistencia */
+  .prev-button, 
+  .next-button, 
+  .continue-button {
+    min-width: 180px;
+    justify-content: center;
+  }
+  
+  /* Mejora el grupo de botones para asegurar alineación uniforme */
+  .button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-lg);
+    margin: var(--space-md) 0 var(--space-sm);
+  }
+  
+  @media (max-width: 768px) {
+    .prev-button, 
+    .next-button, 
+    .continue-button {
+      min-width: 140px;
+      font-size: 0.9rem;
+      padding: var(--space-xs) var(--space-sm);
+    }
+    
+    .button-group {
+      gap: var(--space-md);
+    }
+  }

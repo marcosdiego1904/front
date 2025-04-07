@@ -58,16 +58,17 @@ const VerseBreakdownSection = ({ verse, onNext, prevStep }: Props) => {
           </div>
         </div>
 
-        {/* Navegación entre fragmentos */}
+        {/* Navegación entre fragmentos con botones consistentes */}
         <div className="fragment-navigation">
           <div className="button-group">
-            {currentIndex > 0 ? (
-              <button className="button prev-button" onClick={prevFragment}>
-                ← Previous
-              </button>
-            ) : (
-              <div className="button-placeholder"></div>
-            )}
+            {/* Siempre mostramos el botón "Previous" pero lo deshabilitamos si estamos en el primer fragmento */}
+            <button 
+              className="button prev-button" 
+              onClick={prevFragment} 
+              disabled={currentIndex === 0}
+            >
+              ← Previous
+            </button>
 
             {currentIndex < verseParts.length - 1 ? (
               <button className="button next-button" onClick={nextFragment}>
