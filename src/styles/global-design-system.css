@@ -1048,4 +1048,224 @@
       padding-left: 50px; /* Más padding a la izquierda para dejar espacio al botón */
     }
   }
+  /* Mejora del toggle button */
+.navbar-toggle-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent-orange-light);
+    color: var(--primary-blue-dark);
+    border: none;
+    cursor: pointer;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+  }
   
+  /* Cambia el ícono a una "X" cuando está activo */
+  .navbar-toggle-btn .icon-bar {
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background-color: var(--primary-blue-dark);
+    display: block;
+    transition: all 0.3s;
+  }
+  
+  .navbar-toggle-btn .icon-bar:nth-child(1) {
+    margin-bottom: 5px;
+  }
+  
+  .navbar-toggle-btn .icon-bar:nth-child(2) {
+    margin-bottom: 5px;
+  }
+  
+  /* Transforma las barras en una X cuando está activo */
+  .navbar-toggle-btn.active .icon-bar:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .navbar-toggle-btn.active .icon-bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .navbar-toggle-btn.active .icon-bar:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  /* Si prefieres usar solo un ícono X en lugar de transformar las barras */
+  .navbar-toggle-btn.active .close-icon {
+    display: block;
+  }
+  
+  .navbar-toggle-btn .close-icon {
+    display: none;
+  }
+  
+  .navbar-toggle-btn .menu-icon {
+    display: block;
+  }
+  
+  .navbar-toggle-btn.active .menu-icon {
+    display: none;
+  }
+  
+  /* Estilo para el menú lateral */
+  .sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -280px; /* Inicialmente fuera de la pantalla */
+    width: 280px;
+    height: 100%;
+    background-color: var(--primary-blue);
+    z-index: 1900;
+    padding-top: 70px;
+    transition: left 0.3s ease;
+    box-shadow: var(--shadow-lg);
+    overflow-y: auto;
+  }
+  
+  .sidebar-menu.active {
+    left: 0;
+  }
+  
+  /* Fondo oscuro cuando el menú está abierto */
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1800;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+  
+  .menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Estilo para los elementos del menú */
+  .sidebar-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-menu li {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: var(--font-size-md);
+    border-left: 3px solid transparent;
+  }
+  
+  .sidebar-menu a:hover, 
+  .sidebar-menu a.active {
+    background-color: var(--primary-blue-light);
+    color: white;
+    border-left: 3px solid var(--accent-orange-light);
+  }
+  
+  .sidebar-menu i {
+    margin-right: 10px;
+    font-size: var(--font-size-lg);
+    width: 20px;
+    text-align: center;
+  }
+  
+  /* Estilos para el usuario y botón de logout */
+  .user-section {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
+  }
+  
+  .user-greeting {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--font-size-md);
+    margin-bottom: 10px;
+  }
+  
+  .logout-button {
+    display: inline-block;
+    padding: 6px 20px;
+    background-color: transparent;
+    color: var(--accent-orange-light);
+    border: 1px solid var(--accent-orange-light);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .logout-button:hover {
+    background-color: var(--accent-orange-light);
+    color: var(--primary-blue-dark);
+  }
+  
+  /* CSS específico para el comportamiento móvil */
+  @media (max-width: 768px) {
+    /* Asegura que el toggle esté correctamente posicionado en móviles */
+    .navbar-toggle-btn {
+      top: 15px;
+      left: 15px;
+      width: 36px;
+      height: 36px;
+    }
+    
+    /* Ajusta el sidebar para pantallas pequeñas */
+    .sidebar-menu {
+      width: 250px;
+      left: -250px;
+    }
+    
+    /* Mejora la interacción táctil en móviles */
+    .sidebar-menu a {
+      padding: 12px 16px;
+    }
+    
+    /* Logo y título alineados correctamente */
+    .navbar-brand, .site-title {
+      margin-left: 40px; /* Da espacio para el toggle button */
+    }
+  }
+  
+  /* JavaScript necesario (para referencia):
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.querySelector('.navbar-toggle-btn');
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    const overlay = document.querySelector('.menu-overlay');
+    
+    toggleBtn.addEventListener('click', function() {
+      toggleBtn.classList.toggle('active');
+      sidebarMenu.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.classList.toggle('menu-open');
+    });
+    
+    overlay.addEventListener('click', function() {
+      toggleBtn.classList.remove('active');
+      sidebarMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    });
+  });
+  */
