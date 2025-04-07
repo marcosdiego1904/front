@@ -816,3 +816,111 @@
       max-width: 250px;
     }
   }
+  /* Estilos específicos para la sección Read Aloud */
+.read-aloud-section {
+    /* Optimización del espaciado vertical */
+    gap: var(--space-md);
+  }
+  
+  /* Contenedor de instrucciones más compacto */
+  .read-aloud-instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  
+  /* Texto de acento para números */
+  .text-accent {
+    color: var(--accent-green);
+    font-weight: bold;
+  }
+  
+  /* Botón de información integrado con el párrafo */
+  .info-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 8px;
+    font-size: var(--font-size-sm);
+    color: var(--accent-blue);
+    cursor: pointer;
+    transition: color var(--transition-normal);
+    text-decoration: underline;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* Contenedor optimizado para el versículo */
+  .verse-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 95%; /* Permite más espacio horizontal */
+    margin: 0 auto;
+  }
+  
+  /* Verse con altura adaptable */
+  .verse {
+    font-size: var(--font-size-lg);
+    color: var(--text-dark);
+    padding: var(--space-md) var(--space-lg);
+    border-left: 5px solid var(--accent-blue);
+    background-color: var(--bg-highlight);
+    border-radius: var(--radius-md);
+    margin: var(--space-sm) auto;
+    width: 100%;
+    max-height: 300px; /* Altura máxima */
+    overflow-y: auto; /* Scroll si el versículo es muy largo */
+    line-height: 1.6;
+    text-align: left; /* Mejor legibilidad */
+  }
+  
+  /* Scroll personalizado para el versículo */
+  .verse::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .verse::-webkit-scrollbar-track {
+    background: rgba(0, 123, 255, 0.05);
+    border-radius: 4px;
+  }
+  
+  .verse::-webkit-scrollbar-thumb {
+    background: var(--accent-blue-light);
+    border-radius: 4px;
+  }
+  
+  /* Mejorar la apariencia del contenedor de explicación */
+  .explanation-container.show {
+    max-height: 150px; /* Un poco más compacto */
+    margin-top: var(--space-sm);
+  }
+  
+  .explanation {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  /* Optimizaciones para móvil */
+  @media (max-width: 768px) {
+    .read-aloud-section {
+      padding: var(--space-md);
+    }
+    
+    .verse {
+      padding: var(--space-sm) var(--space-md);
+      max-height: 250px;
+    }
+    
+    .instruction {
+      font-size: var(--font-size-md);
+    }
+    
+    .info-btn {
+      display: block;
+      margin: var(--space-xs) auto 0;
+    }
+  }
