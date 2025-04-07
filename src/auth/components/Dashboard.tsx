@@ -1,5 +1,5 @@
 // src/auth/components/Dashboard.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import API_BASE_URL from '../../config/api';
@@ -48,6 +48,24 @@ const Dashboard: React.FC = () => {
   const [nextRank, setNextRank] = useState<BiblicalRank | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Create refs for the sections we want to scroll to
+  const dashboardRef = useRef<HTMLElement>(null);
+  const userRankRef = useRef<HTMLDivElement>(null);
+  const memorizedVersesRef = useRef<HTMLDivElement>(null);
+  
+  // Function to handle smooth scrolling
+  const scrollToSection = (elementRef: React.RefObject<HTMLElement>) => {
+    if (elementRef && elementRef.current) {
+      elementRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      
+      // Close the mobile menu if it's open
+      setIsMenuOpen(false);
+    }
+  };
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -173,6 +191,29 @@ const Dashboard: React.FC = () => {
     };
     
     fetchUserData();
+    
+    // Check if there's a hash in the URL and scroll to the corresponding section
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#dashboard' && dashboardRef.current) {
+        scrollToSection(dashboardRef);
+      } else if (hash === '#userRank' && userRankRef.current) {
+        scrollToSection(userRankRef);
+      } else if (hash === '#memorizedVerses' && memorizedVersesRef.current) {
+        scrollToSection(memorizedVersesRef);
+      }
+    };
+    
+    // Handle hash when component mounts
+    handleHashChange();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Remove event listener on cleanup
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, [isAuthenticated, getAuthHeader]);
   
   // Format date to display in a readable format (Mar 29, 2025)
@@ -257,7 +298,10 @@ const Dashboard: React.FC = () => {
         <nav className="sidebar-nav">
           <ul>
             <li className="active">
-              <a href="#dashboard">
+              <a href="#dashboard" onClick={(e) => { 
+                e.preventDefault(); 
+                scrollToSection(dashboardRef); 
+              }}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="3" width="7" height="9"></rect>
                   <rect x="14" y="3" width="7" height="5"></rect>
@@ -267,7 +311,7 @@ const Dashboard: React.FC = () => {
                 Dashboard
               </a>
             </li>
-            {/**   <li>
+            {/**<li>
               <a href="/profile">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -275,7 +319,8 @@ const Dashboard: React.FC = () => {
                 </svg>
                 Profile
               </a>
-            </li>
+            </li> 
+            
             <li>
               <a href="#settings">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -286,9 +331,25 @@ const Dashboard: React.FC = () => {
               </a>
             </li>
             */}
-          
+            
             <li>
-              <a href="/memorized-verses">
+              <a href="#userRank" onClick={(e) => { 
+                e.preventDefault(); 
+                scrollToSection(userRankRef); 
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                Biblical Journey
+              </a>
+            </li>
+            
+            <li>
+              <a href="#memorizedVerses" onClick={(e) => { 
+                e.preventDefault(); 
+                scrollToSection(memorizedVersesRef); 
+              }}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
@@ -323,8 +384,8 @@ const Dashboard: React.FC = () => {
           </svg>
         </div>
         
-        {/* Header */}
-        <header className="dashboard-header">
+        {/* Header - add ref for dashboard section */}
+        <header ref={dashboardRef} id="dashboard" className="dashboard-header">
           <h1>Dashboard</h1>
           <div className="user-profile">
             <div className="user-avatar">
@@ -344,8 +405,8 @@ const Dashboard: React.FC = () => {
             <p>Here's what's happening with your account today.</p>
           </div>
           
-          {/* Biblical User Rank Section */}
-          <div className="user-rank-section">
+          {/* Biblical User Rank Section - add ref */}
+          <div ref={userRankRef} id="userRank" className="user-rank-section">
             <div className="section-header">
               <h3>Your Biblical Journey</h3>
             </div>
@@ -367,8 +428,8 @@ const Dashboard: React.FC = () => {
             )}
           </div>
           
-          {/* Memorized Verses Section */}
-          <div className="memorized-verses-section">
+          {/* Memorized Verses Section - add ref */}
+          <div ref={memorizedVersesRef} id="memorizedVerses" className="memorized-verses-section">
             <div className="section-header">
               <h3>Memorized Verses</h3>
               <a href="/memorized-verses" className="view-all-btn">View All</a>
