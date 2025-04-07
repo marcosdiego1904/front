@@ -1027,3 +1027,25 @@
     text-align: center;
     margin-top: var(--space-lg);
   }
+  @media (max-width: 768px) {
+    /* Ajustar la posición del botón toggle */
+    .navbar-toggle-btn {
+      top: 20px; /* Centrado verticalmente con el tracker */
+      left: 10px; /* Cercano al borde izquierdo */
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      z-index: 2001; /* Aumentar z-index para asegurar que esté por encima del tracker */
+    }
+    
+    /* Ajustar posición cuando está activo */
+    .navbar-toggle-btn.active {
+      top: 20px; /* Mantener la misma altura incluso cuando está activo */
+    }
+    
+    /* Ajustar padding del container del tracker para dejar espacio al botón */
+    .progress-tracker-container {
+      padding-left: 50px; /* Más padding a la izquierda para dejar espacio al botón */
+    }
+  }
+  
