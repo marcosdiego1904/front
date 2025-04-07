@@ -7,7 +7,6 @@ import VerseBreakdownSection from "../BreakDown";
 import FillInTheBlanksSection from "../FillBlanks";
 import WriteFromMemorySection from '../WriteSection';
 import FinalScreen from "../FinalScreen";
-import Navbar from "../../../src/Navbar";
 import "./style.css";
 import '../../../src/components/ProgressTracker.css';
 
@@ -40,15 +39,60 @@ const LearnSection = () => {
   
   const totalSteps = stepNames.length;
 
-  // Toggle navbar visibility
+  // Toggle navbar visibility by manipulating the navbar that's already in the DOM
   const toggleNavbar = () => {
-    setNavbarVisible(!navbarVisible);
+    const navbar = document.querySelector('nav.navbar');
+    if (navbar) {
+      if (navbarVisible) {
+        // Hide navbar
+        navbar.style.transform = 'translateY(-100%)';
+        setTimeout(() => {
+          navbar.style.display = 'none';
+          setNavbarVisible(false);
+        }, 300); // Match transition time
+      } else {
+        // Show navbar
+        navbar.style.display = 'flex';
+        // Force reflow
+        navbar.offsetHeight;
+        navbar.style.transform = 'translateY(0)';
+        setNavbarVisible(true);
+      }
+    }
   };
 
-  // Close navbar when clicking outside or when navigating between steps
+  // Hide navbar initially and when changing steps
   useEffect(() => {
+    const navbar = document.querySelector('nav.navbar');
+    if (navbar) {
+      // Add transition style if not already there
+      navbar.style.transition = 'transform 0.3s ease';
+      // Hide navbar
+      navbar.style.transform = 'translateY(-100%)';
+      setTimeout(() => {
+        navbar.style.display = 'none';
+      }, 300); // Match transition time
+    }
     setNavbarVisible(false);
   }, [step]);
+
+  // Init navbar setup on component mount
+  useEffect(() => {
+    const navbar = document.querySelector('nav.navbar');
+    if (navbar) {
+      // Make sure navbar is initially positioned and styled correctly
+      navbar.style.position = 'fixed';
+      navbar.style.top = '0';
+      navbar.style.left = '0';
+      navbar.style.width = '100%';
+      navbar.style.zIndex = '1500';
+      navbar.style.transition = 'transform 0.3s ease';
+      navbar.style.transform = 'translateY(-100%)';
+      navbar.style.display = 'none';
+      navbar.style.backgroundColor = 'rgba(22, 34, 61, 0.95)';
+      navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    }
+  }, []);
 
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
   if (!selectedVerse) {
@@ -115,11 +159,6 @@ const LearnSection = () => {
       >
         <i className={`bi ${navbarVisible ? 'bi-x' : 'bi-list'}`}></i>
       </button>
-      
-      {/* Navbar component with conditional display */}
-      <div className={`navbar-wrapper ${navbarVisible ? 'visible' : ''}`}>
-        <Navbar />
-      </div>
       
       {/* Always show the tracker */}
       <ProgressTracker />
