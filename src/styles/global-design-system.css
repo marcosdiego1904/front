@@ -244,7 +244,7 @@
   .learn-main-container {
     position: relative;
     min-height: 100vh;
-    padding-top: 85px; /* To account for fixed progress tracker */
+    padding-top: 65px; /* Reduced from 85px to start content higher */
     background-color: var(--primary-blue);
   }
   
@@ -252,17 +252,18 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-lg);
+    padding: var(--space-sm) var(--space-lg); /* Reduced padding top */
   }
   
   /* Common container for all learning sections */
   .main-container1,
   .main-container2,
   .main-container3 {
-    padding: var(--space-md) 0;
+    padding: 0; /* Removed padding to save space */
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Changed from center */
     justify-content: center;
+    margin-top: 10px; /* Small margin top */
   }
   
   /* Common intro section for all components */
@@ -271,12 +272,13 @@
     width: 90%;
     max-width: 1100px;
     border-radius: var(--radius-xl);
-    padding: var(--space-xl);
+    padding: var(--space-lg) var(--space-xl); /* Reduced padding */
     box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
     text-align: center;
+    position: relative;
   }
   
   /* Common title style */
@@ -285,6 +287,7 @@
     font-weight: bold;
     color: var(--primary-blue);
     margin-bottom: var(--space-sm);
+    margin-top: 0; /* Removed top margin */
   }
   
   /* Common instruction style */
@@ -335,8 +338,9 @@
   .button-group {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: var(--space-lg);
-    margin-top: var(--space-xl);
+    margin: var(--space-md) 0 var(--space-sm);
   }
   
   /* Common button style */
@@ -374,6 +378,8 @@
   .next-button,
   .prev-button {
     background-color: var(--accent-blue);
+    min-width: 180px;
+    justify-content: center;
   }
   
   .next-button:hover,
@@ -383,33 +389,109 @@
   
   .continue-button {
     background-color: var(--accent-green);
+    min-width: 180px;
+    justify-content: center;
   }
   
   .continue-button:hover {
     background-color: var(--accent-green-dark);
   }
   
-  .continue-button:disabled {
-    background-color: var(--text-light);
+  /* Disabled button styles */
+  .button:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
   }
   
+  .continue-button:disabled {
+    background-color: var(--text-light);
+  }
+  
+  .prev-button:disabled {
+    background-color: #8aa0bd; /* Lighter color for disabled state */
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .prev-button:disabled:hover {
+    background-color: #8aa0bd;
+    transform: none;
+    box-shadow: none;
+  }
+  
   /* ========= READ ALOUD SECTION ========= */
+  .read-aloud-section {
+    gap: var(--space-md);
+  }
+  
+  .read-aloud-instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  
+  .text-accent {
+    color: var(--accent-green);
+    font-weight: bold;
+  }
+  
   .info-btn {
     background: none;
     border: none;
-    font-size: var(--font-size-md);
+    padding: 0;
+    margin-left: 8px;
+    font-size: var(--font-size-sm);
     color: var(--accent-blue);
     cursor: pointer;
     transition: color var(--transition-normal);
     text-decoration: underline;
-    margin: var(--space-md) 0;
+    display: inline-block;
+    vertical-align: middle;
   }
   
   .info-btn:hover {
     color: var(--accent-blue-dark);
+  }
+  
+  .verse-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+  
+  .verse {
+    font-size: var(--font-size-lg);
+    color: var(--text-dark);
+    padding: var(--space-md) var(--space-lg);
+    border-left: 5px solid var(--accent-blue);
+    background-color: var(--bg-highlight);
+    border-radius: var(--radius-md);
+    margin: var(--space-sm) auto;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    line-height: 1.6;
+    text-align: left;
+  }
+  
+  .verse::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .verse::-webkit-scrollbar-track {
+    background: rgba(0, 123, 255, 0.05);
+    border-radius: 4px;
+  }
+  
+  .verse::-webkit-scrollbar-thumb {
+    background: var(--accent-blue-light);
+    border-radius: 4px;
   }
   
   .explanation-container {
@@ -420,20 +502,21 @@
   }
   
   .explanation-container.show {
-    max-height: 200px;
+    max-height: 150px;
+    margin-top: var(--space-sm);
     opacity: 1;
   }
   
   .explanation {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-sm);
     color: var(--text-medium);
-    padding: var(--space-md);
+    line-height: 1.5;
+    padding: var(--space-sm) var(--space-md);
     border-left: 4px solid var(--accent-blue);
     background-color: var(--bg-highlight);
     border-radius: var(--radius-sm);
     margin: var(--space-md) 0;
     text-align: left;
-    line-height: 1.5;
   }
   
   .highlight {
@@ -510,6 +593,96 @@
   .incorrect-word {
     color: #dc3545;
     font-weight: bold;
+  }
+  
+  /* ========= BREAKDOWN SECTION ========= */
+  .breakdown-section {
+    gap: var(--space-md);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .breakdown-instruction {
+    margin-bottom: var(--space-xs);
+  }
+  
+  .fragment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: var(--space-sm) 0;
+    padding: var(--space-md) var(--space-md) var(--space-sm);
+    background-color: var(--bg-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .fragment-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: var(--space-xs) 0 var(--space-sm);
+  }
+  
+  .fragment-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue-light), var(--accent-blue));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  
+  .fragment-counter {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--accent-blue);
+    background-color: rgba(0, 123, 255, 0.1);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 20px;
+    margin: var(--space-xs) 0 var(--space-md);
+  }
+  
+  .verse-fragment-wrapper {
+    width: 100%;
+    margin: 0 0 var(--space-sm);
+    padding: var(--space-sm);
+    background-color: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+  }
+  
+  .verse-fragment {
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.5;
+    text-align: center;
+    padding: var(--space-sm);
+    background-color: white;
+    border-left: 4px solid var(--accent-blue);
+    border-radius: var(--radius-sm);
+    max-width: 90%;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .fragment-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 0;
+  }
+  
+  .button-placeholder {
+    width: 200px;
+    height: 50px;
   }
   
   /* ========= FINAL SCREEN ========= */
@@ -724,605 +897,7 @@
     background-color: var(--accent-green);
   }
   
-  /* ========= ANIMATIONS ========= */
-  @keyframes memorization-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  @keyframes bounce {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-10px);
-    }
-  }
-  
-  /* ========= RESPONSIVE STYLES ========= */
-  @media (max-width: 768px) {
-    :root {
-      --font-size-xxl: 1.6rem;
-      --font-size-xl: 1.3rem;
-      --font-size-lg: 1.1rem;
-    }
-    
-    .progress-tracker-container {
-      padding: var(--space-sm) var(--space-md);
-    }
-    
-    .step-name {
-      display: none;
-    }
-    
-    .progress-steps {
-      max-width: 350px;
-    }
-    
-    .step-circle {
-      width: 22px;
-      height: 22px;
-    }
-    
-    .navbar-toggle-btn {
-      top: 20px;
-      left: var(--space-md);
-      width: 36px;
-      height: 36px;
-    }
-    
-    .learn-main-container {
-      padding-top: 65px;
-    }
-    
-    .intro-section {
-      padding: var(--space-lg);
-      gap: var(--space-md);
-    }
-    
-    .button-group {
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-md);
-    }
-    
-    .button {
-      width: 100%;
-      max-width: 230px;
-    }
-    
-    .verse {
-      padding: var(--space-md);
-    }
-    
-    .blank-input {
-      width: 100px;
-      margin: var(--space-xs) 0;
-    }
-    
-    .memorization-final-container {
-      padding: var(--space-lg);
-      margin: var(--space-md);
-    }
-    
-    .memorization-buttons-container {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .memorization-button {
-      width: 100%;
-      max-width: 250px;
-    }
-  }
-  /* Estilos específicos para la sección Read Aloud */
-.read-aloud-section {
-    /* Optimización del espaciado vertical */
-    gap: var(--space-md);
-  }
-  
-  /* Contenedor de instrucciones más compacto */
-  .read-aloud-instructions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    max-width: 90%;
-  }
-  
-  /* Texto de acento para números */
-  .text-accent {
-    color: var(--accent-green);
-    font-weight: bold;
-  }
-  
-  /* Botón de información integrado con el párrafo */
-  .info-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    margin-left: 8px;
-    font-size: var(--font-size-sm);
-    color: var(--accent-blue);
-    cursor: pointer;
-    transition: color var(--transition-normal);
-    text-decoration: underline;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  
-  /* Contenedor optimizado para el versículo */
-  .verse-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 95%; /* Permite más espacio horizontal */
-    margin: 0 auto;
-  }
-  
-  /* Verse con altura adaptable */
-  .verse {
-    font-size: var(--font-size-lg);
-    color: var(--text-dark);
-    padding: var(--space-md) var(--space-lg);
-    border-left: 5px solid var(--accent-blue);
-    background-color: var(--bg-highlight);
-    border-radius: var(--radius-md);
-    margin: var(--space-sm) auto;
-    width: 100%;
-    max-height: 300px; /* Altura máxima */
-    overflow-y: auto; /* Scroll si el versículo es muy largo */
-    line-height: 1.6;
-    text-align: left; /* Mejor legibilidad */
-  }
-  
-  /* Scroll personalizado para el versículo */
-  .verse::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .verse::-webkit-scrollbar-track {
-    background: rgba(0, 123, 255, 0.05);
-    border-radius: 4px;
-  }
-  
-  .verse::-webkit-scrollbar-thumb {
-    background: var(--accent-blue-light);
-    border-radius: 4px;
-  }
-  
-  /* Mejorar la apariencia del contenedor de explicación */
-  .explanation-container.show {
-    max-height: 150px; /* Un poco más compacto */
-    margin-top: var(--space-sm);
-  }
-  
-  .explanation {
-    font-size: var(--font-size-sm);
-    line-height: 1.5;
-    padding: var(--space-sm) var(--space-md);
-  }
-  
-  /* Optimizaciones para móvil */
-  @media (max-width: 768px) {
-    .read-aloud-section {
-      padding: var(--space-md);
-    }
-    
-    .verse {
-      padding: var(--space-sm) var(--space-md);
-      max-height: 250px;
-    }
-    
-    .instruction {
-      font-size: var(--font-size-md);
-    }
-    
-    .info-btn {
-      display: block;
-      margin: var(--space-xs) auto 0;
-    }
-  }
-  /* Estilos específicos para la sección de fragmentación de versículos */
-.breakdown-section {
-  gap: var(--space-md);
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.breakdown-instruction {
-  margin-bottom: var(--space-sm);
-}
-
-/* Contenedor mejorado para fragmentos */
-.fragment-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin: var(--space-sm) 0;
-  padding: var(--space-md);
-  background-color: var(--bg-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-/* Barra de progreso mejorada */
-.fragment-progress-bar {
-  width: 100%;
-  height: 8px;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-  overflow: hidden;
-  margin: var(--space-xs) 0 var(--space-sm);
-}
-
-.fragment-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent-blue-light), var(--accent-blue));
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-/* Contador de fragmentos */
-.fragment-counter {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--accent-blue);
-  background-color: rgba(0, 123, 255, 0.1);
-  padding: var(--space-xs) var(--space-md);
-  border-radius: 20px;
-  margin: var(--space-xs) 0 var(--space-md);
-}
-
-/* Contenedor para el fragmento actual */
-.verse-fragment-wrapper {
-  width: 100%;
-  margin: var(--space-sm) 0;
-  padding: var(--space-sm);
-  background-color: white;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 150px;
-}
-
-/* Estilo para el fragmento actual */
-.verse-fragment {
-  font-size: var(--font-size-xl);
-  font-weight: 500;
-  color: var(--text-dark);
-  line-height: 1.5;
-  text-align: center;
-  padding: var(--space-sm);
-  background-color: white;
-  border-left: 4px solid var(--accent-blue);
-  border-radius: var(--radius-sm);
-  max-width: 90%;
-  margin: 0 auto;
-  animation: fadeIn 0.5s ease;
-}
-
-/* Navegación entre fragmentos */
-.fragment-navigation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-top: var(--space-md);
-}
-
-/* Espacio reservado para mantener la alineación cuando no hay botón previo */
-.button-placeholder {
-  width: 200px;
-  height: 50px;
-}
-
-/* Botón de regreso con posición mejorada */
-.back-button {
-  margin-top: var(--space-md);
-}
-
-/* Animación de aparición */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .fragment-container {
-    padding: var(--space-sm);
-  }
-  
-  .verse-fragment-wrapper {
-    min-height: 120px;
-  }
-  
-  .verse-fragment {
-    font-size: var(--font-size-lg);
-    padding: var(--space-xs);
-  }
-  
-  .button-placeholder {
-    display: none;
-  }
-  
-  .button-group {
-    justify-content: center;
-  }
-}/* Estilos específicos para la sección de fragmentación de versículos */
-.breakdown-section {
-    gap: var(--space-md);
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  .breakdown-instruction {
-    margin-bottom: var(--space-sm);
-  }
-  
-  /* Contenedor mejorado para fragmentos */
-  .fragment-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin: var(--space-sm) 0;
-    padding: var(--space-md) var(--space-md) var(--space-sm);
-    background-color: var(--bg-light);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-  }
-  
-  /* Barra de progreso mejorada */
-  .fragment-progress-bar {
-    width: 100%;
-    height: 8px;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-    overflow: hidden;
-    margin: var(--space-xs) 0 var(--space-sm);
-  }
-  
-  .fragment-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-blue-light), var(--accent-blue));
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-  
-  /* Contador de fragmentos */
-  .fragment-counter {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--accent-blue);
-    background-color: rgba(0, 123, 255, 0.1);
-    padding: var(--space-xs) var(--space-md);
-    border-radius: 20px;
-    margin: var(--space-xs) 0 var(--space-md);
-  }
-  
-  /* Contenedor para el fragmento actual */
-  .verse-fragment-wrapper {
-    width: 100%;
-    margin: 0 0 var(--space-sm);
-    padding: var(--space-sm);
-    background-color: white;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 120px; /* Altura reducida */
-  }
-  
-  /* Estilo para el fragmento actual */
-  .verse-fragment {
-    font-size: var(--font-size-xl);
-    font-weight: 500;
-    color: var(--text-dark);
-    line-height: 1.5;
-    text-align: center;
-    padding: var(--space-sm);
-    background-color: white;
-    border-left: 4px solid var(--accent-blue);
-    border-radius: var(--radius-sm);
-    max-width: 90%;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease;
-  }
-  
-  /* Navegación entre fragmentos - Movida hacia arriba */
-  .fragment-navigation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 0; /* Eliminado el margen superior */
-  }
-  
-  /* Grupo de botones con mejor alineación */
-  .button-group {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-lg);
-    margin-top: var(--space-sm); /* Reducido el espacio */
-  }
-  
-  /* Espacio reservado para mantener la alineación cuando no hay botón previo */
-  .button-placeholder {
-    width: 200px;
-    height: 50px;
-  }
-  
-  /* Botón de regreso con posición mejorada */
-  .back-button {
-    margin-top: var(--space-sm); /* Reducido el espacio */
-  }
-  
-  /* Animación de aparición */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .fragment-container {
-      padding: var(--space-sm);
-    }
-    
-    .verse-fragment-wrapper {
-      min-height: 100px; /* Altura aún más reducida en móvil */
-    }
-    
-    .verse-fragment {
-      font-size: var(--font-size-lg);
-      padding: var(--space-xs);
-    }
-    
-    .button-placeholder {
-      display: none;
-    }
-    
-    .button-group {
-      justify-content: center;
-    }
-  }
-  /* Optimización del espaciado vertical general */
-.learn-main-container {
-    position: relative;
-    min-height: 100vh;
-    padding-top: 65px; /* Reducido de 85px para que el contenido empiece más arriba */
-    background-color: var(--primary-blue);
-  }
-  
-  .learn-content-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--space-sm) var(--space-lg); /* Reducido el padding superior */
-  }
-  
-  /* Ajustes específicos para containers principales */
-  .main-container1,
-  .main-container2,
-  .main-container3 {
-    padding: 0; /* Elimina el padding vertical para ganar espacio */
-    display: flex;
-    align-items: flex-start; /* Cambiado de center para alinear arriba */
-    justify-content: center;
-    margin-top: 10px; /* Añade un pequeño margen superior */
-  }
-  
-  /* Ajuste del padding interno de los containers */
-  .intro-section {
-    padding-top: var(--space-lg); /* Reducido el padding superior */
-    padding-bottom: var(--space-lg); /* Reducido el padding inferior */
-  }
-  
-  /* Específicamente para la sección de fragmentos */
-  .breakdown-section .title {
-    margin-top: 0; /* Elimina el margen superior del título */
-    margin-bottom: var(--space-sm); /* Reduce el margen inferior */
-  }
-  
-  .breakdown-section .instruction {
-    margin-bottom: var(--space-xs); /* Reduce aún más el espacio */
-  }
-  
-  /* Ajuste del contenedor de fragmentos */
-  .fragment-container {
-    margin-top: var(--space-xs); /* Reduce el margen superior */
-    padding-top: var(--space-sm); /* Reduce el padding superior */
-  }
-  
-  /* Ajustes responsivos */
-  @media (max-width: 768px) {
-    .learn-main-container {
-      padding-top: 55px; /* Aún menos espacio en móviles */
-    }
-    
-    .learn-content-container {
-      padding: var(--space-xs) var(--space-md);
-    }
-    
-    .intro-section {
-      padding: var(--space-md); /* Padding más compacto en móviles */
-    }
-  }
-  /* Estilos para botones deshabilitados */
-.button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-  }
-  
-  .prev-button:disabled {
-    background-color: #8aa0bd; /* Un color más claro para indicar que está deshabilitado */
-    transform: none;
-    box-shadow: none;
-  }
-  
-  .prev-button:disabled:hover {
-    background-color: #8aa0bd;
-    transform: none;
-    box-shadow: none;
-  }
-  
-  /* Asegura que los botones tengan el mismo ancho para mayor consistencia */
-  .prev-button, 
-  .next-button, 
-  .continue-button {
-    min-width: 180px;
-    justify-content: center;
-  }
-  
-  /* Mejora el grupo de botones para asegurar alineación uniforme */
-  .button-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-lg);
-    margin: var(--space-md) 0 var(--space-sm);
-  }
-  
-  @media (max-width: 768px) {
-    .prev-button, 
-    .next-button, 
-    .continue-button {
-      min-width: 140px;
-      font-size: 0.9rem;
-      padding: var(--space-xs) var(--space-sm);
-    }
-    
-    .button-group {
-      gap: var(--space-md);
-    }
-  }
-  /* Estilos para la sección de introducción */
-.intro-section {
-    position: relative;
-  }
-  
-  /* Estilo mejorado para el botón de retorno */
+  /* ========= INTRO SECTION ========= */
   .header {
     display: flex;
     justify-content: center;
@@ -1358,7 +933,6 @@
     font-size: 14px;
   }
   
-  /* Estilo mejorado para el botón Start Learning */
   .start-learning-btn {
     background: linear-gradient(45deg, var(--accent-blue), var(--accent-blue-light));
     color: white;
@@ -1399,7 +973,6 @@
     transform: translateX(100%);
   }
   
-  /* Estilo mejorado para el botón de explicación */
   .toggle-explanation {
     background-color: transparent;
     color: var(--accent-blue);
@@ -1420,7 +993,6 @@
     text-decoration: underline;
   }
   
-  /* Contenido de explicación mejorado */
   .explanation-content {
     background-color: var(--bg-light);
     border-radius: var(--radius-lg);
@@ -1454,28 +1026,4 @@
     color: var(--text-dark);
     text-align: center;
     margin-top: var(--space-lg);
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Media queries para responsividad */
-  @media (max-width: 768px) {
-    .start-learning-btn {
-      padding: 12px 20px;
-      font-size: var(--font-size-sm);
-      max-width: 250px;
-    }
-    
-    .explanation-content {
-      padding: var(--space-md);
-    }
   }
