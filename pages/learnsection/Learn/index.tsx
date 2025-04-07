@@ -10,6 +10,9 @@ import FinalScreen from "../FinalScreen";
 import "./style.css";
 import '../../../src/components/ProgressTracker.css';
 
+// Importamos el Navbar pero no lo vamos a usar directamente
+import Navbar from "../../../src/Navbar";
+
 const LearnSection = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,59 +42,80 @@ const LearnSection = () => {
   
   const totalSteps = stepNames.length;
 
-  // Toggle navbar visibility by manipulating the navbar that's already in the DOM
+  // Controlador de visibilidad del navbar con clases CSS en lugar de manipulación directa
   const toggleNavbar = () => {
-    const navbar = document.querySelector('nav.navbar');
+    const navbar = document.querySelector('nav.navbar') as HTMLElement;
     if (navbar) {
       if (navbarVisible) {
-        // Hide navbar
-        navbar.style.transform = 'translateY(-100%)';
+        // Aplicar clase para ocultar
+        navbar.classList.remove('learn-navbar-visible');
+        navbar.classList.add('learn-navbar-hidden');
         setTimeout(() => {
-          navbar.style.display = 'none';
           setNavbarVisible(false);
-        }, 300); // Match transition time
+        }, 300);
       } else {
-        // Show navbar
-        navbar.style.display = 'flex';
-        // Force reflow
-        navbar.offsetHeight;
-        navbar.style.transform = 'translateY(0)';
+        // Aplicar clase para mostrar
+        navbar.classList.remove('learn-navbar-hidden');
+        navbar.classList.add('learn-navbar-visible');
         setNavbarVisible(true);
       }
     }
   };
 
-  // Hide navbar initially and when changing steps
+  // Ocultar navbar inicialmente y cuando se cambia de paso
   useEffect(() => {
-    const navbar = document.querySelector('nav.navbar');
+    const navbar = document.querySelector('nav.navbar') as HTMLElement;
     if (navbar) {
-      // Add transition style if not already there
-      navbar.style.transition = 'transform 0.3s ease';
-      // Hide navbar
-      navbar.style.transform = 'translateY(-100%)';
-      setTimeout(() => {
-        navbar.style.display = 'none';
-      }, 300); // Match transition time
+      navbar.classList.add('learn-navbar-hidden');
+      navbar.classList.remove('learn-navbar-visible');
+      setNavbarVisible(false);
     }
-    setNavbarVisible(false);
   }, [step]);
 
-  // Init navbar setup on component mount
+  // Inicialización al montar el componente - agregar estilos una vez
   useEffect(() => {
-    const navbar = document.querySelector('nav.navbar');
-    if (navbar) {
-      // Make sure navbar is initially positioned and styled correctly
-      navbar.style.position = 'fixed';
-      navbar.style.top = '0';
-      navbar.style.left = '0';
-      navbar.style.width = '100%';
-      navbar.style.zIndex = '1500';
-      navbar.style.transition = 'transform 0.3s ease';
-      navbar.style.transform = 'translateY(-100%)';
-      navbar.style.display = 'none';
-      navbar.style.backgroundColor = 'rgba(22, 34, 61, 0.95)';
-      navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    // Crear estilos para el navbar si no existen
+    if (!document.getElementById('learn-navbar-styles')) {
+      const styleEl = document.createElement('style');
+      styleEl.id = 'learn-navbar-styles';
+      styleEl.innerHTML = `
+        .learn-navbar-hidden {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          z-index: 1500 !important;
+          transform: translateY(-100%) !important;
+          transition: transform 0.3s ease !important;
+        }
+        .learn-navbar-visible {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          z-index: 1500 !important;
+          transform: translateY(0) !important;
+          transition: transform 0.3s ease !important;
+          background-color: rgba(22, 34, 61, 0.95) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        }
+      `;
+      document.head.appendChild(styleEl);
     }
+
+    // Aplicar clase inicial al navbar
+    const navbar = document.querySelector('nav.navbar') as HTMLElement;
+    if (navbar) {
+      navbar.classList.add('learn-navbar-hidden');
+    }
+
+    // Limpieza al desmontar
+    return () => {
+      const navbar = document.querySelector('nav.navbar') as HTMLElement;
+      if (navbar) {
+        navbar.classList.remove('learn-navbar-hidden', 'learn-navbar-visible');
+      }
+    };
   }, []);
 
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
