@@ -7,6 +7,7 @@ import VerseBreakdownSection from "../BreakDown";
 import FillInTheBlanksSection from "../FillBlanks";
 import WriteFromMemorySection from '../WriteSection';
 import FinalScreen from "../FinalScreen";
+import Navbar from "../../../src/Navbar";
 import "./style.css";
 import '../../../src/components/ProgressTracker.css';
 
@@ -14,6 +15,7 @@ const LearnSection = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedVerse = location.state?.selectedVerse;
+  const [navbarVisible, setNavbarVisible] = useState(false);
 
   // ✅ Verificar en consola si se recibió el versículo correctamente
   useEffect(() => {
@@ -37,6 +39,11 @@ const LearnSection = () => {
   ];
   
   const totalSteps = stepNames.length;
+
+  // Toggle navbar visibility
+  const toggleNavbar = () => {
+    setNavbarVisible(!navbarVisible);
+  };
 
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
   if (!selectedVerse) {
@@ -96,6 +103,16 @@ const LearnSection = () => {
 
   return (
     <main className="learn-main-container">
+      {/* Navbar toggle button */}
+      <button className="navbar-toggle-btn" onClick={toggleNavbar}>
+        <i className="bi bi-list"></i>
+      </button>
+      
+      {/* Navbar component with conditional display */}
+      <div className={`navbar-wrapper ${navbarVisible ? 'visible' : ''}`}>
+        <Navbar />
+      </div>
+      
       {/* Always show the tracker */}
       <ProgressTracker />
       
@@ -146,6 +163,11 @@ const LearnSection = () => {
           />
         )}
       </div>
+      
+      {/* Overlay to close navbar when clicked outside */}
+      {navbarVisible && (
+        <div className="navbar-overlay" onClick={toggleNavbar}></div>
+      )}
     </main>
   );
 };
