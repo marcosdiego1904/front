@@ -144,7 +144,7 @@ html, body {
 /* Navbar toggle button */
 .navbar-toggle-btn {
   position: fixed;
-  top: 75px; /* Positioned below the logo/navbar area */
+  top: 32px; /* Default position (aligned with tracker) when not active */
   left: 15px;
   width: 40px;
   height: 40px;
@@ -160,6 +160,20 @@ html, body {
   justify-content: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+}
+
+/* Change icon and position when active */
+.navbar-toggle-btn.active {
+  top: 90px; /* Move button lower when navbar is showing */
+  background-color: #f0ad4e; /* Slightly different color when active */
+}
+
+.navbar-toggle-btn i {
+  transition: all 0.3s ease;
+}
+
+.navbar-toggle-btn.active i {
+  transform: rotate(180deg); /* Rotate icon when active */
 }
 
 .navbar-toggle-btn:hover {

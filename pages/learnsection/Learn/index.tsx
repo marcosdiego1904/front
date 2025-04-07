@@ -45,6 +45,11 @@ const LearnSection = () => {
     setNavbarVisible(!navbarVisible);
   };
 
+  // Close navbar when clicking outside or when navigating between steps
+  useEffect(() => {
+    setNavbarVisible(false);
+  }, [step]);
+
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
   if (!selectedVerse) {
     return <p>Loading...</p>;
@@ -104,8 +109,11 @@ const LearnSection = () => {
   return (
     <main className="learn-main-container">
       {/* Navbar toggle button */}
-      <button className="navbar-toggle-btn" onClick={toggleNavbar}>
-        <i className="bi bi-list"></i>
+      <button 
+        className={`navbar-toggle-btn ${navbarVisible ? 'active' : ''}`} 
+        onClick={toggleNavbar}
+      >
+        <i className={`bi ${navbarVisible ? 'bi-x' : 'bi-list'}`}></i>
       </button>
       
       {/* Navbar component with conditional display */}
