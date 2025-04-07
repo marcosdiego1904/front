@@ -11,7 +11,8 @@ import ForgotPassword from "./auth/components/ForgotPassword";
 import UserProfile from "./auth/components/UserProfile";
 import Dashboard from "./auth/components/Dashboard";
 import { AuthProvider, useAuth } from "./auth/context/AuthContext";
-
+// En src/index.tsx o App.tsx
+import './styles/global-design-system.css';
 // Custom wrapper for protected routes that works with useRoutes
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();

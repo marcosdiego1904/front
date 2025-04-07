@@ -7,7 +7,8 @@ import VerseBreakdownSection from "../BreakDown";
 import FillInTheBlanksSection from "../FillBlanks";
 import WriteFromMemorySection from '../WriteSection';
 import FinalScreen from "../FinalScreen";
-import "./style.css";
+
+//import "./style.css";
 import '../../../src/components/ProgressTracker.css';
 
 // Importamos el Navbar pero no lo vamos a usar directamente

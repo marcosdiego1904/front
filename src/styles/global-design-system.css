@@ -1,0 +1,818 @@
+/* ========= HARMONIZED DESIGN SYSTEM =========
+ * This stylesheet coordinates the visual language between
+ * the progress tracker and learning components.
+ */
+
+ :root {
+    /* Color palette */
+    --primary-blue: #16223d;
+    --primary-blue-light: #243659;
+    --primary-blue-dark: #0d152a;
+    --accent-blue: #007bff;
+    --accent-blue-light: #4da3ff;
+    --accent-blue-dark: #0056b3;
+    --accent-green: #28a745;
+    --accent-green-light: #48c264;
+    --accent-green-dark: #218838;
+    --accent-orange: #d48900;
+    --accent-orange-light: #ffa826;
+    --accent-orange-dark: #b67500;
+    --text-dark: #16223d;
+    --text-medium: #444;
+    --text-light: #6c757d;
+    --bg-white: #ffffff;
+    --bg-light: #f8f9fa;
+    --bg-highlight: rgba(0, 123, 255, 0.1);
+    
+    /* Typography */
+    --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-xxl: 1.8rem;
+    
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-xxl: 2.5rem;
+    
+    /* Border radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 15px;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 10px 20px rgba(0, 0, 0, 0.2);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+  }
+  
+  /* ========= GLOBAL STYLES ========= */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    background-color: var(--primary-blue);
+    color: var(--text-dark);
+  }
+  
+  /* ========= PROGRESS TRACKER ========= */
+  .progress-tracker-container {
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--primary-blue-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .progress-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+  }
+  
+  .step-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-xs);
+  }
+  
+  .progress-step.completed .step-circle {
+    background-color: var(--accent-green);
+    color: white;
+  }
+  
+  .progress-step.active .step-circle {
+    background-color: var(--accent-blue);
+    color: white;
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+  
+  .step-name {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    max-width: 70px;
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .progress-step.active .step-name {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+  }
+  
+  .progress-step.completed .step-name {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  
+  .step-connector {
+    position: absolute;
+    top: 13px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.12);
+    z-index: 1;
+  }
+  
+  .step-connector.completed {
+    background-color: var(--accent-green);
+  }
+  
+  .progress-text {
+    text-align: center;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-md);
+  }
+  
+  .progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 700px;
+    margin: var(--space-sm) auto 0;
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    background-color: var(--accent-blue);
+    transition: width var(--transition-slow);
+    border-radius: 2px;
+  }
+  
+  /* ========= NAVBAR TOGGLE BUTTON ========= */
+  .navbar-toggle-btn {
+    position: fixed;
+    top: 38px;
+    left: var(--space-lg);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent-orange-light);
+    color: var(--primary-blue);
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+  }
+  
+  .navbar-toggle-btn.active {
+    top: 100px;
+    background-color: var(--accent-orange);
+  }
+  
+  .navbar-toggle-btn i {
+    transition: transform var(--transition-normal);
+  }
+  
+  .navbar-toggle-btn.active i {
+    transform: rotate(180deg);
+  }
+  
+  .navbar-toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .navbar-toggle-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .navbar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1400;
+    backdrop-filter: blur(3px);
+  }
+  
+  /* ========= MAIN CONTAINERS ========= */
+  .learn-main-container {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 85px; /* To account for fixed progress tracker */
+    background-color: var(--primary-blue);
+  }
+  
+  .learn-content-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+  }
+  
+  /* Common container for all learning sections */
+  .main-container1,
+  .main-container2,
+  .main-container3 {
+    padding: var(--space-md) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Common intro section for all components */
+  .intro-section {
+    background-color: var(--bg-white);
+    width: 90%;
+    max-width: 1100px;
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+  
+  /* Common title style */
+  .title {
+    font-size: var(--font-size-xxl);
+    font-weight: bold;
+    color: var(--primary-blue);
+    margin-bottom: var(--space-sm);
+  }
+  
+  /* Common instruction style */
+  .instruction {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--accent-blue);
+    margin-bottom: var(--space-md);
+  }
+  
+  /* Common citation style */
+  .cite,
+  .verse-citation {
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--primary-blue);
+    margin: var(--space-md) 0;
+  }
+  
+  /* Common verse style */
+  .verse {
+    font-size: var(--font-size-lg);
+    color: var(--text-dark);
+    padding: var(--space-lg);
+    border-left: 5px solid var(--accent-blue);
+    background-color: var(--bg-highlight);
+    border-radius: var(--radius-md);
+    margin: var(--space-md) auto;
+    max-width: 90%;
+    line-height: 1.6;
+  }
+  
+  /* Common verse part style */
+  .verse-part {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    text-align: center;
+    color: var(--text-dark);
+    padding: var(--space-lg);
+    border-left: 5px solid var(--accent-blue);
+    background-color: var(--bg-highlight);
+    border-radius: var(--radius-md);
+    max-width: 90%;
+    margin: var(--space-md) auto;
+  }
+  
+  /* Common button group style */
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+  
+  /* Common button style */
+  .button {
+    width: 200px;
+    height: 50px;
+    font-size: var(--font-size-md);
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Button variations */
+  .back-button {
+    background-color: var(--accent-orange);
+  }
+  
+  .back-button:hover {
+    background-color: var(--accent-orange-dark);
+  }
+  
+  .next-button,
+  .prev-button {
+    background-color: var(--accent-blue);
+  }
+  
+  .next-button:hover,
+  .prev-button:hover {
+    background-color: var(--accent-blue-dark);
+  }
+  
+  .continue-button {
+    background-color: var(--accent-green);
+  }
+  
+  .continue-button:hover {
+    background-color: var(--accent-green-dark);
+  }
+  
+  .continue-button:disabled {
+    background-color: var(--text-light);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* ========= READ ALOUD SECTION ========= */
+  .info-btn {
+    background: none;
+    border: none;
+    font-size: var(--font-size-md);
+    color: var(--accent-blue);
+    cursor: pointer;
+    transition: color var(--transition-normal);
+    text-decoration: underline;
+    margin: var(--space-md) 0;
+  }
+  
+  .info-btn:hover {
+    color: var(--accent-blue-dark);
+  }
+  
+  .explanation-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow), opacity var(--transition-normal);
+  }
+  
+  .explanation-container.show {
+    max-height: 200px;
+    opacity: 1;
+  }
+  
+  .explanation {
+    font-size: var(--font-size-md);
+    color: var(--text-medium);
+    padding: var(--space-md);
+    border-left: 4px solid var(--accent-blue);
+    background-color: var(--bg-highlight);
+    border-radius: var(--radius-sm);
+    margin: var(--space-md) 0;
+    text-align: left;
+    line-height: 1.5;
+  }
+  
+  .highlight {
+    color: var(--accent-blue);
+  }
+  
+  /* ========= FILL BLANKS SECTION ========= */
+  .blank-input {
+    width: 130px;
+    height: 45px;
+    text-align: center;
+    font-size: var(--font-size-lg);
+    border: 2px solid var(--text-light);
+    border-radius: var(--radius-sm);
+    margin: 0 var(--space-xs);
+    background-color: white;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color var(--transition-normal);
+    padding: var(--space-xs);
+  }
+  
+  .blank-input:focus {
+    border-color: var(--accent-blue);
+  }
+  
+  .blank-input.correct {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+  }
+  
+  .blank-input.incorrect {
+    border-color: #dc3545;
+    color: #dc3545;
+  }
+  
+  .hint {
+    font-size: var(--font-size-md);
+    color: #dc3545;
+    font-weight: bold;
+    margin: var(--space-md) 0;
+  }
+  
+  /* ========= WRITE FROM MEMORY SECTION ========= */
+  .memory-input {
+    width: 90%;
+    max-width: 650px;
+    height: 130px;
+    font-size: var(--font-size-lg);
+    padding: var(--space-md);
+    border: 2px solid var(--text-light);
+    border-radius: var(--radius-md);
+    margin: var(--space-md) auto;
+    text-align: left;
+    resize: none;
+    background-color: white;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color var(--transition-normal);
+    line-height: 1.5;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .memory-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .correct-word {
+    color: var(--accent-green);
+    font-weight: bold;
+  }
+  
+  .incorrect-word {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
+  /* ========= FINAL SCREEN ========= */
+  .memorization-final-container {
+    background-color: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: var(--space-xxl);
+    max-width: 650px;
+    margin: 50px auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .memorization-header {
+    margin-bottom: var(--space-lg);
+    color: var(--text-dark);
+    font-size: var(--font-size-xxl);
+    font-weight: 700;
+    position: relative;
+  }
+  
+  .memorization-confetti-icon {
+    font-size: calc(var(--font-size-xxl) + 0.3rem);
+    margin: 0 var(--space-sm);
+    display: inline-block;
+    animation: bounce 1s ease infinite alternate;
+  }
+  
+  .memorization-description {
+    font-size: var(--font-size-lg);
+    color: var(--text-medium);
+    line-height: 1.6;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .memorization-tip {
+    font-size: var(--font-size-md);
+    color: var(--text-medium);
+    font-style: italic;
+    margin-bottom: var(--space-lg);
+  }
+  
+  .memorization-status-message {
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    margin: var(--space-lg) 0;
+    font-size: var(--font-size-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .memorization-success-message {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid var(--accent-green);
+    color: var(--accent-green-dark);
+  }
+  
+  .memorization-error-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid #dc3545;
+    color: #b21e2e;
+  }
+  
+  .memorization-loading-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    justify-content: center;
+  }
+  
+  .memorization-spinner {
+    width: 22px;
+    height: 22px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: memorization-spin 1s linear infinite;
+  }
+  
+  .memorization-login-container {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-left: 4px solid var(--accent-blue);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    margin: var(--space-lg) 0;
+    color: var(--accent-blue-dark);
+  }
+  
+  .memorization-login-button {
+    display: inline-block;
+    background-color: var(--accent-blue);
+    color: white;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    margin-top: var(--space-md);
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+  }
+  
+  .memorization-login-button:hover {
+    background-color: var(--accent-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .memorization-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+  
+  .memorization-button {
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    box-shadow: var(--shadow-sm);
+    min-width: 150px;
+  }
+  
+  .memorization-home-button {
+    background-color: var(--text-light);
+    color: white;
+  }
+  
+  .memorization-home-button:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .memorization-restart-button {
+    background-color: var(--accent-green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+  
+  .memorization-restart-button:hover {
+    background-color: var(--accent-green-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .memorization-profile-button {
+    background-color: var(--accent-blue);
+    color: white;
+  }
+  
+  .memorization-profile-button:hover {
+    background-color: var(--accent-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .memorization-back-button {
+    background-color: var(--accent-orange);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+    width: 150px;
+    margin: var(--space-lg) auto 0;
+  }
+  
+  .memorization-back-button:hover {
+    background-color: var(--accent-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .memorization-decoration {
+    position: absolute;
+    opacity: 0.05;
+    z-index: 0;
+  }
+  
+  .memorization-decoration-1 {
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--accent-blue);
+  }
+  
+  .memorization-decoration-2 {
+    bottom: -30px;
+    left: -30px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--accent-green);
+  }
+  
+  /* ========= ANIMATIONS ========= */
+  @keyframes memorization-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* ========= RESPONSIVE STYLES ========= */
+  @media (max-width: 768px) {
+    :root {
+      --font-size-xxl: 1.6rem;
+      --font-size-xl: 1.3rem;
+      --font-size-lg: 1.1rem;
+    }
+    
+    .progress-tracker-container {
+      padding: var(--space-sm) var(--space-md);
+    }
+    
+    .step-name {
+      display: none;
+    }
+    
+    .progress-steps {
+      max-width: 350px;
+    }
+    
+    .step-circle {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .navbar-toggle-btn {
+      top: 20px;
+      left: var(--space-md);
+      width: 36px;
+      height: 36px;
+    }
+    
+    .learn-main-container {
+      padding-top: 65px;
+    }
+    
+    .intro-section {
+      padding: var(--space-lg);
+      gap: var(--space-md);
+    }
+    
+    .button-group {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    
+    .button {
+      width: 100%;
+      max-width: 230px;
+    }
+    
+    .verse {
+      padding: var(--space-md);
+    }
+    
+    .blank-input {
+      width: 100px;
+      margin: var(--space-xs) 0;
+    }
+    
+    .memorization-final-container {
+      padding: var(--space-lg);
+      margin: var(--space-md);
+    }
+    
+    .memorization-buttons-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .memorization-button {
+      width: 100%;
+      max-width: 250px;
+    }
+  }

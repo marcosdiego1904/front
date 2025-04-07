@@ -3,7 +3,8 @@ import { useAuth } from "../../../src/auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from "../../../src/config/api";
-import "./style.css";
+
+//import "./style.css";
 
 interface Props {
   onRestart?: () => void;
