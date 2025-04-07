@@ -144,7 +144,7 @@ html, body {
 /* Navbar toggle button */
 .navbar-toggle-btn {
   position: fixed;
-  top: 15px;
+  top: 75px; /* Positioned below the logo/navbar area */
   left: 15px;
   width: 40px;
   height: 40px;
