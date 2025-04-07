@@ -1205,3 +1205,65 @@
       justify-content: center;
     }
   }
+  /* Optimización del espaciado vertical general */
+.learn-main-container {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 65px; /* Reducido de 85px para que el contenido empiece más arriba */
+    background-color: var(--primary-blue);
+  }
+  
+  .learn-content-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-sm) var(--space-lg); /* Reducido el padding superior */
+  }
+  
+  /* Ajustes específicos para containers principales */
+  .main-container1,
+  .main-container2,
+  .main-container3 {
+    padding: 0; /* Elimina el padding vertical para ganar espacio */
+    display: flex;
+    align-items: flex-start; /* Cambiado de center para alinear arriba */
+    justify-content: center;
+    margin-top: 10px; /* Añade un pequeño margen superior */
+  }
+  
+  /* Ajuste del padding interno de los containers */
+  .intro-section {
+    padding-top: var(--space-lg); /* Reducido el padding superior */
+    padding-bottom: var(--space-lg); /* Reducido el padding inferior */
+  }
+  
+  /* Específicamente para la sección de fragmentos */
+  .breakdown-section .title {
+    margin-top: 0; /* Elimina el margen superior del título */
+    margin-bottom: var(--space-sm); /* Reduce el margen inferior */
+  }
+  
+  .breakdown-section .instruction {
+    margin-bottom: var(--space-xs); /* Reduce aún más el espacio */
+  }
+  
+  /* Ajuste del contenedor de fragmentos */
+  .fragment-container {
+    margin-top: var(--space-xs); /* Reduce el margen superior */
+    padding-top: var(--space-sm); /* Reduce el padding superior */
+  }
+  
+  /* Ajustes responsivos */
+  @media (max-width: 768px) {
+    .learn-main-container {
+      padding-top: 55px; /* Aún menos espacio en móviles */
+    }
+    
+    .learn-content-container {
+      padding: var(--space-xs) var(--space-md);
+    }
+    
+    .intro-section {
+      padding: var(--space-md); /* Padding más compacto en móviles */
+    }
+  }
