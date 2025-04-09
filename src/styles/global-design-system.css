@@ -1247,7 +1247,79 @@
       margin-left: 40px; /* Da espacio para el toggle button */
     }
   }
+  /* Improved navbar toggle button positioning for mobile view */
+
+/* Default position of toggle button */
+.navbar-toggle-btn {
+    position: fixed;
+    top: 15px; /* Position it at the top of the screen */
+    left: 15px; /* Position it at the left of the screen */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent-gold, #ffc107);
+    color: var(--primary-blue, #16223d);
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 2000; /* Make sure it's above other elements */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
   
+  /* When toggle is active (clicked), change its position */
+  .navbar-toggle-btn.active {
+    top: 60px; /* Move it BELOW the navbar instead of just changing color */
+    left: 15px; /* Keep the same horizontal position */
+    background-color: #f0ad4e; /* Changed color when active */
+  }
+  
+  /* For smaller mobile screens, adjust position */
+  @media (max-width: 480px) {
+    .navbar-toggle-btn {
+      top: 12px;
+      left: 12px;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+    }
+    
+    .navbar-toggle-btn.active {
+      top: 55px; /* Adjusted for smaller screens */
+    }
+  }
+  
+  /* Fix for navbar alignment and spacing */
+  .logo {
+    margin-left: 50px; /* Add left margin to the logo to avoid overlap with toggle */
+  }
+  
+  /* Make sure the navbar has enough height */
+  .navbar {
+    min-height: 50px;
+  }
+  
+  /* For very small screens */
+  @media (max-width: 320px) {
+    .navbar-toggle-btn {
+      top: 10px;
+      left: 10px;
+      width: 32px;
+      height: 32px;
+    }
+    
+    .navbar-toggle-btn.active {
+      top: 50px;
+    }
+    
+    .logo {
+      margin-left: 40px;
+      font-size: 24px; /* Reduce logo font size for very small screens */
+    }
+  }
   /* JavaScript necesario (para referencia):
   document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.querySelector('.navbar-toggle-btn');
