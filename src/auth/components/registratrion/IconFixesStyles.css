@@ -1,0 +1,77 @@
+/* IconFixesOverride.css - Use !important to override any conflicting styles */
+
+/* The container for the input field and icon */
+.ltmf-input-container {
+  position: relative !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* The icon styling with positioning that ensures it's visible */
+.ltmf-icon {
+  position: absolute !important;
+  left: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 5 !important; /* Higher z-index to ensure icon appears above input */
+  pointer-events: none !important;
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--text-muted, #b0b6be) !important;
+}
+
+/* Input styling with proper padding */
+.ltmf-input {
+  width: 100% !important;
+  padding: 0.9rem 1rem 0.9rem 3rem !important; /* Left padding creates space for the icon */
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  color: var(--text-light, #f8f9fa) !important;
+  font-size: 1rem !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  z-index: 1 !important; /* Lower z-index than the icon */
+}
+
+.ltmf-input:focus {
+  outline: none !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: var(--accent-gold, #ffc107) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
+.ltmf-input::placeholder {
+  color: var(--text-muted, #b0b6be) !important;
+  opacity: 1 !important; /* Ensures placeholder is visible */
+}
+
+.ltmf-input.error {
+  border-color: var(--error-color, #ff4136) !important;
+}
+
+/* Fix for loading buttons */
+.ltmf-spinner {
+  margin-right: 0.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ltmf-spinner svg {
+  width: 20px !important;
+  height: 20px !important;
+  animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+label{
+  color: white !important;
+}

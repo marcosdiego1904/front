@@ -5,8 +5,8 @@ import Navbar from "./Navbar";
 import "./App.css";
 
 // Import authentication components
-import Login from "./auth/components/Login";
-import Register from "./auth/components/Register";
+import Login from "./auth/components/registratrion/Login";
+import Register from "./auth/components/registratrion/Register";
 import ForgotPassword from "./auth/components/ForgotPassword";
 import UserProfile from "./auth/components/UserProfile";
 import Dashboard from "./auth/components/Dashboard";

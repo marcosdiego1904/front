@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../context/AuthStyles.css'; // We'll create this shared stylesheet for auth components
+import { useAuth } from '../../context/AuthContext';
+import './IconFixesStyles.css'; // Import the new overriding styles
 
 interface FormData {
   email: string;
@@ -86,7 +86,6 @@ const Login: React.FC = () => {
     <div className="auth-container">
       <div className="auth-form-wrapper">
         <div className="auth-logo-container">
-            {/** */}
           <div className="lamp-icon">
             {/* SVG Lamp Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
@@ -113,19 +112,19 @@ const Login: React.FC = () => {
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email address</label>
-            <div className="input-with-icon">
-              <i className="icon-email">
+            <div className="ltmf-input-container">
+              <span className="ltmf-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
-              </i>
+              </span>
               <input
                 id="email"
                 name="email"
                 type="email"
                 autoComplete="email"
-                className={formErrors.email ? 'input-error' : ''}
+                className={`ltmf-input ${formErrors.email ? 'error' : ''}`}
                 placeholder="Your email address"
                 value={formData.email}
                 onChange={handleChange}
@@ -138,19 +137,19 @@ const Login: React.FC = () => {
           
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <div className="input-with-icon">
-              <i className="icon-password">
+            <div className="ltmf-input-container">
+              <span className="ltmf-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
-              </i>
+              </span>
               <input
                 id="password"
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                className={formErrors.password ? 'input-error' : ''}
+                className={`ltmf-input ${formErrors.password ? 'error' : ''}`}
                 placeholder="Your password"
                 value={formData.password}
                 onChange={handleChange}
@@ -183,7 +182,7 @@ const Login: React.FC = () => {
           >
             {isSubmitting ? (
               <>
-                <span className="spinner">
+                <span className="ltmf-spinner">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
