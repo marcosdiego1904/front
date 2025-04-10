@@ -557,3 +557,73 @@
 .navbar, .navbar * {
   transition: all 0.3s ease;
 }
+/* Espaciado mejorado para el navbar */
+
+/* Aumentar el ancho del contenedor del logo */
+.logo {
+  margin-right: 50px; /* Añadir espacio entre el logo y los enlaces */
+}
+
+/* Mejorar el espaciado entre los enlaces */
+.navbar-nav {
+  margin-left: 40px; /* Espacio entre el borde izquierdo y el menú */
+  display: flex;
+  gap: 15px; /* Espacio consistente entre los enlaces */
+}
+
+/* Para dispositivos más grandes, aumentar el espacio */
+@media (min-width: 1200px) {
+  .navbar-nav {
+    margin-left: 60px; /* Más espacio en pantallas grandes */
+    gap: 25px; /* Mayor separación entre enlaces */
+  }
+  
+  .logo {
+    margin-right: 80px; /* Más espacio a la derecha del logo */
+  }
+}
+
+/* Distribución más equilibrada de elementos */
+.container-fluid {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 25px; /* Añadir padding consistente */
+}
+
+/* Ajuste para la sección de usuario a la derecha */
+.navbar-nav.ms-lg-auto {
+  margin-left: auto !important; /* Fuerza el margen automático */
+  margin-right: 10px; /* Pequeño espacio desde el borde derecho */
+}
+
+/* Mejora del espaciado en dispositivos móviles */
+@media (max-width: 992px) {
+  .logo {
+    margin-right: 0; /* En móvil no necesitamos este espacio */
+  }
+  
+  .navbar-nav {
+    margin-left: 0;
+    gap: 5px; /* Menos espacio en móvil */
+  }
+  
+  /* Mejor alineación en el menú desplegable móvil */
+  .navbar-collapse {
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
+}
+
+/* Estilo visual mejorado para los iconos */
+.nav-link i {
+  opacity: 0.8; /* Los iconos un poco más suaves */
+}
+
+.nav-link:hover i {
+  opacity: 1; /* Iconos más brillantes al pasar el mouse */
+}
+
+/* Espacio entre el icono y el texto */
+.nav-link i.me-2 {
+  margin-right: 8px !important; /* Ajusta el espacio entre ícono y texto */
+}
