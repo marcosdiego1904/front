@@ -63,43 +63,40 @@ const Navbar = () => {
 
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
+              {/* Common links for all users */}
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
+                  <i className="bi bi-house-door me-2"></i>
                   Home
                 </NavLink>
               </li>
-              {/**
-               *   <li className="nav-item">
+              <li className="nav-item">
                 <NavLink to="/learn" className="nav-link">
+                  <i className="bi bi-book me-2"></i>
                   Learn
                 </NavLink>
               </li>
-               */}
-            
+              <li className="nav-item">
+                <NavLink to="/about" className="nav-link">
+                  <i className="bi bi-info-circle me-2"></i>
+                  About
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/support" className="nav-link">
+                  <i className="bi bi-heart me-2"></i>
+                  Support Us
+                </NavLink>
+              </li>
 
-              {/* Show these navigation items only when authenticated */}
+              {/* Show Dashboard link only when authenticated */}
               {isAuthenticated && (
-                <>
-                  <li className="nav-item">
-                    <NavLink to="/dashboard" className="nav-link">
-                      <i className="bi bi-grid me-2"></i>
-                      Dashboard
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink to="/profile" className="nav-link">
-                      <i className="bi bi-person me-2"></i>
-                      About
-                    </NavLink>
-                  </li>
-                  {/**<li className="nav-item">
-                    <NavLink to="/settings" className="nav-link">
-                      <i className="bi bi-gear me-2"></i>
-                      Settings
-                    </NavLink>
-                  </li> */}
-                  
-                </>
+                <li className="nav-item">
+                  <NavLink to="/dashboard" className="nav-link">
+                    <i className="bi bi-grid me-2"></i>
+                    Dashboard
+                  </NavLink>
+                </li>
               )}
             </ul>
 
@@ -107,29 +104,51 @@ const Navbar = () => {
             <ul className="navbar-nav ms-lg-auto">
               {isAuthenticated ? (
                 <>
-                  <li className="nav-item">
-                    <span className="nav-link">
-                      Hello, {user?.username || "User"}
-                    </span>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      onClick={handleLogout}
-                      className="btn btn-outline-warning btn-sm ms-2"
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="userDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                     >
-                      Logout
-                    </button>
+                      <i className="bi bi-person-circle me-1"></i>
+                      {user?.username || "User"}
+                    </a>
+                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li>
+                        <NavLink to="/profile" className="dropdown-item">
+                          <i className="bi bi-person me-2"></i>
+                          Profile
+                        </NavLink>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <button
+                          onClick={handleLogout}
+                          className="dropdown-item text-danger"
+                        >
+                          <i className="bi bi-box-arrow-right me-2"></i>
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
                   </li>
                 </>
               ) : (
                 <>
                   <li className="nav-item">
                     <NavLink to="/login" className="nav-link">
+                      <i className="bi bi-box-arrow-in-right me-1"></i>
                       Login
                     </NavLink>
                   </li>
                   <li className="nav-item">
                     <NavLink to="/register" className="nav-link">
+                      <i className="bi bi-person-plus me-1"></i>
                       Register
                     </NavLink>
                   </li>

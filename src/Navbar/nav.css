@@ -395,3 +395,165 @@
     display: none;
   }
 }
+/* Estilos adicionales para el navbar - añadir a tu archivo nav.css */
+
+/* Mejoras para el logo y el icono */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+  width: auto;
+  text-align: center;
+  font-size: 29px;
+  font-family: "Bangers", serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.logo-icon {
+  height: 30px;
+  width: auto;
+  margin-left: 8px;
+}
+
+/* Mejoras para el menú desplegado en móvil */
+@media (max-width: 992px) {
+  .navbar-collapse {
+    background-color: rgba(22, 34, 61, 0.97);
+    border-radius: 0 0 10px 10px;
+    padding: 15px;
+    margin-top: 10px;
+  }
+  
+  .navbar-nav {
+    gap: 8px;
+    margin-left: 0;
+  }
+  
+  .nav-item {
+    margin-bottom: 5px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .nav-link {
+    padding: 10px 15px !important;
+    border-radius: 6px;
+    transition: background-color 0.3s ease !important;
+  }
+  
+  .nav-link:hover, .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .dropdown-menu {
+    background-color: #1d2a47;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .dropdown-item {
+    color: white !important;
+    padding: 10px 15px;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--accent-gold) !important;
+  }
+  
+  .dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Mejora para el dropdown del usuario en versión desktop */
+.dropdown-menu {
+  background-color: #1d2a47;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px;
+}
+
+.dropdown-item {
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent-gold) !important;
+}
+
+.text-danger {
+  color: #ff6b6b !important;
+}
+
+.dropdown-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 5px 0;
+}
+
+/* Estilos para los iconos en los enlaces */
+.nav-link i {
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover i {
+  transform: translateX(2px);
+}
+
+/* Color para el enlace de Support Us destacándolo un poco */
+.nav-link[href="/support"] {
+  color: var(--accent-gold) !important;
+  font-weight: 500;
+}
+
+.nav-link[href="/support"]:hover {
+  color: var(--accent-gold-light) !important;
+}
+
+/* Mejorar la claridad del indicador de enlace activo */
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-gold);
+  border-radius: 1px;
+}
+
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 360px) {
+  .logo {
+    font-size: 22px;
+  }
+  
+  .logo-icon {
+    height: 24px;
+  }
+  
+  .navbar-toggler {
+    padding: 4px 8px;
+  }
+}
+
+/* Asegurar que el menú siempre se expanda correctamente en pantallas pequeñas */
+@media (max-width: 430px) {
+  .logo {
+    width: auto;
+    max-width: 60%;
+  }
+  
+  .navbar-toggler {
+    margin-right: 0;
+  }
+}
+
+/* Animación suave para cambios de estado en el navbar */
+.navbar, .navbar * {
+  transition: all 0.3s ease;
+}
