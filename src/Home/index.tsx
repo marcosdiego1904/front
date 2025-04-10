@@ -65,7 +65,7 @@ const Home = () => {
               <button className="button get-started-btn" onClick={scrollToCategories}>
                 Get Started Now!
               </button>
-              <button className="button resume-btn">Resume Learning</button>
+             {/**<button className="button resume-btn">Resume Learning</button> */} 
               <button className="button learned-btn">My Learned Verses</button>
             </div>
 

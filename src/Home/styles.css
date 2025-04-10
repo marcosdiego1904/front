@@ -201,3 +201,261 @@
     height: 60px;
   }
 }
+/* Enhance the image container */
+.image-overlay {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 0 100px; /* Rounded corner on bottom left */
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Animación de flotación para la imagen */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+/* Mejora básica para todos los botones */
+.button {
+  padding: 16px 24px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+/* Botón GET STARTED NOW mejorado */
+.get-started-btn {
+  background-color: #ffcc00;
+  color: #222222; /* Color de texto más oscuro para mejor contraste */
+  box-shadow: 0px 6px 15px rgba(255, 204, 0, 0.4);
+  transform: scale(1.05); /* Ligeramente más grande */
+  position: relative;
+  z-index: 2;
+}
+
+.get-started-btn:hover {
+  background-color: #e6b800;
+  transform: scale(1.08);
+  box-shadow: 0px 8px 20px rgba(255, 204, 0, 0.5);
+}
+
+/* Efecto pulsante sutil para el botón principal */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 204, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0);
+  }
+}
+
+/* Aplicar la animación al botón principal */
+.get-started-btn {
+  animation: pulse 2s infinite;
+}
+
+/* Mantener los otros botones menos prominentes */
+.resume-btn, .learned-btn {
+  opacity: 0.9;
+  transform: scale(1);
+}
+/* Estilo para el botón principal con mayor diferenciación */
+.get-started-btn {
+  background: linear-gradient(45deg, #FF9500, #FFCC00);
+  color: #16223d;
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 18px 30px;
+  border: 2px solid #FF9500;
+  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 4px rgba(255, 204, 0, 0.2);
+  transform: scale(1.08);
+  position: relative;
+  z-index: 2;
+}
+
+/* Efecto hover mejorado */
+.get-started-btn:hover {
+  background: linear-gradient(45deg, #FF8000, #FFBB00);
+  transform: scale(1.12) translateY(-5px);
+  box-shadow: 0 12px 25px rgba(255, 149, 0, 0.5), 0 0 0 6px rgba(255, 204, 0, 0.2);
+}
+
+/* Animación pulsante más notoria */
+@keyframes strongPulse {
+  0% {
+    box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 0 rgba(255, 204, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(255, 149, 0, 0.4), 0 0 0 15px rgba(255, 204, 0, 0);
+  }
+  100% {
+    box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 0 rgba(255, 204, 0, 0);
+  }
+}
+
+/* Aplicar animación más fuerte */
+.get-started-btn {
+  animation: strongPulse 2.5s infinite;
+}
+
+/* Agregar indicador visual para reforzar que es el botón principal */
+.get-started-btn::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 15px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='%23FF9500' d='M12 4L0 16h24L12 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.8;
+}
+
+/* Botones secundarios con estilo diferenciado */
+.resume-btn, .learned-btn {
+  background-color: #ffffff;
+  color: #16223d;
+  border: 2px solid #e0e0e0;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+
+.resume-btn:hover, .learned-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+/* Estilos para el contenedor de botones con solo dos botones */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 25px;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Botón principal mejorado */
+.get-started-btn {
+  background: linear-gradient(45deg, #FF9500, #FFCC00);
+  color: #16223d;
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 18px 30px;
+  border: 2px solid #FF9500;
+  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 4px rgba(255, 204, 0, 0.2);
+  transform: scale(1.08);
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  animation: strongPulse 2.5s infinite;
+}
+
+/* Efecto hover para el botón principal */
+.get-started-btn:hover {
+  background: linear-gradient(45deg, #FF8000, #FFBB00);
+  transform: scale(1.12) translateY(-5px);
+  box-shadow: 0 12px 25px rgba(255, 149, 0, 0.5), 0 0 0 6px rgba(255, 204, 0, 0.2);
+}
+
+/* Animación pulsante */
+@keyframes strongPulse {
+  0% {
+    box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 0 rgba(255, 204, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(255, 149, 0, 0.4), 0 0 0 15px rgba(255, 204, 0, 0);
+  }
+  100% {
+    box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 0 rgba(255, 204, 0, 0);
+  }
+}
+
+/* Estilo para el botón secundario (My Learned Verses) */
+.learned-btn {
+  background-color: #ffffff;
+  color: #16223d;
+  border: 2px solid #e0e0e0;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.learned-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+/* Estilos para el contenedor de botones - versión simplificada */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 25px auto;
+  width: 90%;
+  max-width: 300px;
+}
+
+/* Estilo base para todos los botones */
+.button {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+/* Botón principal */
+.get-started-btn {
+  background-color: #ffcc00;
+  color: #16223d;
+  box-shadow: 0px 6px 15px rgba(255, 149, 0, 0.4);
+  position: relative;
+}
+
+/* Efecto hover del botón principal */
+.get-started-btn:hover {
+  background-color: #ffbb00;
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 20px rgba(255, 149, 0, 0.5);
+}
+
+/* Botón secundario */
+.learned-btn {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(40, 167, 69, 0.3);
+}
+
+/* Efecto hover del botón secundario */
+.learned-btn:hover {
+  background-color: #218838;
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 15px rgba(40, 167, 69, 0.4);
+}
