@@ -1581,6 +1581,45 @@
       height: 38px;
     }
   }
+  /* Add spacing between stacked buttons in fragment navigation */
+
+/* Update button group to add spacing between buttons */
+.fragment-navigation .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Add space between stacked buttons */
+    max-width: 200px; /* Constrain width */
+    margin: 0 auto; /* Center the button group */
+  }
+  
+  /* Adjust individual buttons for better mobile layout */
+  .fragment-navigation .button {
+    width: 100%;
+    margin-bottom: 8px; /* Additional spacing method as fallback */
+  }
+  
+  /* Make sure back button has proper spacing */
+  .fragment-navigation .back-button {
+    margin-top: 16px; /* Adds extra space above the back button to separate it */
+  }
+  
+  /* Media queries for responsive adjustments */
+  @media (max-width: 768px) {
+    .fragment-navigation .button-group {
+      gap: 10px; /* Slightly more space on mobile for easier touch targets */
+    }
+    
+    .fragment-navigation .back-button {
+      margin-top: 20px; /* More separation on mobile */
+    }
+  }
+  
+  /* Very small screens adjustment */
+  @media (max-width: 320px) {
+    .fragment-navigation .button-group {
+      max-width: 180px; /* Even more constrained for tiny screens */
+    }
+  }
   /* JavaScript necesario (para referencia):
   document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.querySelector('.navbar-toggle-btn');
