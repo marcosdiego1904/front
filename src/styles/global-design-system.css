@@ -1494,6 +1494,93 @@
       font-size: 24px; /* Reduce logo font size for very small screens */
     }
   }
+  /* Mobile Button Sizing Fix */
+
+/* Update the responsive adjustments for mobile to respect the design system */
+@media (max-width: 768px) {
+    /* Improve content container size and padding */
+    .intro-section {
+      width: 90%;
+      padding: var(--space-md);
+      max-width: 500px;
+    }
+    
+    /* Fix button group layout */
+    .button-group {
+      flex-direction: column;
+      gap: var(--space-sm);
+      width: 100%;
+      max-width: 300px;
+      margin: var(--space-md) auto 0;
+    }
+    
+    /* Adjust button proportions */
+    .button {
+      width: 100%;
+      max-width: 240px;
+      height: 45px;
+      padding: var(--space-xs) var(--space-md);
+      margin: 0 auto;
+      font-size: var(--font-size-sm);
+    }
+    
+    /* Specific adjustments for different button types */
+    .continue-button,
+    .back-button,
+    .next-button,
+    .prev-button {
+      width: 100%;
+    }
+  }
+  
+  /* Extra small devices */
+  @media (max-width: 480px) {
+    .intro-section {
+      width: 92%;
+      padding: var(--space-sm) var(--space-md);
+    }
+    
+    .button-group {
+      max-width: 250px;
+    }
+    
+    .button {
+      max-width: 220px;
+      height: 40px;
+      font-size: var(--font-size-xs);
+    }
+    
+    /* Reduce font sizes to fit better on small screens */
+    .title {
+      font-size: var(--font-size-xl);
+    }
+    
+    .instruction {
+      font-size: var(--font-size-md);
+    }
+    
+    .verse, .verse-part, .verse-fragment {
+      font-size: var(--font-size-md);
+      padding: var(--space-sm);
+    }
+  }
+  
+  /* Device-specific fixes for smaller phones */
+  @media (max-width: 320px) {
+    .intro-section {
+      width: 95%;
+      padding: var(--space-xs) var(--space-sm);
+    }
+    
+    .button-group {
+      max-width: 200px;
+    }
+    
+    .button {
+      max-width: 180px;
+      height: 38px;
+    }
+  }
   /* JavaScript necesario (para referencia):
   document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.querySelector('.navbar-toggle-btn');
