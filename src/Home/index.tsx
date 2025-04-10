@@ -40,6 +40,17 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Agregar un efecto para manejar el desplazamiento automático desde la URL
+  useEffect(() => {
+    // Verificar si hay un parámetro en la URL para desplazarse a las categorías
+    if (window.location.search.includes('scrollToCategories=true')) {
+      // Usar setTimeout para asegurar que el componente esté completamente montado
+      setTimeout(() => {
+        scrollToCategories();
+      }, 300);
+    }
+  }, []);
+
   return (
     <>
       {/* Sección Home con clase condicional para ocultarla cuando se llega a categorías */}
@@ -51,12 +62,12 @@ const Home = () => {
               Discover a revolutionary way to memorize Scripture. Simple, engaging, and effective – you'll never forget a verse again!
             </p>
             <div className="buttons">
-  <button className="button get-started-btn" onClick={scrollToCategories}>
-    Get Started Now!
-  </button>
-  <button className="button resume-btn">Resume Learning</button>
-  <button className="button learned-btn">My Learned Verses</button>
-</div>
+              <button className="button get-started-btn" onClick={scrollToCategories}>
+                Get Started Now!
+              </button>
+              <button className="button resume-btn">Resume Learning</button>
+              <button className="button learned-btn">My Learned Verses</button>
+            </div>
 
             <p style={{ marginTop: "40px" }}>
               Memorize your first verse in under 5 minutes – challenge yourself today!
@@ -68,8 +79,12 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Sección de categorías con referencia */}
-      <div ref={categoriesRef} className="pt-5">
+      {/* Sección de categorías con referencia e ID para navegación */}
+      <div 
+        ref={categoriesRef} 
+        id="categories-section" 
+        className="pt-5"
+      >
         <Categories />
       </div>
     </>

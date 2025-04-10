@@ -1,4 +1,7 @@
+// Modificación del Navbar.tsx para manejar el desplazamiento suave a categorías
+
 import { NavLink } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import imag from "../oil-lamp.png";
 import { useAuth } from "../auth/context/AuthContext";
@@ -10,6 +13,38 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   // State para controlar la visibilidad del sidebar
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Función para desplazarse a la sección de categorías
+  const scrollToCategories = () => {
+    // Si ya estamos en la página de inicio, desplazarse a la sección de categorías
+    if (location.pathname === '/') {
+      // Buscar el elemento con la referencia a las categorías
+      const categoriesSection = document.getElementById('categories-section');
+      if (categoriesSection) {
+        categoriesSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Si no estamos en la página de inicio, navegar a la página de inicio
+      // y establecer un flag para indicar que debe desplazarse
+      navigate('/?scrollToCategories=true');
+    }
+  };
+
+  // Efecto para manejar el desplazamiento cuando se carga la página de inicio
+  useEffect(() => {
+    if (location.pathname === '/' && location.search.includes('scrollToCategories=true')) {
+      // Usar setTimeout para asegurar que la página se ha cargado completamente
+      setTimeout(() => {
+        const categoriesSection = document.getElementById('categories-section');
+        if (categoriesSection) {
+          categoriesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300); // Pequeño retraso para asegurar que los componentes se han montado
+    }
+  }, [location]);
 
   // Función para alternar la visibilidad del sidebar
   const toggleSidebar = () => {
@@ -71,10 +106,18 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/learn" className="nav-link">
+                {/* Enlace modificado para usar la función de desplazamiento */}
+                <a 
+                  href="#" 
+                  className="nav-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToCategories();
+                  }}
+                >
                   <i className="bi bi-book me-2"></i>
                   Learn
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item">
                 <NavLink to="/about" className="nav-link">
