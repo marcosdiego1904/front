@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Importamos useNavigate
 import "./styles.css";
 import { getCategories } from "../services/api";
 import Categories from "../../pages/learnsection/categories/Categories";
+import { useAuth } from "../auth/context/AuthContext"; // Importamos el contexto de autenticación
 
 const Home = () => {
   // Estado para almacenar las categorías
@@ -10,8 +12,17 @@ const Home = () => {
   // Estado para ocultar la sección Home cuando se hace scroll
   const [scrolledToCategories, setScrolledToCategories] = useState(false);
 
+  // Estado para mostrar el mensaje de alerta
+  const [showAuthMessage, setShowAuthMessage] = useState(false);
+
   // Referencia a la sección de categorías
   const categoriesRef = useRef<HTMLDivElement | null>(null);
+
+  // Hook para navegación
+  const navigate = useNavigate();
+
+  // Obtener el contexto de autenticación
+  const { isAuthenticated } = useAuth();
 
   // Obtener las categorías al cargar el componente
   useEffect(() => {
@@ -49,10 +60,40 @@ const Home = () => {
         scrollToCategories();
       }, 300);
     }
+
+    // Verificar si hay un mensaje de autenticación en la URL
+    if (window.location.search.includes('authRequired=true')) {
+      setShowAuthMessage(true);
+      // Ocultar el mensaje después de 5 segundos
+      setTimeout(() => {
+        setShowAuthMessage(false);
+      }, 5000);
+    }
   }, []);
+
+  // Función para manejar el clic en "My Learned Verses"
+  const handleLearnedVersesClick = () => {
+    if (isAuthenticated) {
+      // Si está autenticado, redirigir al dashboard con un hash para la sección de versículos memorizados
+      navigate('/dashboard#memorizedVerses');
+    } else {
+      // Si no está autenticado, redirigir a la página de registro con un parámetro para mostrar un mensaje
+      navigate('/register?authRequired=true');
+    }
+  };
 
   return (
     <>
+      {/* Mensaje de alerta para autenticación */}
+      {showAuthMessage && (
+        <div className="auth-alert">
+          <div className="auth-alert-content">
+            <span>Para ver tus versículos memorizados, debes iniciar sesión o registrarte primero.</span>
+            <button className="close-alert" onClick={() => setShowAuthMessage(false)}>×</button>
+          </div>
+        </div>
+      )}
+
       {/* Sección Home con clase condicional para ocultarla cuando se llega a categorías */}
       <div className={`main-cont ${scrolledToCategories ? "hidden-home" : ""}`}>
         <div className="left">
@@ -66,7 +107,9 @@ const Home = () => {
                 Get Started Now!
               </button>
              {/**<button className="button resume-btn">Resume Learning</button> */} 
-              <button className="button learned-btn">My Learned Verses</button>
+              <button className="button learned-btn" onClick={handleLearnedVersesClick}>
+                My Learned Verses
+              </button>
             </div>
 
             <p style={{ marginTop: "40px" }}>

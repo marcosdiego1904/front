@@ -1,7 +1,7 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import './IconFixesStyles.css'; // Import the new overriding styles
+import './IconFixesStyles.css';
 
 interface FormData {
   username: string;
@@ -26,10 +26,27 @@ const Register: React.FC = () => {
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [serverError, setServerError] = useState<string>('');
+  const [authMessage, setAuthMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Verificar si hay un parámetro de auth requerida en la URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('authRequired') === 'true') {
+      setAuthMessage('Para ver tus versículos memorizados, debes crear una cuenta o iniciar sesión.');
+      
+      // Ocultar el mensaje después de 5 segundos
+      const timer = setTimeout(() => {
+        setAuthMessage('');
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
   
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,7 +105,7 @@ const Register: React.FC = () => {
     
     try {
       await register(formData.username, formData.email, formData.password);
-      navigate('/dashboard'); // Redirect to dashboard after successful registration
+      navigate('/dashboard#memorizedVerses'); // Redirigir directamente a la sección de versículos memorizados
     } catch (error) {
       if (error instanceof Error) {
         setServerError(error.message || 'Registration failed. Please try again.');
@@ -102,10 +119,22 @@ const Register: React.FC = () => {
   
   return (
     <div className="auth-container">
+      {authMessage && (
+        <div className="auth-notification">
+          <div className="notification-content">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="notification-icon">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>{authMessage}</span>
+          </div>
+        </div>
+      )}
+      
       <div className="auth-form-wrapper">
         <div className="auth-logo-container">
           <div className="lamp-icon">
-            {/* SVG Lamp Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8,4 C8,2.895 8.895,2 10,2 L14,2 C15.105,2 16,2.895 16,4 L16,5 L8,5 L8,4 Z" fill="#ffc107"/>
               <path d="M9,5 L15,5 L15,10 C15,12.761 12.761,16 10,16 L9,5 Z" fill="#ffc107"/>
@@ -128,6 +157,7 @@ const Register: React.FC = () => {
         )}
         
         <form className="auth-form" onSubmit={handleSubmit}>
+          {/* El resto del formulario sigue igual */}
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <div className="ltmf-input-container">

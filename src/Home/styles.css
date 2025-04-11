@@ -459,3 +459,54 @@
   transform: translateY(-3px);
   box-shadow: 0px 8px 15px rgba(40, 167, 69, 0.4);
 }
+/* Estilos para la alerta de autenticación */
+.auth-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1000;
+  padding: 16px;
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: slideDown 0.5s forwards;
+}
+
+.auth-alert-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auth-alert-content span {
+  color: #664d03;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  color: #664d03;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0 0 10px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}

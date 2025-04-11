@@ -1,5 +1,5 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './IconFixesStyles.css'; // Import the new overriding styles
 
@@ -20,10 +20,27 @@ const Login: React.FC = () => {
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [serverError, setServerError] = useState<string>('');
+  const [authMessage, setAuthMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Verificar si hay un parámetro de auth requerida en la URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('authRequired') === 'true') {
+      setAuthMessage('Para ver tus versículos memorizados, debes iniciar sesión.');
+      
+      // Ocultar el mensaje después de 5 segundos
+      const timer = setTimeout(() => {
+        setAuthMessage('');
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
   
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,7 +87,7 @@ const Login: React.FC = () => {
     
     try {
       await login(formData.email, formData.password);
-      navigate('/dashboard'); // Redirect to dashboard after successful login
+      navigate('/dashboard#memorizedVerses'); // Redirigir directamente a la sección de versículos memorizados
     } catch (error) {
       if (error instanceof Error) {
         setServerError(error.message || 'Login failed. Please try again.');
@@ -84,6 +101,19 @@ const Login: React.FC = () => {
   
   return (
     <div className="auth-container">
+      {authMessage && (
+        <div className="auth-notification">
+          <div className="notification-content">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="notification-icon">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>{authMessage}</span>
+          </div>
+        </div>
+      )}
+      
       <div className="auth-form-wrapper">
         <div className="auth-logo-container">
           <div className="lamp-icon">
