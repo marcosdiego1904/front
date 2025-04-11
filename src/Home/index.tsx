@@ -86,10 +86,11 @@ const Home = () => {
     <>
       {/* Mensaje de alerta para autenticación */}
       {showAuthMessage && (
-        <div className="auth-alert">
-          <div className="auth-alert-content">
-            <span>Para ver tus versículos memorizados, debes iniciar sesión o registrarte primero.</span>
-            <button className="close-alert" onClick={() => setShowAuthMessage(false)}>×</button>
+        <div className="bible-auth-alert">
+          <div className="bible-alert-content">
+            <span className="alert-icon">⚠️</span>
+            <span>To view your memorized verses, you need to create an account or sign in.</span>
+            <button className="close-bible-alert" onClick={() => setShowAuthMessage(false)}>×</button>
           </div>
         </div>
       )}

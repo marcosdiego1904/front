@@ -34,19 +34,20 @@ const Register: React.FC = () => {
   const location = useLocation();
   
   // Verificar si hay un parámetro de auth requerida en la URL
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    if (searchParams.get('authRequired') === 'true') {
-      setAuthMessage('Para ver tus versículos memorizados, debes crear una cuenta o iniciar sesión.');
-      
-      // Ocultar el mensaje después de 5 segundos
-      const timer = setTimeout(() => {
-        setAuthMessage('');
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [location]);
+ // Verificar si hay un parámetro de auth requerida en la URL
+ useEffect(() => {
+  const searchParams = new URLSearchParams(location.search);
+  if (searchParams.get('authRequired') === 'true') {
+    setAuthMessage('To view your memorized verses, you need to create an account or sign in.');
+    
+    // Ocultar el mensaje después de 5 segundos
+    const timer = setTimeout(() => {
+      setAuthMessage('');
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }
+}, [location]);
   
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -119,15 +120,12 @@ const Register: React.FC = () => {
   
   return (
     <div className="auth-container">
-      {authMessage && (
-        <div className="auth-notification">
-          <div className="notification-content">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="notification-icon">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              <line x1="12" y1="9" x2="12" y2="13"></line>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
+     {authMessage && (
+        <div className="bible-auth-alert">
+          <div className="bible-alert-content">
+            <span className="alert-icon">⚠️</span>
             <span>{authMessage}</span>
+            <button className="close-bible-alert" onClick={() => setAuthMessage('')}>×</button>
           </div>
         </div>
       )}

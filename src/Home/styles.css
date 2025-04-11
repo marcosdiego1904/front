@@ -510,3 +510,62 @@
     opacity: 1;
   }
 }
+/* Estilos actualizados para la alerta de autenticación */
+.bible-auth-alert {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  animation: fadeIn 0.5s forwards;
+}
+
+.bible-alert-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #664d03;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.alert-icon {
+  margin-right: 12px;
+  font-size: 1.25rem;
+}
+
+.close-bible-alert {
+  background: none;
+  border: none;
+  color: #664d03;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+  .bible-auth-alert {
+    max-width: 90%;
+    margin-bottom: 15px;
+  }
+}
