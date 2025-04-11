@@ -85,6 +85,7 @@ const Home = () => {
   return (
     <>
       {/* Mensaje de alerta para autenticación */}
+      {/* Mensaje de alerta para autenticación */}
       {showAuthMessage && (
         <div className="bible-auth-alert">
           <div className="bible-alert-content">
