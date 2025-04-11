@@ -47,7 +47,9 @@ const LevelUpNotification: React.FC<LevelUpNotificationProps> = ({
         
         <div className="level-transition">
           <div className="old-level">
-            <div className="level-icon">{currentRank.icon}</div>
+            <div className="level-icon">
+              {currentRank.icon}
+            </div>
             <div className="level-name">{currentRank.level}</div>
           </div>
           
@@ -59,7 +61,9 @@ const LevelUpNotification: React.FC<LevelUpNotificationProps> = ({
           </div>
           
           <div className="new-level">
-            <div className="level-icon">{nextRank.icon}</div>
+            <div className="level-icon">
+              {nextRank.icon}
+            </div>
             <div className="level-name">{nextRank.level}</div>
           </div>
         </div>

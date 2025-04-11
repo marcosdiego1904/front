@@ -141,71 +141,74 @@ export function canLevelUp(versesCount: number): boolean {
 
 // Biblical Rank Icons
 // Saul Icon - Stones or blindness symbol
+// Modificación para las funciones de íconos en RankingSystem.tsx
+
+// Saul Icon - Stones or blindness symbol
 function SaulIcon() {
   return (
-    <img src={Paths}/>
+    <img src={Paths} className="rank-icon" alt="Saul Level" />
   );
 }
 
 // Nicodemus Icon - Lamp or torch
 function NicodemusIcon() {
   return (
-    <img src={lantern}/>
+    <img src={lantern} className="rank-icon" alt="Nicodemus Level" />
   );
 }
 
 // Thomas Icon - Hand with extended finger
 function ThomasIcon() {
   return (
-    <img src={hello}/>
+    <img src={hello} className="rank-icon" alt="Thomas Level" />
   );
 }
 
 // Disciple Icon - Sandals or footprints
 function DiscipleIcon() {
   return (
-    <img src={christian}/>
+    <img src={christian} className="rank-icon" alt="Disciple Level" />
   );
 }
 
 // Apostle Icon - Boat with net
 function ApostleIcon() {
   return (
-    <img src={boat}/>
+    <img src={boat} className="rank-icon" alt="Apostle Level" />
   );
 }
 
 // Prophet Icon - Scroll with quill
 function ProphetIcon() {
   return (
-    <img src={scroll}/>
+    <img src={scroll} className="rank-icon" alt="Prophet Level" />
   );
 }
 
 // Daniel Icon - Lion or star
 function DanielIcon() {
   return (
-    <img src={lion}/>
+    <img src={lion} className="rank-icon" alt="Daniel Level" />
   );
 }
 
 // David Icon - Harp or crown
 function DavidIcon() {
   return (
-    <img src={heart}/>
+    <img src={heart} className="rank-icon" alt="David Level" />
   );
 }
 
 // Paul Icon - Broken chains
 function PaulIcon() {
   return (
-    <img src={weakness}/>
+    <img src={weakness} className="rank-icon" alt="Paul Level" />
   );
 }
 
 // Solomon Icon - Temple or crown with gems
 function SolomonIcon() {
   return (
-    <img src={crown}/>
+    <img src={crown} className="rank-icon" alt="Solomon Level" />
   );
 }
