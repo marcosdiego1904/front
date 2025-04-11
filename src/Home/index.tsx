@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
 import { getCategories } from "../services/api";
 import Categories from "../../pages/learnsection/categories/Categories";
-import { useAuth } from "../auth/context/AuthContext"; // Importamos el contexto de autenticación
+import { useAuth } from "../auth/context/AuthContext";
 
 const Home = () => {
   // Estado para almacenar las categorías
@@ -84,20 +84,19 @@ const Home = () => {
 
   return (
     <>
-      {/* Mensaje de alerta para autenticación */}
-      {/* Mensaje de alerta para autenticación */}
-      {showAuthMessage && (
-        <div className="bible-auth-alert">
-          <div className="bible-alert-content">
-            <span className="alert-icon">⚠️</span>
-            <span>To view your memorized verses, you need to create an account or sign in.</span>
-            <button className="close-bible-alert" onClick={() => setShowAuthMessage(false)}>×</button>
-          </div>
-        </div>
-      )}
-
       {/* Sección Home con clase condicional para ocultarla cuando se llega a categorías */}
       <div className={`main-cont ${scrolledToCategories ? "hidden-home" : ""}`}>
+        {/* Mensaje de alerta para autenticación - ahora dentro de main-cont */}
+        {showAuthMessage && (
+          <div className="bible-auth-alert">
+            <div className="bible-alert-content">
+              <span className="alert-icon">⚠️</span>
+              <span>To view your memorized verses, you need to create an account or sign in.</span>
+              <button className="close-bible-alert" onClick={() => setShowAuthMessage(false)}>×</button>
+            </div>
+          </div>
+        )}
+
         <div className="left">
           <div className="text-cont">
             <h1>Strengthen Your Faith, One Verse at a Time!</h1>
@@ -108,7 +107,6 @@ const Home = () => {
               <button className="button get-started-btn" onClick={scrollToCategories}>
                 Get Started Now!
               </button>
-             {/**<button className="button resume-btn">Resume Learning</button> */} 
               <button className="button learned-btn" onClick={handleLearnedVersesClick}>
                 My Learned Verses
               </button>

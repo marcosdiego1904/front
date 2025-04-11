@@ -114,3 +114,27 @@ label{
     transform: translateY(0);
   }
 }
+/* Estilos para mejorar la integración de la alerta en las páginas de autenticación */
+.auth-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.bible-auth-alert {
+  width: 95%;
+  max-width: 650px;
+  margin: 0 auto 20px auto;
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 480px;
+  background-color: #16223d;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
