@@ -1,4 +1,4 @@
-// src/utils/RankingSystem.tsx
+// src/utils/RankingSystem.tsx (función corregida)
 import React from 'react';
 import Paths from './images/path.png'
 import boat from './images/boat.png'
@@ -10,6 +10,7 @@ import lion from './images/lion.png'
 import scroll from './images/scroll.png'
 import weakness from './images/weakness.png'
 import christian from './images/christian.png'
+
 // Define the biblical rank interface
 export interface BiblicalRank {
   level: string;
@@ -104,26 +105,56 @@ export const biblicalRanks: BiblicalRank[] = [
   }
 ];
 
-// Calculate rank based on verse count
+// Calculate rank based on verse count - FUNCIÓN CORREGIDA
 export function calculateUserRank(versesCount: number): {
   currentRank: BiblicalRank;
   progress: number;
   versesToNextRank: number;
 } {
-  // Find the current rank based on verse count
-  const currentRank = biblicalRanks.find(
-    rank => versesCount >= rank.minVerses && versesCount <= rank.maxVerses
-  ) || biblicalRanks[0]; // Default to first rank if not found
+  // Si no hay versículos memorizados, establecer en 0 (nivel mínimo)
+  if (versesCount <= 0) {
+    const firstRank = biblicalRanks[0];
+    return {
+      currentRank: firstRank,
+      progress: 0,
+      versesToNextRank: firstRank.minVerses // Necesitas 1 versículo para empezar
+    };
+  }
   
-  // Calculate progress percentage within current level
+  // Encontrar el rango actual basado en el conteo de versículos
+  let currentRank = biblicalRanks[0]; // Valor predeterminado
+  
+  // Buscar el rango adecuado según los versículos
+  for (const rank of biblicalRanks) {
+    if (versesCount >= rank.minVerses && versesCount <= rank.maxVerses) {
+      currentRank = rank;
+      break;
+    }
+  }
+  
+  // Si superamos el conteo máximo, usar el último rango
+  if (versesCount > biblicalRanks[biblicalRanks.length - 2].maxVerses) {
+    currentRank = biblicalRanks[biblicalRanks.length - 1];
+  }
+  
+  // Calcular el porcentaje de progreso dentro del nivel actual
+  let progress = 0;
   const levelRange = currentRank.maxVerses - currentRank.minVerses + 1;
-  const versesInCurrentLevel = versesCount - currentRank.minVerses + 1;
-  const progress = Math.min((versesInCurrentLevel / levelRange) * 100, 100);
   
-  // Calculate verses needed for next rank
+  if (levelRange === Infinity) {
+    // Para el nivel máximo con versesCount infinito
+    progress = 100;
+  } else {
+    const versesInCurrentLevel = versesCount - currentRank.minVerses + 1;
+    // Asegurarnos de que el progreso esté entre 0 y 100
+    progress = Math.min(Math.max((versesInCurrentLevel / levelRange) * 100, 0), 100);
+  }
+  
+  // Calcular versículos necesarios para el siguiente rango
   let versesToNextRank = 0;
   if (currentRank.nextLevel) {
-    versesToNextRank = currentRank.maxVerses + 1 - versesCount;
+    // Solamente si hay un siguiente nivel
+    versesToNextRank = Math.max(currentRank.maxVerses + 1 - versesCount, 0);
   }
   
   return {
@@ -133,80 +164,75 @@ export function calculateUserRank(versesCount: number): {
   };
 }
 
-// Check if user can level up
+// Check if user can level up - FUNCIÓN CORREGIDA
 export function canLevelUp(versesCount: number): boolean {
+  // Si no hay versículos, no se puede subir de nivel
+  if (versesCount <= 0) {
+    return false;
+  }
+  
   const { currentRank } = calculateUserRank(versesCount);
-  return versesCount === currentRank.maxVerses && currentRank.nextLevel !== null;
+  
+  // Se puede subir de nivel si alcanzamos el máximo de versículos del nivel actual
+  // y existe un siguiente nivel al que subir
+  return versesCount >= currentRank.maxVerses && currentRank.nextLevel !== null;
 }
 
 // Biblical Rank Icons
-// Saul Icon - Stones or blindness symbol
-// Modificación para las funciones de íconos en RankingSystem.tsx
-
-// Saul Icon - Stones or blindness symbol
 function SaulIcon() {
   return (
     <img src={Paths} className="rank-icon" alt="Saul Level" />
   );
 }
 
-// Nicodemus Icon - Lamp or torch
 function NicodemusIcon() {
   return (
     <img src={lantern} className="rank-icon" alt="Nicodemus Level" />
   );
 }
 
-// Thomas Icon - Hand with extended finger
 function ThomasIcon() {
   return (
     <img src={hello} className="rank-icon" alt="Thomas Level" />
   );
 }
 
-// Disciple Icon - Sandals or footprints
 function DiscipleIcon() {
   return (
     <img src={christian} className="rank-icon" alt="Disciple Level" />
   );
 }
 
-// Apostle Icon - Boat with net
 function ApostleIcon() {
   return (
     <img src={boat} className="rank-icon" alt="Apostle Level" />
   );
 }
 
-// Prophet Icon - Scroll with quill
 function ProphetIcon() {
   return (
     <img src={scroll} className="rank-icon" alt="Prophet Level" />
   );
 }
 
-// Daniel Icon - Lion or star
 function DanielIcon() {
   return (
     <img src={lion} className="rank-icon" alt="Daniel Level" />
   );
 }
 
-// David Icon - Harp or crown
 function DavidIcon() {
   return (
     <img src={heart} className="rank-icon" alt="David Level" />
   );
 }
 
-// Paul Icon - Broken chains
 function PaulIcon() {
   return (
     <img src={weakness} className="rank-icon" alt="Paul Level" />
   );
 }
 
-// Solomon Icon - Temple or crown with gems
 function SolomonIcon() {
   return (
     <img src={crown} className="rank-icon" alt="Solomon Level" />

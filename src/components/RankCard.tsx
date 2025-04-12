@@ -1,24 +1,23 @@
 // src/components/RankCard.tsx
 import React from 'react';
-import { BiblicalRank } from '../utils/RankingSystem';
+import { useRanking } from '../auth/context/RankingContext';
 
-interface RankCardProps {
-  currentRank: BiblicalRank;
-  progress: number;
-  versesToNextRank: number;
-  versesCount: number;
-  onLevelUp?: () => void;
-  canLevelUp: boolean;
-}
+const RankCard: React.FC = () => {
+  // Usar el contexto de ranking en lugar de pasar props
+  const { 
+    currentRank, 
+    progress, 
+    versesToNextRank, 
+    versesCount, 
+    levelUp, 
+    canLevelUp 
+  } = useRanking();
 
-const RankCard: React.FC<RankCardProps> = ({
-  currentRank,
-  progress,
-  versesToNextRank,
-  versesCount,
-  onLevelUp,
-  canLevelUp
-}) => {
+  // Validar que los datos críticos estén disponibles
+  if (!currentRank) {
+    return <div className="rank-card">Cargando información de rango...</div>;
+  }
+
   return (
     <div className="rank-card">
       <div className="rank-badge">
@@ -31,21 +30,30 @@ const RankCard: React.FC<RankCardProps> = ({
           <div 
             className="progress-fill" 
             style={{ width: `${progress}%` }}
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            role="progressbar"
           ></div>
         </div>
         <div className="rank-info">
-          <span className="verses-count">{versesCount} verses memorized</span>
+          <span className="verses-count">{versesCount} versículo{versesCount !== 1 ? 's' : ''} memorizado{versesCount !== 1 ? 's' : ''}</span>
           {currentRank.nextLevel && (
             <span>
-              {versesToNextRank} more verse{versesToNextRank !== 1 ? 's' : ''} to reach {currentRank.nextLevel}
+              {versesToNextRank > 0 ? (
+                `${versesToNextRank} versículo${versesToNextRank !== 1 ? 's' : ''} más para alcanzar ${currentRank.nextLevel}`
+              ) : (
+                `¡Listo para avanzar a ${currentRank.nextLevel}!`
+              )}
             </span>
           )}
-          {canLevelUp && onLevelUp && (
+          {canLevelUp && (
             <button 
               className="level-up-btn"
-              onClick={onLevelUp}
+              onClick={levelUp}
+              aria-label="Subir de nivel"
             >
-              Level Up!
+              ¡Subir de Nivel!
             </button>
           )}
         </div>

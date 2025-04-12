@@ -1,14 +1,77 @@
 /* src/components/RankingStyles.css */
 
+:root {
+  --primary-blue: #16223D;
+  --primary-blue-light: #2A3A62;
+  --accent-gold: #FFC107;
+  --accent-gold-light: #FFD54F;
+  --accent-gold-dark: #FFA000;
+  --text-muted: #6c757d;
+  --success-green: #28a745;
+  --white: #fff;
+  --black: #000;
+}
+
+/* Ranking Page Styles */
+.ranking-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+.ranking-page h2 {
+  text-align: center;
+  color: var(--primary-blue);
+  margin-bottom: an 2rem;
+  font-size: 2rem;
+}
+
+/* Verse Action Buttons */
+.verse-actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.add-verse-btn {
+  background-color: var(--success-green);
+  color: var(--white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-verse-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.verse-counter {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
 /* Rank Card Styles */
 .rank-card {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1rem;
-  background-color: #fff;
+  padding: 1.5rem;
+  background-color: var(--white);
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.rank-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .rank-badge {
@@ -29,11 +92,16 @@
 
 /* Estilos para los íconos dentro de rank-badge */
 .rank-badge img, .rank-badge .rank-icon {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
   margin-bottom: 1rem;
   filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+  font-size: 40px; /* Para emojis */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .rank-title {
@@ -64,6 +132,7 @@
   background-color: rgba(22, 34, 61, 0.1);
   border-radius: 6px;
   overflow: hidden;
+  position: relative;
 }
 
 .progress-fill {
@@ -71,6 +140,33 @@
   background: linear-gradient(90deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
   border-radius: 6px;
   transition: width 1s ease;
+  position: relative;
+}
+
+/* Añadir un brillo al final de la barra cuando está cerca de completarse */
+.progress-fill[aria-valuenow="100"]::after,
+.progress-fill[aria-valuenow="90"]::after,
+.progress-fill[aria-valuenow="80"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  animation: shine 1.5s infinite;
+}
+
+@keyframes shine {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
 }
 
 .rank-info {
@@ -95,7 +191,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   align-self: flex-start;
   animation: pulse 2s infinite;
 }
@@ -104,6 +200,11 @@
   background-color: var(--accent-gold-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.level-up-btn:focus {
+  outline: 2px solid var(--accent-gold-dark);
+  outline-offset: 2px;
 }
 
 @keyframes pulse {
@@ -125,6 +226,9 @@
   object-fit: contain;
   max-width: 100%;
   max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Level Up Notification Styles */
@@ -157,12 +261,13 @@
 .level-up-content {
   background-color: white;
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 2rem;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
   animation: slideUp 0.5s forwards;
+  position: relative;
 }
 
 @keyframes slideUp {
@@ -184,9 +289,12 @@
 }
 
 .level-up-header h3 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--primary-blue);
   margin: 0;
+  font-weight: 700;
+  text-align: center;
+  flex-grow: 1;
 }
 
 .close-btn {
@@ -195,39 +303,57 @@
   font-size: 1.5rem;
   color: var(--text-muted);
   cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  border-radius: 50%;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  color: var(--black);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .level-transition {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  margin: 1rem 0 1.5rem;
+  gap: 2rem;
+  margin: 1.5rem 0 2rem;
 }
 
 .old-level, .new-level {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: all 0.3s ease;
+}
+
+.new-level {
+  transform: scale(1.05);
 }
 
 .level-icon {
   background-color: rgba(22, 34, 61, 0.05);
-  padding: 0.75rem;
+  padding: 1rem;
   border-radius: 10px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
 }
 
 /* Control de tamaño para las imágenes dentro del contenedor de íconos */
 .level-icon img, .level-icon .rank-icon {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   object-fit: contain;
+  font-size: 35px; /* Para emojis */
 }
 
 .level-name {
@@ -236,8 +362,8 @@
 }
 
 .level-arrow svg {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   color: var(--accent-gold);
   animation: arrowMove 1s infinite alternate;
 }
@@ -267,10 +393,38 @@
 
 .level-up-message {
   margin-bottom: 1.5rem;
-  padding: 1rem;
+  padding: 1.25rem;
   background-color: rgba(255, 193, 7, 0.1);
   border-radius: 8px;
   font-style: italic;
+  position: relative;
+}
+
+.level-up-message::before {
+  content: '"';
+  font-size: 3rem;
+  position: absolute;
+  top: -15px;
+  left: 10px;
+  color: rgba(255, 193, 7, 0.3);
+  font-family: serif;
+}
+
+.level-up-message::after {
+  content: '"';
+  font-size: 3rem;
+  position: absolute;
+  bottom: -40px;
+  right: 10px;
+  color: rgba(255, 193, 7, 0.3);
+  font-family: serif;
+}
+
+.level-up-message p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  line-height: 1.6;
 }
 
 .continue-btn {
@@ -282,11 +436,44 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-top: 1rem;
 }
 
 .continue-btn:hover {
   background-color: var(--primary-blue-light);
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(22, 34, 61, 0.3);
+}
+
+.continue-btn:focus {
+  outline: 2px solid var(--primary-blue-light);
+  outline-offset: 2px;
+}
+
+/* Loading indicator */
+.loading-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+.loading-rank::after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(22, 34, 61, 0.1);
+  border-top-color: var(--accent-gold);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive adjustments */
@@ -301,5 +488,13 @@
   
   .rank-phrase {
     max-width: 100%;
+  }
+  
+  .level-up-content {
+    padding: 2.5rem;
+  }
+  
+  .level-transition {
+    gap: 3rem;
   }
 }

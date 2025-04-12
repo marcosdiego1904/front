@@ -1,48 +1,69 @@
 // src/components/LevelUpNotification.tsx
-import React, { useState, useEffect } from 'react';
-import { BiblicalRank } from '../utils/RankingSystem';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRanking } from '../auth/context/RankingContext';
 
-interface LevelUpNotificationProps {
-  show: boolean;
-  onClose: () => void;
-  currentRank: BiblicalRank;
-  nextRank: BiblicalRank | null;
-}
-
-const LevelUpNotification: React.FC<LevelUpNotificationProps> = ({
-  show,
-  onClose,
-  currentRank,
-  nextRank
-}) => {
+const LevelUpNotification: React.FC = () => {
   const [animationClass, setAnimationClass] = useState('');
+  const { 
+    currentRank, 
+    nextRank, 
+    showLevelUpNotification, 
+    closeLevelUpNotification 
+  } = useRanking();
+  
+  // Usar refs para gestionar temporizadores y evitar fugas de memoria
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (show) {
+    // Limpiar temporizadores existentes cuando el componente se desmonta o cambian las dependencias
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Limpiar temporizadores existentes primero
+    if (timerRef.current) clearTimeout(timerRef.current);
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    
+    if (showLevelUpNotification) {
       setAnimationClass('level-up-show');
       
-      // Auto close after 5 seconds
-      const timer = setTimeout(() => {
+      // Auto-cerrar después de 5 segundos
+      timerRef.current = setTimeout(() => {
         setAnimationClass('level-up-hide');
-        setTimeout(() => {
-          onClose();
+        
+        closeTimerRef.current = setTimeout(() => {
+          closeLevelUpNotification();
         }, 500);
       }, 5000);
-      
-      return () => clearTimeout(timer);
     } else {
       setAnimationClass('');
     }
-  }, [show, onClose]);
+  }, [showLevelUpNotification, closeLevelUpNotification]);
 
-  if (!show || !nextRank) return null;
+  // Validación adicional para prevenir problemas de renderizado
+  if (!showLevelUpNotification || !nextRank || !currentRank) return null;
 
   return (
-    <div className={`level-up-notification ${animationClass}`}>
+    <div 
+      className={`level-up-notification ${animationClass}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="level-up-title"
+    >
       <div className="level-up-content">
         <div className="level-up-header">
-          <h3>Level Up!</h3>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <h3 id="level-up-title">¡Subiste de Nivel!</h3>
+          <button 
+            className="close-btn" 
+            onClick={closeLevelUpNotification}
+            aria-label="Cerrar notificación"
+          >
+            ×
+          </button>
         </div>
         
         <div className="level-transition">
@@ -72,8 +93,12 @@ const LevelUpNotification: React.FC<LevelUpNotificationProps> = ({
           <p>{nextRank.phrase}</p>
         </div>
         
-        <button className="continue-btn" onClick={onClose}>
-          Continue Journey
+        <button 
+          className="continue-btn" 
+          onClick={closeLevelUpNotification}
+          aria-label="Continuar con el nuevo rango"
+        >
+          Continuar Jornada
         </button>
       </div>
     </div>
