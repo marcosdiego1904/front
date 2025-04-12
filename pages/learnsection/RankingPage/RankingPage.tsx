@@ -1,6 +1,6 @@
-// src/pages/RankingPage.tsx
+// pages/learnsection/RankingPage/RankingPage.tsx
 import React from 'react';
-import { RankingProvider } from '../../../src/auth/context/RankingContext';
+import { RankingProvider, useRanking } from '../../../src/auth/context/RankingContext';
 import RankCard from '../../../src/components/RankCard';
 import LevelUpNotification from '../../../src/components/LevelUpNotification';
 import '../../../src/components/RankingStyles.css';

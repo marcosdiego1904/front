@@ -1,22 +1,45 @@
 // src/components/LevelUpNotification.tsx
 import React, { useState, useEffect, useRef } from 'react';
+import { BiblicalRank } from '../utils/RankingSystem';
 import { useRanking } from '../auth/context/RankingContext';
 
-const LevelUpNotification: React.FC = () => {
+// Define the props that can be received directly
+interface LevelUpNotificationProps {
+  show?: boolean;
+  onClose?: () => void;
+  currentRank?: BiblicalRank;
+  nextRank?: BiblicalRank | null;
+}
+
+const LevelUpNotification: React.FC<LevelUpNotificationProps> = (props) => {
   const [animationClass, setAnimationClass] = useState('');
-  const { 
-    currentRank, 
-    nextRank, 
-    showLevelUpNotification, 
-    closeLevelUpNotification 
-  } = useRanking();
   
-  // Usar refs para gestionar temporizadores y evitar fugas de memoria
+  // Obtain data from context
+  let context;
+  try {
+    context = useRanking();
+  } catch (error) {
+    // If context is not available, we'll use props only
+    context = {
+      showLevelUpNotification: false,
+      closeLevelUpNotification: () => {},
+      currentRank: undefined,
+      nextRank: undefined
+    };
+  }
+  
+  // Determine whether to use direct props or context
+  const show = props.show !== undefined ? props.show : context.showLevelUpNotification;
+  const onClose = props.onClose || context.closeLevelUpNotification;
+  const currentRank = props.currentRank || context.currentRank;
+  const nextRank = props.nextRank !== undefined ? props.nextRank : context.nextRank;
+  
+  // Use refs to manage timers and prevent memory leaks
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Limpiar temporizadores existentes cuando el componente se desmonta o cambian las dependencias
+    // Clean up existing timers when the component unmounts or dependencies change
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
@@ -24,28 +47,28 @@ const LevelUpNotification: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Limpiar temporizadores existentes primero
+    // Clean up existing timers first
     if (timerRef.current) clearTimeout(timerRef.current);
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     
-    if (showLevelUpNotification) {
+    if (show) {
       setAnimationClass('level-up-show');
       
-      // Auto-cerrar después de 5 segundos
+      // Auto-close after 5 seconds
       timerRef.current = setTimeout(() => {
         setAnimationClass('level-up-hide');
         
         closeTimerRef.current = setTimeout(() => {
-          closeLevelUpNotification();
+          onClose();
         }, 500);
       }, 5000);
     } else {
       setAnimationClass('');
     }
-  }, [showLevelUpNotification, closeLevelUpNotification]);
+  }, [show, onClose]);
 
-  // Validación adicional para prevenir problemas de renderizado
-  if (!showLevelUpNotification || !nextRank || !currentRank) return null;
+  // Additional validation to prevent rendering issues
+  if (!show || !nextRank || !currentRank) return null;
 
   return (
     <div 
@@ -56,11 +79,11 @@ const LevelUpNotification: React.FC = () => {
     >
       <div className="level-up-content">
         <div className="level-up-header">
-          <h3 id="level-up-title">¡Subiste de Nivel!</h3>
+          <h3 id="level-up-title">Level Up!</h3>
           <button 
             className="close-btn" 
-            onClick={closeLevelUpNotification}
-            aria-label="Cerrar notificación"
+            onClick={onClose}
+            aria-label="Close notification"
           >
             ×
           </button>
@@ -95,10 +118,10 @@ const LevelUpNotification: React.FC = () => {
         
         <button 
           className="continue-btn" 
-          onClick={closeLevelUpNotification}
-          aria-label="Continuar con el nuevo rango"
+          onClick={onClose}
+          aria-label="Continue with new rank"
         >
-          Continuar Jornada
+          Continue Journey
         </button>
       </div>
     </div>

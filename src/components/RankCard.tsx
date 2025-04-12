@@ -1,21 +1,46 @@
 // src/components/RankCard.tsx
 import React from 'react';
+import { BiblicalRank } from '../utils/RankingSystem';
 import { useRanking } from '../auth/context/RankingContext';
 
-const RankCard: React.FC = () => {
-  // Usar el contexto de ranking en lugar de pasar props
-  const { 
-    currentRank, 
-    progress, 
-    versesToNextRank, 
-    versesCount, 
-    levelUp, 
-    canLevelUp 
-  } = useRanking();
+// Define the props that can be received directly
+interface RankCardProps {
+  currentRank?: BiblicalRank;
+  progress?: number;
+  versesToNextRank?: number;
+  versesCount?: number;
+  onLevelUp?: () => void;
+  canLevelUp?: boolean;
+}
 
-  // Validar que los datos críticos estén disponibles
+const RankCard: React.FC<RankCardProps> = (props) => {
+  // Obtain data from context
+  let context;
+  try {
+    context = useRanking();
+  } catch (error) {
+    // If context is not available, we'll use props only
+    context = {
+      currentRank: undefined,
+      progress: 0,
+      versesToNextRank: 0,
+      versesCount: 0,
+      levelUp: () => {},
+      canLevelUp: false
+    };
+  }
+  
+  // Determine whether to use direct props or context
+  const currentRank = props.currentRank || context.currentRank;
+  const progress = props.progress !== undefined ? props.progress : context.progress;
+  const versesToNextRank = props.versesToNextRank !== undefined ? props.versesToNextRank : context.versesToNextRank;
+  const versesCount = props.versesCount !== undefined ? props.versesCount : context.versesCount;
+  const levelUp = props.onLevelUp || context.levelUp;
+  const canLevelUp = props.canLevelUp !== undefined ? props.canLevelUp : context.canLevelUp;
+
+  // Validate that critical data is available
   if (!currentRank) {
-    return <div className="rank-card">Cargando información de rango...</div>;
+    return <div className="rank-card">Loading rank information...</div>;
   }
 
   return (
@@ -37,13 +62,13 @@ const RankCard: React.FC = () => {
           ></div>
         </div>
         <div className="rank-info">
-          <span className="verses-count">{versesCount} versículo{versesCount !== 1 ? 's' : ''} memorizado{versesCount !== 1 ? 's' : ''}</span>
+          <span className="verses-count">{versesCount} verse{versesCount !== 1 ? 's' : ''} memorized</span>
           {currentRank.nextLevel && (
             <span>
               {versesToNextRank > 0 ? (
-                `${versesToNextRank} versículo${versesToNextRank !== 1 ? 's' : ''} más para alcanzar ${currentRank.nextLevel}`
+                `${versesToNextRank} more verse${versesToNextRank !== 1 ? 's' : ''} to reach ${currentRank.nextLevel}`
               ) : (
-                `¡Listo para avanzar a ${currentRank.nextLevel}!`
+                `Ready to advance to ${currentRank.nextLevel}!`
               )}
             </span>
           )}
@@ -51,9 +76,9 @@ const RankCard: React.FC = () => {
             <button 
               className="level-up-btn"
               onClick={levelUp}
-              aria-label="Subir de nivel"
+              aria-label="Level up to next rank"
             >
-              ¡Subir de Nivel!
+              Level Up!
             </button>
           )}
         </div>
