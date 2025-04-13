@@ -1,7 +1,7 @@
 // src/config/api.ts
 
-// Correct URL for your Render backend deployment
-const API_BASE_URL = "https://back-e1qy.onrender.com/api";
+// Updated with the new official domain
+const API_BASE_URL = "https://api.lamptomyfeet.co/api";
 
 // For development/local testing
 const DEV_API_URL = "http://localhost:5000/api";

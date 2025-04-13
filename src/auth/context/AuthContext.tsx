@@ -30,8 +30,8 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// API base URL - update this with your actual backend URL from Railway
-const API_URL = 'https://back-e1qy.onrender.com'; // TODO: Update this!
+// API base URL - updated to the new official domain
+const API_URL = 'https://api.lamptomyfeet.co';
 
 // Create context with a default value
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -181,7 +181,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // Update user profile - ADDED IMPLEMENTATION HERE
+  // Update user profile
   const updateUserProfile = async (userData: Partial<User>): Promise<void> => {
     if (!token || !user) {
       setError('Authentication required');
@@ -244,7 +244,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     getUserProfile,
     getAuthHeader,
     isAuthenticated: !!user && !!token,
-    updateUserProfile, // ADDED FUNCTION TO CONTEXT VALUE
+    updateUserProfile,
   };
 
   return (
