@@ -1,0 +1,51 @@
+/* Styles for the construction pages */
+
+.construction-container {
+    background-color: #16223d;
+    border-radius: 10px;
+    color: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 30px;
+  }
+  
+  .construction-image {
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.5));
+  }
+  
+  .construction-notice {
+    border: 1px dashed #ffc107;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: rgba(255, 193, 7, 0.05);
+  }
+  
+  .coming-soon {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .coming-soon ul li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+  
+  /* Animation for the construction notice */
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+    }
+  }
+  
+  .text-warning {
+    animation: pulse 2s infinite;
+  }

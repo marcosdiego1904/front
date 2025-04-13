@@ -11,8 +11,14 @@ import ForgotPassword from "./auth/components/ForgotPassword";
 import UserProfile from "./auth/components/UserProfile";
 import Dashboard from "./auth/components/Dashboard";
 import { AuthProvider, useAuth } from "./auth/context/AuthContext";
+
+// Import the About and Support components
+import AboutPage from "../pages/learnsection/about";
+import SupportPage from "../pages/learnsection/support";
+
 // En src/index.tsx o App.tsx
 import './styles/global-design-system.css';
+
 // Custom wrapper for protected routes that works with useRoutes
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -40,6 +46,11 @@ const AppRoutes = () => {
     // Public routes
     { path: "/", element: <Home /> },
     { path: "/learn", element: <LearnSection /> },
+    
+    // Add the new About and Support routes
+    { path: "/about", element: <AboutPage /> },
+    { path: "/support", element: <SupportPage /> },
+    
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/forgot-password", element: <ForgotPassword /> },
