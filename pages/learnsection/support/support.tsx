@@ -119,16 +119,16 @@ const SupportPage: React.FC = () => {
           </div>
           
           <div className="message-content">
-            <h3>¡Hola! Soy el creador de Lamp to my feet</h3>
+            <h3>Hello! I'm the creator of Lamp to my feet</h3>
             <p>
-              Comencé este proyecto por una razón personal: siempre he querido memorizar más Escrituras, 
-              pero me resultaba difícil. Como desarrollador independiente, creé esta herramienta con la 
-              misión de hacer que la memorización bíblica sea accesible y efectiva para todos.
+            As an independent developer, I created this tool to make Bible memorization accessible and effective for all believers. This project was born from my own struggle to memorize Scripture and has grown thanks to the support of people like you.
             </p>
             <p className="dev-personal-note">
-              <i className="bi bi-quote"></i> Cada vez que recibo un mensaje de alguien contándome 
-              cómo la app le ha ayudado a crecer espiritualmente, me confirma que todo el esfuerzo 
-              ha valido la pena. <i className="bi bi-quote"></i>
+              <i className="bi bi-quote"></i> Every testimony of spiritual growth through this app reminds me why I dedicate my time and resources to this ministry.
+              <i className="bi bi-quote"></i>
+            </p>
+            <p>
+            Has Lamp to my feet helped you engrave God's Word in your heart? Your support allows this tool to continue equipping God's people with Scripture as spiritual armor for daily battles.
             </p>
             <button className="video-btn pulse-btn" onClick={() => setShowVideo(true)}>
               <i className="bi bi-play-circle-fill"></i> Mi historia en video
