@@ -16,22 +16,22 @@ const SupportPage: React.FC = () => {
   // Testimonial data
   const testimonials = [
     {
-      text: "Esta app cambió mi relación con la Palabra. Después de años intentando memorizar versículos sin éxito, finalmente puedo recordarlos cuando más los necesito. Es como llevar un tesoro en mi corazón.",
+      text: "This app changed my relationship with the Word. After years of trying to memorize verses without success, I can finally remember them when I need them most. It's like carrying a treasure in my heart.",
       author: "María S.",
-      country: "México"
+      country: "Mexico"
     },
     {
-      text: "Como pastor, recomiendo esta herramienta a toda mi congregación. El método paso a paso es brillante y he visto cómo ha transformado la vida espiritual de muchos en nuestra iglesia.",
+      text: "As a pastor, I recommend this tool to my entire congregation. The step-by-step method is brilliant and I've seen how it has transformed the spiritual life of many in our church.",
       author: "Pastor David L.",
       country: "Colombia"
     },
     {
-      text: "Soy maestra de escuela dominical y esta app ha revolucionado cómo enseño la Palabra a mis alumnos. ¡Ahora los niños memorizan con entusiasmo y compiten por quién aprende más versículos!",
+      text: "I'm a Sunday school teacher and this app has revolutionized how I teach the Word to my students. Now the children memorize with enthusiasm and compete to see who learns more verses!",
       author: "Carolina P.",
-      country: "España"
+      country: "Spain"
     },
     {
-      text: "Todos los días en el tren uso la app para memorizar un nuevo versículo. Este hábito ha sido un ancla espiritual en tiempos difíciles. Agradezco de corazón el trabajo del desarrollador.",
+      text: "Every day on the train I use the app to memorize a new verse. This habit has been a spiritual anchor in difficult times. I am deeply grateful for the developer's work.",
       author: "Roberto M.",
       country: "Argentina"
     }
@@ -80,7 +80,7 @@ const SupportPage: React.FC = () => {
   // Sharing functionality
   const shareApp = (platform: string) => {
     const url = window.location.origin;
-    const text = "¡Descubrí una increíble app para memorizar versículos bíblicos! Me está ayudando a guardar la Palabra en mi corazón ✨";
+    const text = "I discovered an amazing app for memorizing Bible verses! It's helping me store the Word in my heart ✨";
     
     let shareUrl = "";
     
@@ -95,7 +95,7 @@ const SupportPage: React.FC = () => {
         shareUrl = `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`;
         break;
       case 'email':
-        shareUrl = `mailto:?subject=App para memorizar versículos bíblicos&body=${encodeURIComponent(text + "\n\n" + url)}`;
+        shareUrl = `mailto:?subject=App for memorizing Bible verses&body=${encodeURIComponent(text + "\n\n" + url)}`;
         break;
       default:
         return;
@@ -107,7 +107,7 @@ const SupportPage: React.FC = () => {
   return (
     <div className="support-page">
       <div className="support-container">
-        <h1 className="support-title">Apoya este ministerio</h1>
+        <h1 className="support-title">Support this ministry</h1>
         
         {/* Developer personal message - enhanced with pulse effect */}
         <div className="developer-message">
@@ -131,17 +131,17 @@ const SupportPage: React.FC = () => {
             Has Lamp to my feet helped you engrave God's Word in your heart? Your support allows this tool to continue equipping God's people with Scripture as spiritual armor for daily battles.
             </p>
             <button className="video-btn pulse-btn" onClick={() => setShowVideo(true)}>
-              <i className="bi bi-play-circle-fill"></i> Mi historia en video
+              <i className="bi bi-play-circle-fill"></i> My story in video
             </button>
           </div>
         </div>
         
         {/* Why support is needed - more visual with progress bars */}
         <div className="support-why">
-          <h2>¿Por qué tu apoyo es importante?</h2>
+          <h2>Why is your support important?</h2>
           <p className="support-intro">
-            Como desarrollador independiente, mantengo esta app con recursos limitados. 
-            Tu apoyo hace posible que este ministerio digital siga creciendo.
+            As an independent developer, I maintain this app with limited resources. 
+            Your support makes it possible for this digital ministry to continue growing.
           </p>
           
           <div className="expense-cards">
@@ -149,18 +149,18 @@ const SupportPage: React.FC = () => {
               <div className="expense-icon">
                 <i className="bi bi-server"></i>
               </div>
-              <h4>Hosting y Base de Datos</h4>
+              <h4>Hosting and Database</h4>
               <div className="expense-details">
                 <div className="expense-progress-container">
                   <div className="expense-progress-label">
-                    <span>Costo mensual</span>
-                    <span>Cubierto: 65%</span>
+                    <span>Monthly cost</span>
+                    <span>Covered: 65%</span>
                   </div>
                   <div className="expense-progress-bar">
                     <div className="expense-progress-fill" style={{width: "65%"}}></div>
                   </div>
                 </div>
-                <p>El almacenamiento de datos y servidores confiables son esenciales para mantener la app funcionando sin interrupciones.</p>
+                <p>Reliable data storage and servers are essential to keep the app running without interruptions.</p>
               </div>
             </div>
             
@@ -168,18 +168,18 @@ const SupportPage: React.FC = () => {
               <div className="expense-icon">
                 <i className="bi bi-translate"></i>
               </div>
-              <h4>Traducción al Español</h4>
+              <h4>Spanish Translation</h4>
               <div className="expense-details">
                 <div className="expense-progress-container">
                   <div className="expense-progress-label">
-                    <span>Proyecto en progreso</span>
-                    <span>Completado: 40%</span>
+                    <span>Project in progress</span>
+                    <span>Completed: 40%</span>
                   </div>
                   <div className="expense-progress-bar">
                     <div className="expense-progress-fill" style={{width: "40%"}}></div>
                   </div>
                 </div>
-                <p>Mi prioridad es hacer que la app sea accesible para la comunidad hispana, comenzando con una traducción completa.</p>
+                <p>My priority is to make the app accessible to the Hispanic community, starting with a complete translation.</p>
               </div>
             </div>
             
@@ -187,18 +187,18 @@ const SupportPage: React.FC = () => {
               <div className="expense-icon">
                 <i className="bi bi-phone"></i>
               </div>
-              <h4>App Móvil Nativa</h4>
+              <h4>Native Mobile App</h4>
               <div className="expense-details">
                 <div className="expense-progress-container">
                   <div className="expense-progress-label">
-                    <span>Proyecto futuro</span>
-                    <span>Fondos: 25%</span>
+                    <span>Future project</span>
+                    <span>Funds: 25%</span>
                   </div>
                   <div className="expense-progress-bar">
                     <div className="expense-progress-fill" style={{width: "25%"}}></div>
                   </div>
                 </div>
-                <p>Una app nativa para Android e iOS permitirá memorizar versículos en cualquier momento y lugar, incluso sin conexión.</p>
+                <p>A native app for Android and iOS will allow memorizing verses anytime, anywhere, even offline.</p>
               </div>
             </div>
             
@@ -206,19 +206,19 @@ const SupportPage: React.FC = () => {
               <div className="expense-icon">
                 <i className="bi bi-clock-history"></i>
               </div>
-              <h4>Tiempo de Desarrollo</h4>
+              <h4>Development Time</h4>
               <div className="expense-details">
                 <div className="expense-time-info">
                   <div className="time-metric">
                     <span className="time-number">15+</span>
-                    <span className="time-label">horas semanales</span>
+                    <span className="time-label">hours weekly</span>
                   </div>
                   <div className="time-metric">
                     <span className="time-number">60+</span>
-                    <span className="time-label">horas mensuales</span>
+                    <span className="time-label">hours monthly</span>
                   </div>
                 </div>
-                <p>Tu apoyo me permite dedicar más tiempo a mejorar la app, añadir nuevas funciones y mantener todo funcionando sin problemas.</p>
+                <p>Your support allows me to dedicate more time to improving the app, adding new features, and keeping everything running smoothly.</p>
               </div>
             </div>
           </div>
@@ -226,18 +226,18 @@ const SupportPage: React.FC = () => {
         
         {/* Ways to support - now with interactive elements */}
         <div className="ways-to-support">
-          <h2>¿Cómo puedes ayudar?</h2>
+          <h2>How can you help?</h2>
           
           <div className="support-options">
             <div className="support-option donate-option">
               <div className="support-icon">
                 <i className="bi bi-heart-fill"></i>
               </div>
-              <div className="ribbon">Mayor impacto</div>
-              <h3>Apóyanos Económicamente</h3>
+              <div className="ribbon">Greatest impact</div>
+              <h3>Support Us Financially</h3>
               <p>
-                Tu contribución, por pequeña que sea, ayuda a mantener vivo este ministerio. 
-                La opción mensual permite una planificación más estable.
+                Your contribution, however small, helps keep this ministry alive. 
+                The monthly option allows for more stable planning.
               </p>
               <div className="donation-container">
                 <div className="donation-tiers">
@@ -245,11 +245,11 @@ const SupportPage: React.FC = () => {
                   <button className="donation-tier">$10</button>
                   <button className="donation-tier active">$20</button>
                   <button className="donation-tier">$50</button>
-                  <button className="donation-tier">Otro</button>
+                  <button className="donation-tier">Other</button>
                 </div>
                 <div className="donation-buttons">
-                  <button className="support-btn">Donación única</button>
-                  <button className="support-btn support-btn-secondary">Apoyo mensual</button>
+                  <button className="support-btn">One-time donation</button>
+                  <button className="support-btn support-btn-secondary">Monthly support</button>
                 </div>
               </div>
             </div>
@@ -258,18 +258,18 @@ const SupportPage: React.FC = () => {
               <div className="support-icon">
                 <i className="bi bi-share-fill"></i>
               </div>
-              <h3>Comparte la App</h3>
+              <h3>Share the App</h3>
               <p>
-                ¿Te ha ayudado esta app a memorizar Escrituras? ¡Compártela con amigos, familia e iglesia! 
-                Esta simple acción puede tener un gran impacto en la vida de otros creyentes.
+                Has this app helped you memorize Scripture? Share it with friends, family, and church! 
+                This simple action can have a big impact on the lives of other believers.
               </p>
               <div className="share-message">
-                <p>"He encontrado una app increíble para memorizar versículos bíblicos. ¡Deberías probarla!"</p>
+                <p>"I found an amazing app for memorizing Bible verses. You should try it!"</p>
                 <div className="share-copy-btn" onClick={() => {
-                  navigator.clipboard.writeText("He encontrado una app increíble para memorizar versículos bíblicos: " + window.location.origin);
-                  alert("¡Mensaje copiado al portapapeles!");
+                  navigator.clipboard.writeText("I found an amazing app for memorizing Bible verses: " + window.location.origin);
+                  alert("Message copied to clipboard!");
                 }}>
-                  <i className="bi bi-clipboard"></i> Copiar
+                  <i className="bi bi-clipboard"></i> Copy
                 </div>
               </div>
               <div className="share-buttons">
@@ -292,20 +292,20 @@ const SupportPage: React.FC = () => {
               <div className="support-icon">
                 <i className="bi bi-chat-heart-fill"></i>
               </div>
-              <h3>Ora y Comparte tu Testimonio</h3>
+              <h3>Pray and Share Your Testimony</h3>
               <p>
-                Tus oraciones por este ministerio son invaluables. También te invito a compartir 
-                cómo la app ha impactado tu vida espiritual.
+                Your prayers for this ministry are invaluable. I also invite you to share 
+                how the app has impacted your spiritual life.
               </p>
               <div className="testimonial-form">
                 <textarea 
-                  placeholder="Comparte cómo ha impactado esta app tu vida espiritual..." 
+                  placeholder="Share how this app has impacted your spiritual life..." 
                   rows={3}
                   value={formData.message}
                   onChange={handleInputChange}
                   name="message"
                 ></textarea>
-                <button className="support-btn testimonial-btn">Enviar testimonio</button>
+                <button className="support-btn testimonial-btn">Send testimony</button>
               </div>
             </div>
           </div>
@@ -313,20 +313,20 @@ const SupportPage: React.FC = () => {
         
         {/* Impact slider - user testimonials with auto rotation */}
         <div className="impact-section">
-          <h2>Impacto en la Comunidad</h2>
+          <h2>Community Impact</h2>
           
           <div className="impact-metrics">
             <div className="impact-metric">
               <div className="metric-number">12,500+</div>
-              <div className="metric-label">Versículos memorizados</div>
+              <div className="metric-label">Verses memorized</div>
             </div>
             <div className="impact-metric">
               <div className="metric-number">3,200+</div>
-              <div className="metric-label">Usuarios activos</div>
+              <div className="metric-label">Active users</div>
             </div>
             <div className="impact-metric">
               <div className="metric-number">18+</div>
-              <div className="metric-label">Países alcanzados</div>
+              <div className="metric-label">Countries reached</div>
             </div>
           </div>
           
@@ -371,8 +371,8 @@ const SupportPage: React.FC = () => {
         
         {/* Vision roadmap - more visually engaging */}
         <div className="vision-section">
-          <h2>Visión de Futuro</h2>
-          <p className="vision-intro">Con tu apoyo, este es el camino que estamos recorriendo:</p>
+          <h2>Future Vision</h2>
+          <p className="vision-intro">With your support, this is the path we are taking:</p>
           
           <div className="roadmap-container">
             <div className="roadmap-timeline"></div>
@@ -385,10 +385,10 @@ const SupportPage: React.FC = () => {
                 <div className="roadmap-icon">
                   <i className="bi bi-translate"></i>
                 </div>
-                <h3>Traducción al Español</h3>
-                <p>Hacer la app completamente accesible para la comunidad hispana</p>
+                <h3>Spanish Translation</h3>
+                <p>Make the app fully accessible to the Hispanic community</p>
                 <div className="roadmap-status">
-                  <div className="status-label">En progreso</div>
+                  <div className="status-label">In progress</div>
                   <div className="status-bar">
                     <div className="status-fill" style={{width: "40%"}}></div>
                   </div>
@@ -404,10 +404,10 @@ const SupportPage: React.FC = () => {
                 <div className="roadmap-icon">
                   <i className="bi bi-phone"></i>
                 </div>
-                <h3>Aplicaciones Móviles Nativas</h3>
-                <p>Desarrollar apps dedicadas para iOS y Android con soporte offline</p>
+                <h3>Native Mobile Applications</h3>
+                <p>Develop dedicated apps for iOS and Android with offline support</p>
                 <div className="roadmap-status">
-                  <div className="status-label">Próximamente</div>
+                  <div className="status-label">Coming soon</div>
                 </div>
               </div>
             </div>
@@ -420,10 +420,10 @@ const SupportPage: React.FC = () => {
                 <div className="roadmap-icon">
                   <i className="bi bi-people"></i>
                 </div>
-                <h3>Funciones Grupales</h3>
-                <p>Herramientas para iglesias y grupos pequeños para memorizar juntos</p>
+                <h3>Group Features</h3>
+                <p>Tools for churches and small groups to memorize together</p>
                 <div className="roadmap-status">
-                  <div className="status-label">Planificado</div>
+                  <div className="status-label">Planned</div>
                 </div>
               </div>
             </div>
@@ -436,10 +436,10 @@ const SupportPage: React.FC = () => {
                 <div className="roadmap-icon">
                   <i className="bi bi-globe2"></i>
                 </div>
-                <h3>Más Idiomas</h3>
-                <p>Expandir a otros idiomas para alcanzar a creyentes en todo el mundo</p>
+                <h3>More Languages</h3>
+                <p>Expand to other languages to reach believers worldwide</p>
                 <div className="roadmap-status">
-                  <div className="status-label">Visión Futura</div>
+                  <div className="status-label">Future Vision</div>
                 </div>
               </div>
             </div>
@@ -448,22 +448,22 @@ const SupportPage: React.FC = () => {
         
         {/* Contact form - with interactive elements */}
         <div className="support-contact">
-          <h2>Hablemos</h2>
+          <h2>Let's Talk</h2>
           <p className="contact-intro">
-            ¿Tienes preguntas sobre cómo apoyar este ministerio o sugerencias para mejorarlo? 
-            Me encantaría escucharte.
+            Do you have questions about how to support this ministry or suggestions to improve it? 
+            I'd love to hear from you.
           </p>
           
           <form className="contact-form" onSubmit={handleSubmit}>
             <div className={`form-group ${formData.name ? 'has-value' : ''}`}>
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="name">Name</label>
               <input 
                 type="text" 
                 id="name" 
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Tu nombre" 
+                placeholder="Your name" 
               />
             </div>
             
@@ -475,31 +475,31 @@ const SupportPage: React.FC = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="Tu email" 
+                placeholder="Your email" 
               />
             </div>
             
             <div className={`form-group ${formData.message ? 'has-value' : ''}`}>
-              <label htmlFor="message">Mensaje</label>
+              <label htmlFor="message">Message</label>
               <textarea 
                 id="message" 
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
-                placeholder="Tu mensaje" 
+                placeholder="Your message" 
                 rows={4}
               ></textarea>
             </div>
             
             <button type="submit" className="contact-submit">
-              <span>Enviar Mensaje</span>
+              <span>Send Message</span>
               <i className="bi bi-send"></i>
             </button>
             
             {thankYouVisible && (
               <div className="form-thank-you">
                 <i className="bi bi-check-circle"></i>
-                <p>¡Gracias por tu mensaje! Te responderé lo antes posible.</p>
+                <p>Thank you for your message! I'll respond as soon as possible.</p>
               </div>
             )}
           </form>
@@ -510,14 +510,14 @@ const SupportPage: React.FC = () => {
           <div className="thank-you-icon">
             <i className="bi bi-heart-fill"></i>
           </div>
-          <h2>¡Gracias!</h2>
+          <h2>Thank You!</h2>
           <p>
-            Tu apoyo, oraciones y ánimo significan mucho. Juntos podemos llevar la 
-            Palabra de Dios a más corazones y vidas.
+            Your support, prayers, and encouragement mean a lot. Together we can bring 
+            God's Word to more hearts and lives.
           </p>
           <div className="scripture-sign">
-            <p>"La hierba se seca y la flor se cae, pero la palabra del Señor permanece para siempre."</p>
-            <span>- 1 Pedro 1:24-25</span>
+            <p>"The grass withers and the flower falls, but the word of the Lord remains forever."</p>
+            <span>- 1 Peter 1:24-25</span>
           </div>
         </div>
       </div>
@@ -527,7 +527,7 @@ const SupportPage: React.FC = () => {
         <div className="video-modal" onClick={() => setShowVideo(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>La Historia detrás de Lamp to my feet</h3>
+              <h3>The Story behind Lamp to my feet</h3>
               <button className="close-btn" onClick={() => setShowVideo(false)}>
                 <i className="bi bi-x-lg"></i>
               </button>
@@ -536,7 +536,7 @@ const SupportPage: React.FC = () => {
               {isVideoLoaded ? null : (
                 <div className="video-loading">
                   <div className="loading-spinner"></div>
-                  <p>Cargando video...</p>
+                  <p>Loading video...</p>
                 </div>
               )}
               <div className={`video-player ${isVideoLoaded ? 'loaded' : ''}`}>
@@ -545,9 +545,9 @@ const SupportPage: React.FC = () => {
                   <div className="play-icon">
                     <i className="bi bi-play-circle"></i>
                   </div>
-                  <p>El video estará disponible pronto</p>
+                  <p>Video will be available soon</p>
                   <button className="video-placeholder-btn" onClick={() => setShowVideo(false)}>
-                    Cerrar
+                    Close
                   </button>
                 </div>
               </div>

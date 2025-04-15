@@ -29,7 +29,7 @@ const Categories = () => {
       context_nlt: string;
     }[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true); // Start with loading set to true
+  const [loading, setLoading] = useState<boolean>(true);
   const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -254,12 +254,14 @@ const Categories = () => {
       <div className="cat-categories-section">
         {!selectedSubcategory ? (
           <>
-            <div className="cat-intro-text">
-              <h1>We want to help you find the perfect verse for you</h1>
-              <p>
-                That's why we've organized the verses into categories that
-                reflect the situations and emotions we face as Christians.
-              </p>
+            <div className="cat-intro-container">
+              <div className="cat-intro-text">
+                <h1>We want to help you find the perfect verse for you</h1>
+                <p>
+                  That's why we've organized the verses into categories that
+                  reflect the situations and emotions we face as Christians.
+                </p>
+              </div>
             </div>
 
             {loading || categories.length === 0 ? (
@@ -294,9 +296,17 @@ const Categories = () => {
 
                         <div className="cat-overlay"></div>
                         <h2>{category.name}</h2>
-                        <span className="cat-toggle-icon">
-                          {openCategories.includes(category.id) ? "▲" : "▼"}
-                        </span>
+                        <div className="cat-toggle-icon">
+                          {openCategories.includes(category.id) ? (
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M5 15L12 8L19 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          ) : (
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M19 9L12 16L5 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                        </div>
                       </div>
 
                       {openCategories.includes(category.id) && (
@@ -312,7 +322,7 @@ const Categories = () => {
                               </button>
                             ))
                           ) : (
-                            <p>Loading subcategories...</p>
+                            <p className="cat-loading-text">Loading subcategories...</p>
                           )}
                         </div>
                       )}
@@ -325,9 +335,13 @@ const Categories = () => {
         ) : (
           <div className="cat-verses-section">
             <button className="cat-back-button" onClick={handleReturn}>
-              ← Return
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="cat-back-icon">
+                <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Return
             </button>
-            <h1>{selectedSubcategory.name}</h1>
+            <h1 className="cat-subcategory-title">{selectedSubcategory.name}</h1>
 
             {/* Added guidance text for users */}
             {!loading && verses.length > 0 && (
@@ -344,20 +358,26 @@ const Categories = () => {
             ) : (
               <div className="cat-verses-list">
                 {verses.length === 0 ? (
-                  <p>No verses available.</p>
+                  <p className="cat-no-verses">No verses available.</p>
                 ) : (
                   verses.map((verse) => (
                     <div
                       key={verse.id}
                       className="cat-verse-card"
                       onClick={() => handleVerseClick(verse)}
-                      style={{ cursor: "pointer" }}
                     >
                       <p className="cat-verse-text">"{verse.text_nlt}"</p>
                       <p className="cat-verse-reference">
                         - {verse.verse_reference}
                       </p>
                       <p className="cat-verse-context">{verse.context_nlt}</p>
+                      <div className="cat-verse-read-more">
+                        <span>Learn this verse</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
                   ))
                 )}

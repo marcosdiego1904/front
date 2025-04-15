@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
   text-align: center;
   padding: 20px;
   width: 100%;
@@ -13,48 +13,84 @@
   margin-top: 10px;
 }
 
-/* Texto de introducción */
-.cat-intro-text {
-  max-width: 90%;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 120px;
+/* Introduction container with shadow effect */
+.cat-intro-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  perspective: 1000px;
 }
 
+/* Improved intro text box with 3D effect */
+.cat-intro-text {
+  max-width: 800px;
+  width: 90%;
+  background: white;
+  padding: 35px 40px;
+  border-radius: 16px;
+  margin-top: 120px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle hover effect */
+.cat-intro-text:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Enhanced typography for intro text */
 .cat-intro-text h1 {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+  color: #16223d;
+  line-height: 1.3;
 }
 
 .cat-intro-text p {
-  font-size: 15px;
+  font-size: 1.1rem;
   color: #555;
   margin-top: 20px;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Contenedor de categorías */
+/* Redesigned categories grid with better spacing */
 .cat-categories-container {
   display: grid;
-  gap: 20px;
+  gap: 30px;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1200px;
   justify-content: center;
+  padding: 0 15px;
+}
+
+/* Responsive grid adjustments */
+@media (min-width: 768px) {
+  .cat-categories-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
 }
 
 @media (min-width: 1024px) {
   .cat-categories-container {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      justify-items: center;
-      
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
   }
 }
 
-/* Tarjetas de categoría */
+/* Improved category cards */
 .cat-category-card {
   position: relative;
-  min-width: 250px;
-  height: 160px;
+  min-width: 100%;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,60 +98,63 @@
   color: white;
   font-size: 1rem;
   font-weight: bold;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Overlay oscuro para legibilidad */
+/* Enhanced hover effect */
+.cat-category-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Improved overlay for better text readability */
 .cat-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  transition: background 0.3s ease;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  transition: background 0.4s ease;
 }
 
-/* Hover en desktop */
-@media (min-width: 768px) {
-  .cat-categories-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      overflow: hidden;
-  }
-
-  .cat-category-card {
-      min-width: auto;
-      height: 180px;
-      width: 300px;
-  }
-
-  .cat-category-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  .cat-category-card:hover .cat-overlay {
-      background: rgba(0, 0, 0, 0.3);
-  }
+/* Lighten overlay on hover for more vibrant look */
+.cat-category-card:hover .cat-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
 }
 
-/* Texto dentro de la tarjeta */
+/* Enhanced category title */
 .cat-category-card h2 {
   position: relative;
   z-index: 2;
   margin: 0;
-  padding: 10px;
-  font-size: 1rem;
+  padding: 15px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
 }
 
+.cat-category-card:hover h2 {
+  transform: scale(1.05);
+}
+
+/* Category wrapper */
 .cat-category-wrapper {
   display: flex;
   flex-direction: column;
@@ -123,157 +162,314 @@
   width: 100%;
 }
 
+/* Modern toggle icon with SVG */
 .cat-toggle-icon {
   position: absolute;
-  bottom: 10px;
-  right: 15px;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.2rem;
   color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  z-index: 3;
+  transition: all 0.3s ease;
 }
 
-/* Estilos para las subcategorías */
+.cat-category-card:hover .cat-toggle-icon {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-50%) scale(1.1);
+}
+
+/* Improved subcategory container */
 .cat-subcategory-container {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 15px;
-  background: #ffffff;
-  border-radius: 8px;
-  margin-top: 10px;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  gap: 12px;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  margin-top: 15px;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  animation: fadeInDown 0.5s forwards;
 }
 
+/* Animation for subcategory container appearance */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Improved subcategory buttons */
 .cat-subcategory-button {
-  background: linear-gradient(135deg, #007bff, #004bb3);
+  background: linear-gradient(135deg, #007bff, #0056b3);
   color: white;
   border: none;
-  padding: 12px 18px;
-  border-radius: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background 0.3s;
-  width: 90%;
+  font-weight: 600;
+  width: 100%;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 .cat-subcategory-button:hover {
   background: linear-gradient(135deg, #0056b3, #003d80);
-  transform: scale(1.05);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3);
 }
 
-/* Efecto de entrada suave */
-.cat-styled-subcategories {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.3s ease-in-out;
+/* Loading text for subcategories */
+.cat-loading-text {
+  color: #666;
+  font-size: 0.95rem;
+  font-style: italic;
+  padding: 10px;
 }
 
-.cat-styled-subcategories.open {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (min-width: 1280px) {
-  .cat-categories-container {
-      grid-template-columns: repeat(3,3fr);
-      max-width: 1250px;
-      
-  }
-}
-
-/* Verses section */
+/* Improved verses section */
 .cat-verses-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 30px 20px;
   width: 100%;
-  margin-top: 220px;
+  max-width: 900px;
+  margin-top: 150px;
 }
 
+/* Better back button */
 .cat-back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: #007bff;
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 1rem;
-  margin-bottom: 15px;
-  transition: background 0.3s;
-  margin-top: 45px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 .cat-back-button:hover {
   background: #0056b3;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3);
 }
 
+.cat-back-icon {
+  transition: transform 0.3s ease;
+}
+
+.cat-back-button:hover .cat-back-icon {
+  transform: translateX(-3px);
+}
+
+/* Subcategory title */
+.cat-subcategory-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 25px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Improved verses list */
 .cat-verses-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 700px;
+  gap: 25px;
+  max-width: 800px;
   width: 100%;
 }
 
+/* Enhanced verse cards */
 .cat-verse-card {
-  background: #08192d; /* Azul muy oscuro */
-  color: white; /* Texto blanco */
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4); /* Sombra más fuerte */
-  transition: transform 0.3s ease-in-out;
+  background: linear-gradient(135deg, #08192d, #0c2546);
+  color: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Card hover effect */
 .cat-verse-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
+/* Shine effect on hover */
+.cat-verse-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  transition: transform 0.7s ease;
+}
+
+.cat-verse-card:hover::after {
+  transform: rotate(30deg) translate(50%, 50%);
+}
+
+/* Verse text styling */
 .cat-verse-text {
   font-size: 1.3rem;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
-  color: #ffffff; /* Blanco */
+  color: #ffffff;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
+/* Verse reference styling */
 .cat-verse-reference {
   font-size: 1.1rem;
-  color: #64b5f6; /* Azul claro para resaltar la referencia */
+  color: #64b5f6;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 15px;
   font-style: italic;
 }
 
+/* Verse context styling */
 .cat-verse-context {
   font-size: 1rem;
-  color: #90caf9; /* Azul grisáceo claro para el contexto */
+  color: #90caf9;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 15px;
+  line-height: 1.5;
 }
 
-@media (max-width: 1023px){
-  .cat-intro-text{
-      margin-top: 0px;
-  }
-}  
+/* No verses message */
+.cat-no-verses {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+}
 
-/* Skeleton loading animation */
-@keyframes cat-shimmer {
+/* Read more indicator */
+.cat-verse-read-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #64b5f6;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.cat-verse-card:hover .cat-verse-read-more {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Improved verse guidance */
+.cat-verse-guidance {
+  margin: 20px 0 30px;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+.cat-verse-guide-text {
+  color: #64b5f6;
+  font-size: 1rem;
+  animation: cat-pulse 2s infinite;
+  padding: 12px 20px;
+  background-color: rgba(8, 25, 45, 0.7);
+  border-radius: 50px;
+  display: inline-block;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+}
+
+.cat-verse-guide-icon {
+  display: inline-block;
+  margin-right: 8px;
+  animation: cat-bounce 1.5s infinite;
+}
+
+/* Animation keyframes */
+@keyframes cat-pulse {
   0% {
-      background-position: -1000px 0;
+    opacity: 0.7;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.25);
   }
   100% {
-      background-position: 1000px 0;
+    opacity: 0.7;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+  }
+}
+
+@keyframes cat-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Skeleton loading animation - improved */
+@keyframes cat-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
   }
 }
 
 /* Skeleton card for categories */
 .cat-skeleton-card {
-  background: linear-gradient(135deg, #334455, #223344) !important;
+  background: linear-gradient(135deg, #1a293d, #0f1928) !important;
   position: relative;
   overflow: hidden;
 }
@@ -295,17 +491,19 @@
 
 .cat-skeleton-title {
   width: 70%;
-  height: 24px;
+  height: 30px;
   background: rgba(255, 255, 255, 0.2);
   margin: 0 auto;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 /* Skeleton verse cards */
 .cat-skeleton-verse {
-  background: #0a1a2a !important;
+  background: linear-gradient(135deg, #0a1a2a, #061220) !important;
   position: relative;
   overflow: hidden;
+  border-radius: 16px;
+  padding: 25px;
 }
 
 .cat-skeleton-verse::after {
@@ -325,93 +523,113 @@
 
 .cat-skeleton-verse-text {
   width: 90%;
-  height: 24px;
+  height: 30px;
   background: rgba(255, 255, 255, 0.1);
-  margin: 0 auto 10px auto;
-  border-radius: 4px;
+  margin: 0 auto 20px auto;
+  border-radius: 8px;
 }
 
 .cat-skeleton-verse-reference {
   width: 40%;
-  height: 16px;
+  height: 20px;
   background: rgba(255, 255, 255, 0.1);
-  margin: 0 auto 10px auto;
-  border-radius: 4px;
+  margin: 0 auto 15px auto;
+  border-radius: 8px;
 }
 
 .cat-skeleton-verse-context {
   width: 80%;
-  height: 40px;
+  height: 50px;
   background: rgba(255, 255, 255, 0.1);
   margin: 0 auto;
-  border-radius: 4px;
-}
-
-/* Verse guidance */
-.cat-verse-guidance {
-  margin: 15px 0;
-  width: 100%;
-  max-width: 700px;
-  text-align: center;
-}
-
-.cat-verse-guide-text {
-  color: #64b5f6;
-  font-size: 1rem;
-  animation: cat-pulse 2s infinite;
-  padding: 8px 15px;
-  background-color: rgba(8, 25, 45, 0.6);
-  border-radius: 20px;
-  display: inline-block;
-}
-
-.cat-verse-guide-icon {
-  display: inline-block;
-  margin-right: 8px;
-  animation: cat-bounce 1.5s infinite;
-}
-
-@keyframes cat-pulse {
-  0% {
-      opacity: 0.7;
-  }
-  50% {
-      opacity: 1;
-  }
-  100% {
-      opacity: 0.7;
-  }
-}
-
-@keyframes cat-bounce {
-  0%, 100% {
-      transform: translateY(0);
-  }
-  50% {
-      transform: translateY(-4px);
-  }
+  border-radius: 8px;
 }
 
 /* Mobile responsive adjustments */
+@media (max-width: 1023px) {
+  .cat-intro-text {
+    margin-top: 0;
+  }
+  
+  .cat-verses-section {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cat-intro-text h1 {
+    font-size: 1.8rem;
+  }
+  
+  .cat-intro-text p {
+    font-size: 1rem;
+  }
+  
+  .cat-category-card {
+    height: 180px;
+  }
+  
+  .cat-category-card h2 {
+    font-size: 1.3rem;
+  }
+  
+  .cat-subcategory-title {
+    font-size: 1.8rem;
+  }
+  
+  .cat-verse-text {
+    font-size: 1.1rem;
+  }
+  
+  .cat-verse-reference {
+    font-size: 1rem;
+  }
+  
+  .cat-verse-context {
+    font-size: 0.9rem;
+  }
+}
+
 @media (max-width: 480px) {
+  .cat-intro-text {
+    padding: 25px 20px;
+  }
+  
   .cat-verse-guide-text {
-      font-size: 0.9rem;
-      padding: 6px 12px;
+    font-size: 0.9rem;
+    padding: 10px 15px;
   }
   
   .cat-verse-guidance {
-      margin: 10px 0;
+    margin: 15px 0;
   }
   
   .cat-verse-guide-icon {
-      margin-right: 5px;
+    margin-right: 5px;
+  }
+  
+  .cat-toggle-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .cat-category-card {
+    height: 160px;
   }
 }
 
 /* For very small screens */
 @media (max-width: 320px) {
+  .cat-intro-text h1 {
+    font-size: 1.5rem;
+  }
+  
   .cat-verse-guide-text {
-      font-size: 0.8rem;
-      padding: 5px 10px;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+  
+  .cat-category-card h2 {
+    font-size: 1.1rem;
   }
 }
