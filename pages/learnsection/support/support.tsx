@@ -168,9 +168,9 @@ const SupportPage: React.FC = () => {
             <p>
             Has Lamp to my feet helped you engrave God's Word in your heart? Your support allows this tool to continue equipping God's people with Scripture as spiritual armor for daily battles.
             </p>
-            <button className="video-btn pulse-btn" onClick={() => setShowVideo(true)}>
+           {/** <button className="video-btn pulse-btn" onClick={() => setShowVideo(true)}>
               <i className="bi bi-play-circle-fill"></i> My story in video
-            </button>
+            </button>*/} 
           </div>
         </div>
         
