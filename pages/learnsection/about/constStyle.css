@@ -851,3 +851,111 @@
       font-size: 0.9rem;
     }
   }
+  /* Estilos para el mensaje del fundador y texto expandible */
+.about-message {
+  background-color: #f2f7ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 90% 10%, rgba(255, 193, 7, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(0, 123, 255, 0.05) 0%, transparent 40%);
+  z-index: 0;
+}
+
+.founder-message {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.founder-intro {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.founder-icon {
+  font-size: 2.5rem;
+  margin-right: 1rem;
+  animation: wave 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.expandable-text {
+  position: relative;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+.expandable-text p {
+  white-space: pre-line;
+  margin-bottom: 0.5rem;
+}
+
+.expandable-button {
+  background: none;
+  border: none;
+  color: var(--accent-gold, #ffc107);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+.expandable-button:hover {
+  color: var(--primary-blue, #16223d);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .founder-message {
+    padding: 1.5rem;
+  }
+  
+  .expandable-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .founder-message {
+    padding: 1.25rem;
+    border-radius: 8px;
+  }
+  
+  .founder-icon {
+    font-size: 2rem;
+  }
+  
+  .expandable-text {
+    font-size: 0.95rem;
+  }
+}

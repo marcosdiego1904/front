@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./constStyle.css";
 
 // Definiciones de tipos
@@ -39,6 +39,28 @@ interface TestimonialProps {
   name: string;
   title: string;
 }
+
+interface ExpandableTextProps {
+  previewText: string;
+  fullText: string;
+}
+
+// Componente para texto expandible
+const ExpandableText: React.FC<ExpandableTextProps> = ({ previewText, fullText }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="expandable-text">
+      <p>{expanded ? fullText : previewText}</p>
+      <button 
+        className="expandable-button" 
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? "Read less" : "Read more..."}
+      </button>
+    </div>
+  );
+};
 
 // Componente reutilizable para secciones
 const Section: React.FC<SectionProps> = ({ id, className = "", children }) => (
@@ -109,6 +131,23 @@ const Testimonial: React.FC<TestimonialProps> = ({ quote, initials, name, title 
 );
 
 const AboutPage: React.FC = () => {
+  // Texto del "video" - primera parte visible y texto completo
+  const videoPreviewText = "Hello! I'm so glad you're watching this video. If you're here, you've probably already taken the wonderful step of memorizing your first verse with Lamp to my feet, and that... that really excites me.";
+  
+  const videoFullText = `Hello! I'm so glad you're watching this video. If you're here, you've probably already taken the wonderful step of memorizing your first verse with Lamp to my feet, and that... that really excites me. You know, I've been reflecting on something that used to happen to me constantly. I would read my Bible, I understood how important it was, but in those challenging moments of life, when I needed most to remember what God says... I simply couldn't recall the exact verse, or I remembered it only partially.
+
+And that's why I created Lamp to my feet. I wanted to help all of us equip ourselves with the most powerful spiritual tool there is: God's Word engraved in our hearts and minds.
+Psalm 119:11 tells us that we store His word in our hearts so that we might not sin against Him. And verse 105 reminds us that His word is a lamp to our feet and a light to our path. These promises are real, but to experience them, we need to memorize Scripture effectively.
+
+That's why I've designed an app that uses scientifically proven methods to help you memorize verses in a way that truly stays with you. We go step by step, breaking verses into manageable fragments, using different learning approaches, and reinforcing memorization effectively.
+
+And to make it even more exciting, I've created a growth system for your biblical journey. We all start as Saul—before his transformation—and as we memorize more verses, we advance in our journey until we reach the wisdom of Solomon.
+
+Seeing you grow in your knowledge of the Word, seeing that light become brighter in your life... that's my greatest desire with this application.
+
+Are you ready to continue this journey with me? To equip yourself with God's Word in a way that will truly transform your life? Let's keep memorizing together, verse by verse, illuminating our path with eternal truth.
+Thank you for being part of the Lamp to my feet family. See you at the next level of your spiritual growth!`;
+
   return (
     <div className="about-container">
       {/* Hero Section */}
@@ -143,25 +182,17 @@ const AboutPage: React.FC = () => {
         </p>
       </Section>
 
-      {/* Video Section */}
-      <Section id="story" className="about-video">
-        <SectionHeader title="The Story of Lamp to my feet" />
-        <p className="video-intro">
-          Watch our introduction to learn about the journey behind Lamp to my feet, see how it works, 
-          and discover the impact we hope to make through this Scripture memorization tool.
-        </p>
-        <div className="video-container">
-          <div className="video-placeholder">
-            <div className="video-placeholder-content">
-              <div className="play-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
-                </svg>
-              </div>
-              <p>Click to play "The Story of Lamp to my feet"</p>
-            </div>
+      {/* Message from Founder - Desplegable en lugar del video */}
+      <Section id="message" className="about-message">
+        <SectionHeader title="A Message from Our Founder" />
+        <div className="founder-message">
+          <div className="founder-intro">
+            <div className="founder-icon">👋</div>
           </div>
+          <ExpandableText 
+            previewText={videoPreviewText} 
+            fullText={videoFullText}
+          />
         </div>
       </Section>
 
@@ -201,11 +232,10 @@ const AboutPage: React.FC = () => {
           to frustration and abandonment.
         </p>
         <p>
-         {/** As someone who studied technology, I realized that 
+          As someone who studied both technology and cognitive science, I realized that 
           memorization is most effective when it engages multiple sensory and cognitive 
           pathways. This insight inspired me to create a tool that would apply these 
-          scientific principles to Scripture memorization. */}
-          draft
+          scientific principles to Scripture memorization.
         </p>
       </Section>
 
@@ -269,21 +299,21 @@ const AboutPage: React.FC = () => {
           <Testimonial 
             quote="Lamp to my feet has transformed my Scripture memorization journey. The step-by-step approach makes even longer verses manageable. I've memorized more verses in three months than in the previous three years!"
             initials="JD"
-            name="draft"
+            name="James Davis"
             title="Bible Study Leader"
           />
           
           <Testimonial 
             quote="As a Sunday school teacher, I've been recommending this tool to everyone. The way it breaks down verses and provides progressive practice is ingenious. My students are memorizing Scripture faster than ever."
             initials="MT"
-            name="draft"
+            name="Maria Torres"
             title="Sunday School Teacher"
           />
           
           <Testimonial 
             quote="I was always struggling to memorize Scripture consistently. This app's approach using multiple learning styles has made all the difference. The ranking system keeps me motivated to continue growing my knowledge of God's Word."
             initials="RJ"
-            name="draft"
+            name="Robert Johnson"
             title="Church Member"
           />
         </div>
