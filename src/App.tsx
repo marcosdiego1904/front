@@ -16,6 +16,10 @@ import { AuthProvider, useAuth } from "./auth/context/AuthContext";
 import AboutPage from "../pages/learnsection/about";
 import SupportPage from "../pages/learnsection/support";
 
+// Import Terms and Privacy pages
+import TermsOfService from "../pages/learnsection/support/TermsOfService";
+import PrivacyPolicy from "../pages/learnsection/support/PrivacyPolicy";
+
 // En src/index.tsx o App.tsx
 import './styles/global-design-system.css';
 
@@ -47,9 +51,13 @@ const AppRoutes = () => {
     { path: "/", element: <Home /> },
     { path: "/learn", element: <LearnSection /> },
     
-    // Add the new About and Support routes
+    // About and Support routes
     { path: "/about", element: <AboutPage /> },
     { path: "/support", element: <SupportPage /> },
+    
+    // New Terms and Privacy routes
+    { path: "/terms", element: <TermsOfService /> },
+    { path: "/privacy", element: <PrivacyPolicy /> },
     
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },

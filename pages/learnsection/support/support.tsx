@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./constStyle.css";
 
 const SupportPage: React.FC = () => {
@@ -12,6 +12,9 @@ const SupportPage: React.FC = () => {
     email: "",
     message: ""
   });
+  
+  // Track selected donation amount
+  const selectedAmount = useRef("20");
 
   // Testimonial data
   const testimonials = [
@@ -75,6 +78,41 @@ const SupportPage: React.FC = () => {
     setTimeout(() => {
       setThankYouVisible(false);
     }, 5000);
+  };
+
+  // PayPal donation handler
+  const handlePayPalDonation = (amount: string, isMonthly: boolean) => {
+    // Get the selected amount or use the default
+    const donationAmount = amount || selectedAmount.current || "20";
+    
+    // For personal PayPal account, PayPal.me is the simplest approach
+    // Replace "YourPayPalUsername" with your actual PayPal username
+    const paypalUsername = "MBarzola9";
+    window.open(`https://www.paypal.me/${paypalUsername}/${donationAmount}`, '_blank');
+    
+    // For monthly donations, inform users to set it up manually
+    if (isMonthly) {
+      alert("For monthly support, please consider setting up a recurring payment directly in PayPal after completing your donation. Thank you for your continued support!");
+    }
+  };
+
+  // Handle donation tier selection
+  const selectDonationTier = (amount: string) => {
+    // Update the ref with selected amount
+    selectedAmount.current = amount;
+    
+    // Update the UI - remove active class from all tiers
+    document.querySelectorAll('.donation-tier').forEach(el => {
+      el.classList.remove('active');
+    });
+    
+    // Add active class to the selected tier
+    if (amount !== "other") {
+      document.querySelector(`.donation-tier[data-amount="${amount}"]`)?.classList.add('active');
+    } else {
+      // For "Other" option, we'll keep it active but prompt for amount
+      document.querySelector(`.donation-tier[data-amount="other"]`)?.classList.add('active');
+    }
   };
 
   // Sharing functionality
@@ -241,15 +279,52 @@ const SupportPage: React.FC = () => {
               </p>
               <div className="donation-container">
                 <div className="donation-tiers">
-                  <button className="donation-tier">$5</button>
-                  <button className="donation-tier">$10</button>
-                  <button className="donation-tier active">$20</button>
-                  <button className="donation-tier">$50</button>
-                  <button className="donation-tier">Other</button>
+                  <button 
+                    className="donation-tier" 
+                    data-amount="5"
+                    onClick={() => selectDonationTier("5")}
+                  >$5</button>
+                  <button 
+                    className="donation-tier" 
+                    data-amount="10"
+                    onClick={() => selectDonationTier("10")}
+                  >$10</button>
+                  <button 
+                    className="donation-tier active" 
+                    data-amount="20"
+                    onClick={() => selectDonationTier("20")}
+                  >$20</button>
+                  <button 
+                    className="donation-tier" 
+                    data-amount="50"
+                    onClick={() => selectDonationTier("50")}
+                  >$50</button>
+                  <button 
+                    className="donation-tier" 
+                    data-amount="other"
+                    onClick={() => {
+                      const amount = prompt("Enter donation amount:", "20");
+                      if (amount && !isNaN(Number(amount)) && Number(amount) > 0) {
+                        selectedAmount.current = amount;
+                        selectDonationTier("other");
+                      }
+                    }}
+                  >Other</button>
                 </div>
                 <div className="donation-buttons">
-                  <button className="support-btn">One-time donation</button>
-                  <button className="support-btn support-btn-secondary">Monthly support</button>
+                  <button 
+                    className="support-btn"
+                    onClick={() => handlePayPalDonation(selectedAmount.current, false)}
+                  >One-time donation</button>
+                  <button 
+                    className="support-btn support-btn-secondary"
+                    onClick={() => handlePayPalDonation(selectedAmount.current, true)}
+                  >Monthly support</button>
+                </div>
+                <div className="legal-links">
+                  <p>
+                    By making a donation, you accept our <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+                  </p>
                 </div>
               </div>
             </div>
@@ -311,6 +386,7 @@ const SupportPage: React.FC = () => {
           </div>
         </div>
         
+        {/* Rest of the existing component remains the same */}
         {/* Impact slider - user testimonials with auto rotation */}
         <div className="impact-section">
           <h2>Community Impact</h2>
@@ -369,143 +445,7 @@ const SupportPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Vision roadmap - more visually engaging */}
-        <div className="vision-section">
-          <h2>Future Vision</h2>
-          <p className="vision-intro">With your support, this is the path we are taking:</p>
-          
-          <div className="roadmap-container">
-            <div className="roadmap-timeline"></div>
-            
-            <div className="roadmap-item">
-              <div className="roadmap-point current">
-                <div className="roadmap-point-inner"></div>
-              </div>
-              <div className="roadmap-content">
-                <div className="roadmap-icon">
-                  <i className="bi bi-translate"></i>
-                </div>
-                <h3>Spanish Translation</h3>
-                <p>Make the app fully accessible to the Hispanic community</p>
-                <div className="roadmap-status">
-                  <div className="status-label">In progress</div>
-                  <div className="status-bar">
-                    <div className="status-fill" style={{width: "40%"}}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="roadmap-item">
-              <div className="roadmap-point">
-                <div className="roadmap-point-inner"></div>
-              </div>
-              <div className="roadmap-content">
-                <div className="roadmap-icon">
-                  <i className="bi bi-phone"></i>
-                </div>
-                <h3>Native Mobile Applications</h3>
-                <p>Develop dedicated apps for iOS and Android with offline support</p>
-                <div className="roadmap-status">
-                  <div className="status-label">Coming soon</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="roadmap-item">
-              <div className="roadmap-point">
-                <div className="roadmap-point-inner"></div>
-              </div>
-              <div className="roadmap-content">
-                <div className="roadmap-icon">
-                  <i className="bi bi-people"></i>
-                </div>
-                <h3>Group Features</h3>
-                <p>Tools for churches and small groups to memorize together</p>
-                <div className="roadmap-status">
-                  <div className="status-label">Planned</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="roadmap-item">
-              <div className="roadmap-point">
-                <div className="roadmap-point-inner"></div>
-              </div>
-              <div className="roadmap-content">
-                <div className="roadmap-icon">
-                  <i className="bi bi-globe2"></i>
-                </div>
-                <h3>More Languages</h3>
-                <p>Expand to other languages to reach believers worldwide</p>
-                <div className="roadmap-status">
-                  <div className="status-label">Future Vision</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Contact form - with interactive elements */}
-        <div className="support-contact">
-          <h2>Let's Talk</h2>
-          <p className="contact-intro">
-            Do you have questions about how to support this ministry or suggestions to improve it? 
-            I'd love to hear from you.
-          </p>
-          
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className={`form-group ${formData.name ? 'has-value' : ''}`}>
-              <label htmlFor="name">Name</label>
-              <input 
-                type="text" 
-                id="name" 
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Your name" 
-              />
-            </div>
-            
-            <div className={`form-group ${formData.email ? 'has-value' : ''}`}>
-              <label htmlFor="email">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Your email" 
-              />
-            </div>
-            
-            <div className={`form-group ${formData.message ? 'has-value' : ''}`}>
-              <label htmlFor="message">Message</label>
-              <textarea 
-                id="message" 
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                placeholder="Your message" 
-                rows={4}
-              ></textarea>
-            </div>
-            
-            <button type="submit" className="contact-submit">
-              <span>Send Message</span>
-              <i className="bi bi-send"></i>
-            </button>
-            
-            {thankYouVisible && (
-              <div className="form-thank-you">
-                <i className="bi bi-check-circle"></i>
-                <p>Thank you for your message! I'll respond as soon as possible.</p>
-              </div>
-            )}
-          </form>
-        </div>
-        
-        {/* Thank you section - more heartfelt */}
+        {/* Thank you section at the end */}
         <div className="thank-you-section">
           <div className="thank-you-icon">
             <i className="bi bi-heart-fill"></i>
