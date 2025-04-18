@@ -132,9 +132,11 @@ const Testimonial: React.FC<TestimonialProps> = ({ quote, initials, name, title 
 
 const AboutPage: React.FC = () => {
   // Texto del "video" - primera parte visible y texto completo
-  const videoPreviewText = "Hello! I'm so glad you're watching this video. If you're here, you've probably already taken the wonderful step of memorizing your first verse with Lamp to my feet, and that... that really excites me.";
+  const videoPreviewText = "Hello! I'm so glad you're here. If you've found Lamp to my feet, you've probably already taken the wonderful step of memorizing your first verse, and that... that really excites me. Scripture memorization changed my spiritual life, and I built this app to help you experience that same transformation.";
   
-  const videoFullText = `Hello! I'm so glad you're watching this video. If you're here, you've probably already taken the wonderful step of memorizing your first verse with Lamp to my feet, and that... that really excites me. You know, I've been reflecting on something that used to happen to me constantly. I would read my Bible, I understood how important it was, but in those challenging moments of life, when I needed most to remember what God says... I simply couldn't recall the exact verse, or I remembered it only partially.
+  const videoFullText = `Hello! I'm so glad you're here. If you've found Lamp to my feet, you've probably already taken the wonderful step of memorizing your first verse, and that... that really excites me. Scripture memorization changed my spiritual life, and I built this app to help you experience that same transformation.
+
+You know, I've been reflecting on something that used to happen to me constantly. I would read my Bible, I understood how important it was, but in those challenging moments of life, when I needed most to remember what God says... I simply couldn't recall the exact verse, or I remembered it only partially.
 
 And that's why I created Lamp to my feet. I wanted to help all of us equip ourselves with the most powerful spiritual tool there is: God's Word engraved in our hearts and minds.
 Psalm 119:11 tells us that we store His word in our hearts so that we might not sin against Him. And verse 105 reminds us that His word is a lamp to our feet and a light to our path. These promises are real, but to experience them, we need to memorize Scripture effectively.
@@ -171,30 +173,84 @@ Thank you for being part of the Lamp to my feet family. See you at the next leve
         </div>
       </section>
 
-      {/* Mission Statement */}
-      <Section id="mission">
-        <SectionHeader title="Our Mission" />
-        <p>
-          At <strong>Lamp to my feet</strong>, we're dedicated to making Bible verse 
-          memorization accessible, effective, and enjoyable for everyone. Our name comes 
-          from Psalm 119:105: <em>"Your word is a lamp to my feet and a light to my path"</em> — 
-          representing how Scripture illuminates our daily journey.
-        </p>
-      </Section>
-
-      {/* Message from Founder - Desplegable en lugar del video */}
-      <Section id="message" className="about-message">
-        <SectionHeader title="A Message from Our Founder" />
-        <div className="founder-message">
-          <div className="founder-intro">
-            <div className="founder-icon">👋</div>
+      {/* Improved Mission Statement */}
+      <section id="mission" className="mission-section">
+        <div className="mission-container">
+          <div className="mission-header">
+            <h2>Our Mission</h2>
+            <div className="mission-subtitle">
+              Illuminating paths through the power of God's Word
+            </div>
+            <div className="mission-separator"></div>
           </div>
-          <ExpandableText 
-            previewText={videoPreviewText} 
-            fullText={videoFullText}
-          />
+          
+          <p className="mission-intro">
+            At <strong>Lamp to my feet</strong>, we believe the Scriptures are not 
+            merely to be read, but to be <em>internalized</em> and <em>lived</em>. When Scripture 
+            becomes part of who you are, it transforms:
+          </p>
+          
+          <div className="mission-pillars">
+            <div className="mission-pillar">
+              <div className="pillar-icon">🛡️</div>
+              <h3>Your Defense</h3>
+              <p>"I have hidden your word in my heart that I might not sin against you."</p>
+              <span className="verse-ref">— Psalm 119:11</span>
+            </div>
+            
+            <div className="mission-pillar">
+              <div className="pillar-icon">🔆</div>
+              <h3>Your Direction</h3>
+              <p>"Your word is a lamp to my feet and a light to my path."</p>
+              <span className="verse-ref">— Psalm 119:105</span>
+            </div>
+            
+            <div className="mission-pillar">
+              <div className="pillar-icon">🌱</div>
+              <h3>Your Growth</h3>
+              <p>"All Scripture is God-breathed and useful for teaching..."</p>
+              <span className="verse-ref">— 2 Timothy 3:16</span>
+            </div>
+          </div>
         </div>
-      </Section>
+      </section>
+
+      {/* Improved Founder Message */}
+      <section id="message" className="founder-section">
+        <div className="founder-container">
+          <div className="founder-header">
+            <h2>A Message from Our Founder</h2>
+            <div className="founder-separator"></div>
+          </div>
+          
+          <div className="founder-message-card">
+            <div className="light-rays"></div>
+            
+            <div className="founder-message-content">
+              <div className="founder-profile">
+                <div className="founder-avatar">
+                  <div className="founder-icon">👋</div>
+                </div>
+                <h3>Why I Created <span>Lamp to my feet</span></h3>
+              </div>
+              
+              <div className="message-scroll">
+                <ExpandableText 
+                  previewText={videoPreviewText} 
+                  fullText={videoFullText}
+                />
+              </div>
+            </div>
+            
+            <div className="card-footer">
+              <div className="scripture-seal">
+                <div className="seal-icon">📖</div>
+                <span>Hiding His Word in Our Hearts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Features Section */}
       <Section id="features" className="about-features">
@@ -299,21 +355,21 @@ Thank you for being part of the Lamp to my feet family. See you at the next leve
           <Testimonial 
             quote="Lamp to my feet has transformed my Scripture memorization journey. The step-by-step approach makes even longer verses manageable. I've memorized more verses in three months than in the previous three years!"
             initials="JD"
-            name="James Davis"
+            name="Draft"
             title="Bible Study Leader"
           />
           
           <Testimonial 
             quote="As a Sunday school teacher, I've been recommending this tool to everyone. The way it breaks down verses and provides progressive practice is ingenious. My students are memorizing Scripture faster than ever."
             initials="MT"
-            name="Maria Torres"
+            name="Draft"
             title="Sunday School Teacher"
           />
           
           <Testimonial 
             quote="I was always struggling to memorize Scripture consistently. This app's approach using multiple learning styles has made all the difference. The ranking system keeps me motivated to continue growing my knowledge of God's Word."
             initials="RJ"
-            name="Robert Johnson"
+            name="Draft"
             title="Church Member"
           />
         </div>
