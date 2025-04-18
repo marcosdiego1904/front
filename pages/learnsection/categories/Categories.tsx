@@ -29,7 +29,7 @@ const Categories = () => {
       context_nlt: string;
     }[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true); // Start with loading set to true
+  const [loading, setLoading] = useState<boolean>(true);
   const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -341,13 +341,7 @@ const Categories = () => {
               </svg>
               Return
             </button>
-            
             <h1 className="cat-subcategory-title">{selectedSubcategory.name}</h1>
-            
-            {/* Memorization tagline - added to match your screenshot */}
-            <p className="verse-memorize-tagline">
-              Memorize your first verse in under 5 minutes – challenge yourself today!
-            </p>
 
             {/* Added guidance text for users */}
             {!loading && verses.length > 0 && (
