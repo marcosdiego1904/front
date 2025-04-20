@@ -10,42 +10,7 @@
   min-height: 100vh;
   justify-content: flex-start;
   position: relative;
-  margin-top: 50px; /* Added more space at the top */
-}
-
-/* Animation keyframes */
-@keyframes cat-pulse {
-  0% {
-    opacity: 0.7;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
-  }
-  50% {
-    opacity: 1;
-    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.25);
-  }
-  100% {
-    opacity: 0.7;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
-  }
-}
-
-@keyframes cat-bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Skeleton loading animation - improved */
-@keyframes cat-shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
+  margin-top: 10px;
 }
 
 /* Introduction container with shadow effect */
@@ -63,7 +28,7 @@
   background: white;
   padding: 35px 40px;
   border-radius: 16px;
-  margin-top: 80px; /* Reduced from 120px to create less space */
+  margin-top: 120px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transform: translateY(0);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -104,7 +69,6 @@
   max-width: 1200px;
   justify-content: center;
   padding: 0 15px;
-  margin-top: 20px; /* Added space between intro and categories */
 }
 
 /* Responsive grid adjustments */
@@ -289,7 +253,7 @@
   padding: 30px 20px;
   width: 100%;
   max-width: 900px;
-  margin-top: 80px; /* Reduced from 150px to create less space */
+  margin-top: 150px;
 }
 
 /* Better back button */
@@ -328,9 +292,9 @@
 .cat-subcategory-title {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #16223d;
+  color: white;
   margin-bottom: 25px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Improved verses list */
@@ -460,4 +424,212 @@
   border-radius: 50px;
   display: inline-block;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+}
+
+.cat-verse-guide-icon {
+  display: inline-block;
+  margin-right: 8px;
+  animation: cat-bounce 1.5s infinite;
+}
+
+/* Animation keyframes */
+@keyframes cat-pulse {
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.25);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+  }
+}
+
+@keyframes cat-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Skeleton loading animation - improved */
+@keyframes cat-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Skeleton card for categories */
+.cat-skeleton-card {
+  background: linear-gradient(135deg, #1a293d, #0f1928) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.cat-skeleton-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+      rgba(255, 255, 255, 0) 0%, 
+      rgba(255, 255, 255, 0.1) 50%, 
+      rgba(255, 255, 255, 0) 100%);
+  background-size: 1000px 100%;
+  animation: cat-shimmer 2s infinite linear;
+}
+
+.cat-skeleton-title {
+  width: 70%;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+/* Skeleton verse cards */
+.cat-skeleton-verse {
+  background: linear-gradient(135deg, #0a1a2a, #061220) !important;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.cat-skeleton-verse::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+      rgba(255, 255, 255, 0) 0%, 
+      rgba(255, 255, 255, 0.05) 50%, 
+      rgba(255, 255, 255, 0) 100%);
+  background-size: 1000px 100%;
+  animation: cat-shimmer 2s infinite linear;
+}
+
+.cat-skeleton-verse-text {
+  width: 90%;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 auto 20px auto;
+  border-radius: 8px;
+}
+
+.cat-skeleton-verse-reference {
+  width: 40%;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 auto 15px auto;
+  border-radius: 8px;
+}
+
+.cat-skeleton-verse-context {
+  width: 80%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 1023px) {
+  .cat-intro-text {
+    margin-top: 0;
+  }
+  
+  .cat-verses-section {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cat-intro-text h1 {
+    font-size: 1.8rem;
+  }
+  
+  .cat-intro-text p {
+    font-size: 1rem;
+  }
+  
+  .cat-category-card {
+    height: 180px;
+  }
+  
+  .cat-category-card h2 {
+    font-size: 1.3rem;
+  }
+  
+  .cat-subcategory-title {
+    font-size: 1.8rem;
+  }
+  
+  .cat-verse-text {
+    font-size: 1.1rem;
+  }
+  
+  .cat-verse-reference {
+    font-size: 1rem;
+  }
+  
+  .cat-verse-context {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cat-intro-text {
+    padding: 25px 20px;
+  }
+  
+  .cat-verse-guide-text {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+  
+  .cat-verse-guidance {
+    margin: 15px 0;
+  }
+  
+  .cat-verse-guide-icon {
+    margin-right: 5px;
+  }
+  
+  .cat-toggle-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .cat-category-card {
+    height: 160px;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 320px) {
+  .cat-intro-text h1 {
+    font-size: 1.5rem;
+  }
+  
+  .cat-verse-guide-text {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+  
+  .cat-category-card h2 {
+    font-size: 1.1rem;
+  }
 }

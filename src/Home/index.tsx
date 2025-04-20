@@ -83,7 +83,7 @@ const Home = () => {
   };
 
   return (
-    <div className="home-wrapper">
+    <>
       {/* Sección Home con clase condicional para ocultarla cuando se llega a categorías */}
       <div className={`main-cont ${scrolledToCategories ? "hidden-home" : ""}`}>
         {/* Mensaje de alerta para autenticación - ahora dentro de main-cont */}
@@ -126,11 +126,11 @@ const Home = () => {
       <div 
         ref={categoriesRef} 
         id="categories-section" 
-        className="categories-container"
+        className="pt-5"
       >
         <Categories />
       </div>
-    </div>
+    </>
   );
 };
 

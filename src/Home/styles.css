@@ -1,11 +1,4 @@
 /* 📌 General Layout */
-.home-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow: hidden;
-}
-
 .main-cont {
   width: 100%;
   height: 93vh;
@@ -13,8 +6,6 @@
   align-items: center;
   justify-content: center;
   transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-  position: relative;
-  z-index: 10;
 }
 
 /* Hide Home Section When Scrolled */
@@ -22,15 +13,6 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-}
-
-/* Categories container with proper positioning */
-.categories-container {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  padding-top: 50px;
-  z-index: 5;
 }
 
 /* 📌 Left Section (Text) */
@@ -155,7 +137,6 @@
   .main-cont {
     flex-direction: column; 
     height: auto;
-    min-height: 100vh;
   }
   
   .left, .right {
@@ -185,10 +166,6 @@
     width: 90%;
     font-size: 1rem;
     padding: 12px;
-  }
-  
-  .categories-container {
-    padding-top: 20px;
   }
 }
 
@@ -224,7 +201,6 @@
     height: 60px;
   }
 }
-
 /* Enhance the image container */
 .image-overlay {
   position: relative;
@@ -240,6 +216,141 @@
   50% { transform: translateY(-10px); }
   100% { transform: translateY(0px); }
 }
+/* Mejora básica para todos los botones */
+.button {
+  padding: 16px 24px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+/* Botón GET STARTED NOW mejorado */
+.get-started-btn {
+  background-color: #ffcc00;
+  color: #222222; /* Color de texto más oscuro para mejor contraste */
+  box-shadow: 0px 6px 15px rgba(255, 204, 0, 0.4);
+  transform: scale(1.05); /* Ligeramente más grande */
+  position: relative;
+  z-index: 2;
+}
+
+.get-started-btn:hover {
+  background-color: #e6b800;
+  transform: scale(1.08);
+  box-shadow: 0px 8px 20px rgba(255, 204, 0, 0.5);
+}
+
+/* Efecto pulsante sutil para el botón principal */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 204, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0);
+  }
+}
+
+/* Aplicar la animación al botón principal */
+.get-started-btn {
+  animation: pulse 2s infinite;
+}
+
+/* Mantener los otros botones menos prominentes */
+.resume-btn, .learned-btn {
+  opacity: 0.9;
+  transform: scale(1);
+}
+/* Estilo para el botón principal con mayor diferenciación */
+.get-started-btn {
+  background: linear-gradient(45deg, #FF9500, #FFCC00);
+  color: #16223d;
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 18px 30px;
+  border: 2px solid #FF9500;
+  box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 4px rgba(255, 204, 0, 0.2);
+  transform: scale(1.08);
+  position: relative;
+  z-index: 2;
+}
+
+/* Efecto hover mejorado */
+.get-started-btn:hover {
+  background: linear-gradient(45deg, #FF8000, #FFBB00);
+  transform: scale(1.12) translateY(-5px);
+  box-shadow: 0 12px 25px rgba(255, 149, 0, 0.5), 0 0 0 6px rgba(255, 204, 0, 0.2);
+}
+
+/* Animación pulsante más notoria */
+@keyframes strongPulse {
+  0% {
+    box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 0 rgba(255, 204, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(255, 149, 0, 0.4), 0 0 0 15px rgba(255, 204, 0, 0);
+  }
+  100% {
+    box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 0 rgba(255, 204, 0, 0);
+  }
+}
+
+/* Aplicar animación más fuerte */
+.get-started-btn {
+  animation: strongPulse 2.5s infinite;
+}
+
+/* Agregar indicador visual para reforzar que es el botón principal */
+.get-started-btn::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 15px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='%23FF9500' d='M12 4L0 16h24L12 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.8;
+}
+
+/* Botones secundarios con estilo diferenciado */
+.resume-btn, .learned-btn {
+  background-color: #ffffff;
+  color: #16223d;
+  border: 2px solid #e0e0e0;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+
+.resume-btn:hover, .learned-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+/* Estilos para el contenedor de botones con solo dos botones */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 25px;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* Botón principal mejorado */
 .get-started-btn {
@@ -252,16 +363,17 @@
   padding: 18px 30px;
   border: 2px solid #FF9500;
   box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4), 0 0 0 4px rgba(255, 204, 0, 0.2);
-  transform: scale(1.05); /* Ligeramente más grande */
+  transform: scale(1.08);
   position: relative;
   z-index: 2;
+  width: 100%;
   animation: strongPulse 2.5s infinite;
 }
 
 /* Efecto hover para el botón principal */
 .get-started-btn:hover {
   background: linear-gradient(45deg, #FF8000, #FFBB00);
-  transform: scale(1.08) translateY(-5px);
+  transform: scale(1.12) translateY(-5px);
   box-shadow: 0 12px 25px rgba(255, 149, 0, 0.5), 0 0 0 6px rgba(255, 204, 0, 0.2);
 }
 
@@ -278,7 +390,249 @@
   }
 }
 
+/* Estilo para el botón secundario (My Learned Verses) */
+.learned-btn {
+  background-color: #ffffff;
+  color: #16223d;
+  border: 2px solid #e0e0e0;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.learned-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+/* Estilos para el contenedor de botones - versión simplificada */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 25px auto;
+  width: 90%;
+  max-width: 300px;
+}
+
+/* Estilo base para todos los botones */
+.button {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+/* Botón principal */
+.get-started-btn {
+  background-color: #ffcc00;
+  color: #16223d;
+  box-shadow: 0px 6px 15px rgba(255, 149, 0, 0.4);
+  position: relative;
+}
+
+/* Efecto hover del botón principal */
+.get-started-btn:hover {
+  background-color: #ffbb00;
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 20px rgba(255, 149, 0, 0.5);
+}
+
+/* Botón secundario */
+.learned-btn {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(40, 167, 69, 0.3);
+}
+
+/* Efecto hover del botón secundario */
+.learned-btn:hover {
+  background-color: #218838;
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 15px rgba(40, 167, 69, 0.4);
+}
 /* Estilos para la alerta de autenticación */
+.auth-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1000;
+  padding: 16px;
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: slideDown 0.5s forwards;
+}
+
+.auth-alert-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auth-alert-content span {
+  color: #664d03;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  color: #664d03;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0 0 10px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+/* Estilos actualizados para la alerta de autenticación */
+.bible-auth-alert {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  animation: fadeIn 0.5s forwards;
+}
+
+.bible-alert-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #664d03;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.alert-icon {
+  margin-right: 12px;
+  font-size: 1.25rem;
+}
+
+.close-bible-alert {
+  background: none;
+  border: none;
+  color: #664d03;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+  .bible-auth-alert {
+    max-width: 90%;
+    margin-bottom: 15px;
+  }
+}
+/* Estilos mejorados para la alerta de autenticación */
+.bible-auth-alert {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff8e1;
+  border: 1px solid #ffecb5;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  animation: fadeIn 0.3s forwards;
+  display: flex;
+  align-items: center;
+}
+
+.bible-alert-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.alert-icon {
+  color: #ffc107;
+  margin-right: 12px;
+  font-size: 1.25rem;
+}
+
+.bible-alert-content span:nth-child(2) {
+  color: #664d03;
+  font-weight: 500;
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.close-bible-alert {
+  background: none;
+  border: none;
+  color: #664d03;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+  .bible-auth-alert {
+    width: 95%;
+    margin: 10px auto;
+  }
+}
+/* Estilos corregidos para la alerta de autenticación */
 .bible-auth-alert {
   position: relative;
   width: 90%;
