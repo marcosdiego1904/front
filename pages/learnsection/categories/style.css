@@ -7,7 +7,6 @@
   text-align: center;
   padding: 20px;
   width: 100%;
-  min-height: 100vh;
   justify-content: flex-start;
   position: relative;
   margin-top: 10px;
@@ -253,7 +252,8 @@
   padding: 30px 20px;
   width: 100%;
   max-width: 900px;
-  margin-top: 150px;
+  /* margin-top: 150px; /* Remove or comment out this line */
+  /* Adjust the margin in the media query as well if you remove this */
 }
 
 /* Better back button */
@@ -632,4 +632,11 @@
   .cat-category-card h2 {
     font-size: 1.1rem;
   }
+}
+@media (max-width: 1023px) {
+  /* ... other styles */
+  .cat-verses-section {
+    /* margin-top: 40px; /* Remove or comment out this line */
+  }
+  /* ... other styles */
 }
