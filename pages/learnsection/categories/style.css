@@ -7,6 +7,7 @@
   text-align: center;
   padding: 20px;
   width: 100%;
+
   justify-content: flex-start;
   position: relative;
   margin-top: 10px;
@@ -252,8 +253,7 @@
   padding: 30px 20px;
   width: 100%;
   max-width: 900px;
-  /* margin-top: 150px; /* Remove or comment out this line */
-  /* Adjust the margin in the media query as well if you remove this */
+  margin-top: 150px;
 }
 
 /* Better back button */
@@ -631,111 +631,5 @@
   
   .cat-category-card h2 {
     font-size: 1.1rem;
-  }
-}
-/* Add these styles to your pages/learnsection/categories/style.css file */
-
-/* Fix for the main container */
-.main-cont {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Update the categories section */
-.cat-categories-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  text-align: center;
-  padding: 20px;
-  width: 100%;
-  justify-content: flex-start;
-  position: relative;
-  margin-top: 10px;
-  z-index: 5;
-}
-
-/* New container for verses section */
-.cat-verses-container {
-  position: relative;
-  width: 100%;
-  background-color: #121f38;
-  border-radius: 16px;
-  overflow: hidden;
-  z-index: 10;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* Update the verses section styling */
-.cat-verses-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 30px 20px;
-  width: 100%;
-  max-width: 900px;
-  position: relative;
-  z-index: 10;
-}
-
-/* Fix the back button */
-.cat-back-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 25px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-  position: relative;
-  z-index: 15;
-}
-
-/* Fix subcategory title */
-.cat-subcategory-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 25px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  position: relative;
-  z-index: 15;
-}
-
-/* Fix guidance section */
-.cat-verse-guidance {
-  margin: 20px 0 30px;
-  width: 100%;
-  max-width: 700px;
-  text-align: center;
-  position: relative;
-  z-index: 15;
-}
-
-/* Remove the margin-top that was causing problems */
-@media (max-width: 1023px) {
-  .cat-verses-section {
-    margin-top: 0;
-  }
-}
-
-/* Mobile responsive adjustments */
-@media (max-width: 767px) {
-  .cat-verses-container {
-    border-radius: 12px;
-  }
-  
-  .cat-verse-guidance {
-    margin: 15px 0 25px;
   }
 }
