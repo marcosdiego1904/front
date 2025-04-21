@@ -250,7 +250,7 @@ const Categories = () => {
   };
 
   return (
-    <div className="main-cont">
+    
       <div className="cat-categories-section">
         {!selectedSubcategory ? (
           <>
@@ -386,7 +386,7 @@ const Categories = () => {
           </div>
         )}
       </div>
-    </div>
+  
   );
 };
 
