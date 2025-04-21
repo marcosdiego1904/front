@@ -633,9 +633,42 @@
     font-size: 1.1rem;
   }
 }
-/* Fix for pages/learnsection/categories/style.css */
+/* Add these styles to your pages/learnsection/categories/style.css file */
 
-/* Update the verses section to ensure proper positioning */
+/* Fix for the main container */
+.main-cont {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Update the categories section */
+.cat-categories-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  justify-content: flex-start;
+  position: relative;
+  margin-top: 10px;
+  z-index: 5;
+}
+
+/* New container for verses section */
+.cat-verses-container {
+  position: relative;
+  width: 100%;
+  background-color: #121f38;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Update the verses section styling */
 .cat-verses-section {
   display: flex;
   flex-direction: column;
@@ -645,11 +678,10 @@
   width: 100%;
   max-width: 900px;
   position: relative;
-  z-index: 10; /* Ensure this is higher than potential overlapping elements */
-  background-color: #121f38; /* Match with your background color */
+  z-index: 10;
 }
 
-/* Fix the back button to ensure proper positioning */
+/* Fix the back button */
 .cat-back-button {
   display: flex;
   align-items: center;
@@ -666,39 +698,7 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
   position: relative;
-  z-index: 15; /* Higher than verses section */
-}
-
-/* Fix guidance section positioning */
-.cat-verse-guidance {
-  margin: 20px 0 30px;
-  width: 100%;
-  max-width: 700px;
-  text-align: center;
-  position: relative;
-  z-index: 15; /* Higher than verses section */
-}
-
-/* Fix for the main container in Categories.tsx */
-.main-cont {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Fix category section in Categories.tsx */
-.cat-categories-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  text-align: center;
-  padding: 20px;
-  width: 100%;
-  justify-content: flex-start;
-  position: relative;
-  margin-top: 10px;
-  z-index: 5; /* Ensure proper stacking context */
+  z-index: 15;
 }
 
 /* Fix subcategory title */
@@ -709,5 +709,33 @@
   margin-bottom: 25px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 15; /* Higher than verses section */
+  z-index: 15;
+}
+
+/* Fix guidance section */
+.cat-verse-guidance {
+  margin: 20px 0 30px;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  position: relative;
+  z-index: 15;
+}
+
+/* Remove the margin-top that was causing problems */
+@media (max-width: 1023px) {
+  .cat-verses-section {
+    margin-top: 0;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767px) {
+  .cat-verses-container {
+    border-radius: 12px;
+  }
+  
+  .cat-verse-guidance {
+    margin: 15px 0 25px;
+  }
 }
