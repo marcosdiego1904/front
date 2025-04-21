@@ -333,56 +333,65 @@ const Categories = () => {
             )}
           </>
         ) : (
-          <div className="cat-verses-section">
-            <button className="cat-back-button" onClick={handleReturn}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="cat-back-icon">
-                <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Return
-            </button>
-            <h1 className="cat-subcategory-title">{selectedSubcategory.name}</h1>
+          <div className="cat-verses-container" style={{ 
+            position: 'relative', 
+            width: '100%',
+            backgroundColor: '#121f38', 
+            borderRadius: '16px',
+            overflow: 'hidden',
+            zIndex: 10
+          }}>
+            <div className="cat-verses-section">
+              <button className="cat-back-button" onClick={handleReturn}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="cat-back-icon">
+                  <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Return
+              </button>
+              <h1 className="cat-subcategory-title">{selectedSubcategory.name}</h1>
 
-            {/* Added guidance text for users */}
-            {!loading && verses.length > 0 && (
-              <div className="cat-verse-guidance">
-                <p className="cat-verse-guide-text">
-                  <span className="cat-verse-guide-icon">👆</span>
-                  Click on a verse to begin memorizing it
-                </p>
-              </div>
-            )}
+              {/* Added guidance text for users */}
+              {!loading && verses.length > 0 && (
+                <div className="cat-verse-guidance">
+                  <p className="cat-verse-guide-text">
+                    <span className="cat-verse-guide-icon">👆</span>
+                    Click on a verse to begin memorizing it
+                  </p>
+                </div>
+              )}
 
-            {loading ? (
-              renderLoadingVerses() // Use skeleton UI for verses
-            ) : (
-              <div className="cat-verses-list">
-                {verses.length === 0 ? (
-                  <p className="cat-no-verses">No verses available.</p>
-                ) : (
-                  verses.map((verse) => (
-                    <div
-                      key={verse.id}
-                      className="cat-verse-card"
-                      onClick={() => handleVerseClick(verse)}
-                    >
-                      <p className="cat-verse-text">"{verse.text_nlt}"</p>
-                      <p className="cat-verse-reference">
-                        - {verse.verse_reference}
-                      </p>
-                      <p className="cat-verse-context">{verse.context_nlt}</p>
-                      <div className="cat-verse-read-more">
-                        <span>Learn this verse</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+              {loading ? (
+                renderLoadingVerses() // Use skeleton UI for verses
+              ) : (
+                <div className="cat-verses-list">
+                  {verses.length === 0 ? (
+                    <p className="cat-no-verses">No verses available.</p>
+                  ) : (
+                    verses.map((verse) => (
+                      <div
+                        key={verse.id}
+                        className="cat-verse-card"
+                        onClick={() => handleVerseClick(verse)}
+                      >
+                        <p className="cat-verse-text">"{verse.text_nlt}"</p>
+                        <p className="cat-verse-reference">
+                          - {verse.verse_reference}
+                        </p>
+                        <p className="cat-verse-context">{verse.context_nlt}</p>
+                        <div className="cat-verse-read-more">
+                          <span>Learn this verse</span>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
                       </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

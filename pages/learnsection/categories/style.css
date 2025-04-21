@@ -633,10 +633,81 @@
     font-size: 1.1rem;
   }
 }
-@media (max-width: 1023px) {
-  /* ... other styles */
-  .cat-verses-section {
-    /* margin-top: 40px; /* Remove or comment out this line */
-  }
-  /* ... other styles */
+/* Fix for pages/learnsection/categories/style.css */
+
+/* Update the verses section to ensure proper positioning */
+.cat-verses-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px 20px;
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  z-index: 10; /* Ensure this is higher than potential overlapping elements */
+  background-color: #121f38; /* Match with your background color */
+}
+
+/* Fix the back button to ensure proper positioning */
+.cat-back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+  position: relative;
+  z-index: 15; /* Higher than verses section */
+}
+
+/* Fix guidance section positioning */
+.cat-verse-guidance {
+  margin: 20px 0 30px;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  position: relative;
+  z-index: 15; /* Higher than verses section */
+}
+
+/* Fix for the main container in Categories.tsx */
+.main-cont {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Fix category section in Categories.tsx */
+.cat-categories-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  justify-content: flex-start;
+  position: relative;
+  margin-top: 10px;
+  z-index: 5; /* Ensure proper stacking context */
+}
+
+/* Fix subcategory title */
+.cat-subcategory-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 25px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 15; /* Higher than verses section */
 }
