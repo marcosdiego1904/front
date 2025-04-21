@@ -19,22 +19,22 @@ const SupportPage: React.FC = () => {
   // Testimonial data
   const testimonials = [
     {
-      text: "This app changed my relationship with the Word. After years of trying to memorize verses without success, I can finally remember them when I need them most. It's like carrying a treasure in my heart.",
+      text: "THIS IS A DRAFT This app changed my relationship with the Word. After years of trying to memorize verses without success, I can finally remember them when I need them most. It's like carrying a treasure in my heart.",
       author: "María S.",
       country: "Mexico"
     },
     {
-      text: "As a pastor, I recommend this tool to my entire congregation. The step-by-step method is brilliant and I've seen how it has transformed the spiritual life of many in our church.",
+      text: "THIS IS A DRAFT As a pastor, I recommend this tool to my entire congregation. The step-by-step method is brilliant and I've seen how it has transformed the spiritual life of many in our church.",
       author: "Pastor David L.",
       country: "Colombia"
     },
     {
-      text: "I'm a Sunday school teacher and this app has revolutionized how I teach the Word to my students. Now the children memorize with enthusiasm and compete to see who learns more verses!",
+      text: "THIS IS A DRAFT I'm a Sunday school teacher and this app has revolutionized how I teach the Word to my students. Now the children memorize with enthusiasm and compete to see who learns more verses!",
       author: "Carolina P.",
       country: "Spain"
     },
     {
-      text: "Every day on the train I use the app to memorize a new verse. This habit has been a spiritual anchor in difficult times. I am deeply grateful for the developer's work.",
+      text: "THIS IS A DRAFT Every day on the train I use the app to memorize a new verse. This habit has been a spiritual anchor in difficult times. I am deeply grateful for the developer's work.",
       author: "Roberto M.",
       country: "Argentina"
     }
@@ -192,7 +192,6 @@ const SupportPage: React.FC = () => {
                 <div className="expense-progress-container">
                   <div className="expense-progress-label">
                     <span>Monthly cost</span>
-                    <span>Covered: 65%</span>
                   </div>
                   <div className="expense-progress-bar">
                     <div className="expense-progress-fill" style={{width: "65%"}}></div>
@@ -211,7 +210,6 @@ const SupportPage: React.FC = () => {
                 <div className="expense-progress-container">
                   <div className="expense-progress-label">
                     <span>Project in progress</span>
-                    <span>Completed: 40%</span>
                   </div>
                   <div className="expense-progress-bar">
                     <div className="expense-progress-fill" style={{width: "40%"}}></div>
@@ -230,7 +228,6 @@ const SupportPage: React.FC = () => {
                 <div className="expense-progress-container">
                   <div className="expense-progress-label">
                     <span>Future project</span>
-                    <span>Funds: 25%</span>
                   </div>
                   <div className="expense-progress-bar">
                     <div className="expense-progress-fill" style={{width: "25%"}}></div>
@@ -364,44 +361,55 @@ const SupportPage: React.FC = () => {
             </div>
             
             <div className="support-option pray-option">
-              <div className="support-icon">
-                <i className="bi bi-chat-heart-fill"></i>
-              </div>
-              <h3>Pray and Share Your Testimony</h3>
-              <p>
-                Your prayers for this ministry are invaluable. I also invite you to share 
-                how the app has impacted your spiritual life.
-              </p>
-              <div className="testimonial-form">
-                <textarea 
-                  placeholder="Share how this app has impacted your spiritual life..." 
-                  rows={3}
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  name="message"
-                ></textarea>
-                <button className="support-btn testimonial-btn">Send testimony</button>
-              </div>
-            </div>
+  <div className="support-icon">
+    <i className="bi bi-chat-heart-fill"></i>
+  </div>
+  <h3>Pray and Share Your Testimony</h3>
+  <p>
+    Your prayers for this ministry are invaluable. I also invite you to share 
+    how the app has impacted your spiritual life.
+  </p>
+  <div className="testimonial-form">
+    {/** <textarea 
+      placeholder="Share how this app has impacted your spiritual life..." 
+      rows={3}
+      value={formData.message}
+      onChange={handleInputChange}
+      name="message"
+    ></textarea>*/}
+    <button 
+      className="support-btn testimonial-btn"
+      onClick={() => {
+        // Abrir cliente de correo con el mensaje del textarea
+        const mailtoLink = `mailto:marcosbarzola@devbymarcos.com?subject=My Testimony for Lamp to my feet&body=${encodeURIComponent(formData.message)}`;
+        window.open(mailtoLink, '_blank');
+      }}
+    >
+      Send testimony
+    </button>
+    <p className="email-direct-note">
+      Send your testimony directly to: <a href="mailto:marcosbarzola@devbymarcos.com">marcosbarzola@devbymarcos.com</a>
+    </p>
+  </div>
+</div>
           </div>
         </div>
         
-        {/* Rest of the existing component remains the same */}
         {/* Impact slider - user testimonials with auto rotation */}
         <div className="impact-section">
           <h2>Community Impact</h2>
           
           <div className="impact-metrics">
             <div className="impact-metric">
-              <div className="metric-number">12,500+</div>
+              <div className="metric-number">7+</div>
               <div className="metric-label">Verses memorized</div>
             </div>
             <div className="impact-metric">
-              <div className="metric-number">3,200+</div>
+              <div className="metric-number">3+</div>
               <div className="metric-label">Active users</div>
             </div>
             <div className="impact-metric">
-              <div className="metric-number">18+</div>
+              <div className="metric-number">2+</div>
               <div className="metric-label">Countries reached</div>
             </div>
           </div>

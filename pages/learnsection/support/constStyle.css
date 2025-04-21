@@ -1731,3 +1731,19 @@ body {
     font-size: 1.2rem;
   }
 }
+.email-direct-note {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  color: var(--text-muted);
+}
+
+.email-direct-note a {
+  color: var(--accent-green);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.email-direct-note a:hover {
+  text-decoration: underline;
+}
