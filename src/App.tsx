@@ -1,6 +1,7 @@
 import { BrowserRouter, useRoutes, Navigate } from "react-router-dom";
 import Home from "../src/Home/index";
 import LearnSection from "../pages/learnsection/Learn";
+import BibleSearch from "../pages/learnsection/BibleSearch"; // ← NUEVA IMPORTACIÓN
 import Navbar from "./Navbar";
 import "./App.css";
 
@@ -50,6 +51,7 @@ const AppRoutes = () => {
     // Public routes
     { path: "/", element: <Home /> },
     { path: "/learn", element: <LearnSection /> },
+    { path: "/bible-search", element: <BibleSearch /> }, // ← NUEVA RUTA
     
     // About and Support routes
     { path: "/about", element: <AboutPage /> },

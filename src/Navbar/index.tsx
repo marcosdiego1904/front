@@ -1,4 +1,4 @@
-// Modificación del Navbar.tsx para manejar el desplazamiento suave a categorías
+// Modificación del Navbar.tsx para incluir Bible Search
 
 import { NavLink } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -118,6 +118,13 @@ const Navbar = () => {
                   <i className="bi bi-book me-2"></i>
                   Learn
                 </a>
+              </li>
+              {/* ← NUEVO ENLACE DE BÚSQUEDA BÍBLICA */}
+              <li className="nav-item">
+                <NavLink to="/bible-search" className="nav-link">
+                  <i className="bi bi-search me-2"></i>
+                  Bible Search
+                </NavLink>
               </li>
               <li className="nav-item">
                 <NavLink to="/about" className="nav-link">
