@@ -164,63 +164,6 @@ const BibleSearch: React.FC = () => {
         </div>
       </div>
 
-      {/* Example Verses by Category */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h3 style={{ textAlign: 'center', color: '#16223d', marginBottom: '1.5rem' }}>
-          Popular Verses to Try:
-        </h3>
-        {examplesByCategory.map((category, index) => (
-          <div key={index} style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#ffc107', 
-              fontSize: '1rem', 
-              marginBottom: '0.75rem',
-              textAlign: 'center'
-            }}>
-              {category.category}
-            </h4>
-            <div style={{ 
-              display: 'flex', 
-              flexWrap: 'wrap', 
-              gap: '0.5rem', 
-              justifyContent: 'center' 
-            }}>
-              {category.verses.map((verse) => (
-                <button
-                  key={verse}
-                  onClick={() => handleExampleClick(verse)}
-                  disabled={isLoading}
-                  style={{
-                    padding: '0.5rem 1rem',
-                    backgroundColor: '#f8f9fa',
-                    border: '1px solid #ddd',
-                    borderRadius: '20px',
-                    cursor: isLoading ? 'not-allowed' : 'pointer',
-                    fontSize: '0.9rem',
-                    color: '#16223d',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseOver={(e) => {
-                    if (!isLoading) {
-                      e.currentTarget.style.backgroundColor = '#ffc107';
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (!isLoading) {
-                      e.currentTarget.style.backgroundColor = '#f8f9fa';
-                      e.currentTarget.style.color = '#16223d';
-                    }
-                  }}
-                >
-                  {verse}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Error Message */}
       {error && (
         <div style={{
@@ -266,15 +209,16 @@ const BibleSearch: React.FC = () => {
         </div>
       )}
 
-      {/* Search Results */}
+      {/* Search Results - MOVED UP */}
       {searchedVerse && !isLoading && (
         <div style={{
           backgroundColor: 'white',
           borderRadius: '15px',
           boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
           overflow: 'hidden',
-          marginBottom: '2rem',
-          border: '3px solid #ffc107'
+          marginBottom: '3rem',
+          border: '3px solid #ffc107',
+          animation: 'slideInFromTop 0.5s ease'
         }}>
           {/* Header with translation info */}
           <div style={{
@@ -386,6 +330,65 @@ const BibleSearch: React.FC = () => {
         </div>
       )}
 
+      {/* Example Verses by Category - MOVED DOWN, ONLY SHOW WHEN NO VERSE FOUND */}
+      {!searchedVerse && !isLoading && (
+        <div style={{ marginBottom: '2rem' }}>
+          <h3 style={{ textAlign: 'center', color: '#16223d', marginBottom: '1.5rem' }}>
+            Popular Verses to Try:
+          </h3>
+          {examplesByCategory.map((category, index) => (
+            <div key={index} style={{ marginBottom: '1.5rem' }}>
+              <h4 style={{ 
+                color: '#ffc107', 
+                fontSize: '1rem', 
+                marginBottom: '0.75rem',
+                textAlign: 'center'
+              }}>
+                {category.category}
+              </h4>
+              <div style={{ 
+                display: 'flex', 
+                flexWrap: 'wrap', 
+                gap: '0.5rem', 
+                justifyContent: 'center' 
+              }}>
+                {category.verses.map((verse) => (
+                  <button
+                    key={verse}
+                    onClick={() => handleExampleClick(verse)}
+                    disabled={isLoading}
+                    style={{
+                      padding: '0.5rem 1rem',
+                      backgroundColor: '#f8f9fa',
+                      border: '1px solid #ddd',
+                      borderRadius: '20px',
+                      cursor: isLoading ? 'not-allowed' : 'pointer',
+                      fontSize: '0.9rem',
+                      color: '#16223d',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      if (!isLoading) {
+                        e.currentTarget.style.backgroundColor = '#ffc107';
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (!isLoading) {
+                        e.currentTarget.style.backgroundColor = '#f8f9fa';
+                        e.currentTarget.style.color = '#16223d';
+                      }
+                    }}
+                  >
+                    {verse}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Instructions */}
       <div style={{
         padding: '2rem',
@@ -438,11 +441,27 @@ const BibleSearch: React.FC = () => {
         </div>
       </div>
 
-      {/* CSS Animation for spinner */}
+      {/* CSS Animation for spinner and slide in */}
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes slideInFromTop {
+          0% { 
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          100% { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeIn {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
       `}</style>
     </div>
