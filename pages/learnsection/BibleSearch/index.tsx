@@ -36,12 +36,21 @@ const BibleSearch: React.FC = () => {
     }
   };
 
-  const startLearning = () => {
-    if (searchedVerse) {
-      navigate('/learn', { state: { selectedVerse: searchedVerse } });
-    }
-  };
-
+ const startLearning = () => {
+  if (searchedVerse) {
+    // Crear objeto compatible con el sistema de guardado existente
+    const normalizedVerse = {
+      id: searchedVerse.id,
+      text_nlt: searchedVerse.text_nlt,
+      verse_reference: searchedVerse.verse_reference,
+      context_nlt: searchedVerse.context_nlt,
+      // No incluir datos de translation para mantener estructura de BD consistente
+    };
+    
+    console.log("Navigating to learn with normalized verse:", normalizedVerse);
+    navigate('/learn', { state: { selectedVerse: normalizedVerse } });
+  }
+};
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       searchVerse();
