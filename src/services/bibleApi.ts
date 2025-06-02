@@ -244,15 +244,18 @@ class BibleApiService {
   /**
    * Transforma la respuesta de la API a nuestro formato
    */
-  private transformApiResponse(data: BibleApiResponse, translation: BibleTranslation): SearchedVerse {
-    return {
-      id: Date.now(),
-      verse_reference: data.reference,
-      text_nlt: data.text,
-      context_nlt: `${translation.fullName} (${translation.name})`,
-      translation: translation
-    };
-  }
+private transformApiResponse(data: BibleApiResponse, translation: BibleTranslation): SearchedVerse {
+  // IDs en rango específico para Bible Search (900,000 - 999,999)
+  const bibleSearchId = 900000 + Math.floor(Math.random() * 99999);
+  
+  return {
+    id: bibleSearchId, // ✅ ID en rango específico
+    verse_reference: data.reference,
+    text_nlt: data.text,
+    context_nlt: `${translation.fullName} (${translation.name})`,
+    translation: translation
+  };
+}
 
   /**
    * Obtiene ejemplos de referencias bíblicas por categoría

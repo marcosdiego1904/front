@@ -48,18 +48,25 @@ const FinalScreen = ({ onRestart, prevStep, verse }: Props) => {
           message: "Saving verse to your profile...",
         });
 
-        const response = await axios.post<SaveVerseResponse>(
-          `${API_BASE_URL}/user/memorized-verses`,
-          {
-            verseId: verse.id,
-            verseReference: verse.verse_reference,
-            verseText: verse.text_nlt,
-            contextText: verse.context_nlt,
-          },
-          {
-            headers: getAuthHeader(),
-          }
-        );
+        // Datos que se van a enviar
+const dataToSend = {
+  verseId: verse.id,
+  verseReference: verse.verse_reference,
+  verseText: verse.text_nlt,
+  contextText: verse.context_nlt,
+};
+
+console.log("🔍 DEBUGGING - Datos a enviar al servidor:", dataToSend);
+console.log("🔍 DEBUGGING - Tipo de verseId:", typeof verse.id);
+console.log("🔍 DEBUGGING - Verso completo:", verse);
+
+const response = await axios.post<SaveVerseResponse>(
+  `${API_BASE_URL}/user/memorized-verses`,
+  dataToSend,
+  {
+    headers: getAuthHeader(),
+  }
+);
 
         setSaveStatus({
           isSaving: false,
