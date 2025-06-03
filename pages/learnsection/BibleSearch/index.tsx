@@ -27,6 +27,8 @@ const BibleSearch: React.FC = () => {
     setSearchedVerse(null);
 
     try {
+      // LÍNEA TEMPORAL - Agregar antes de bibleApiService.searchVerse()
+await bibleApiService.debugGetAllBibles();
       const verse = await bibleApiService.searchVerse(searchInput, selectedTranslation);
       setSearchedVerse(verse);
     } catch (err) {

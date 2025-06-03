@@ -1,4 +1,4 @@
-// TranslationInfo.tsx - Componente opcional para mostrar información sobre las traducciones
+// TranslationInfo.tsx - Componente actualizado para API.Bible
 import React, { useState } from 'react';
 import { BibleTranslation } from '../../../src/services/bibleApi';
 
@@ -13,36 +13,25 @@ const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selecte
   const selectedTranslationData = translations.find(t => t.id === selectedTranslation);
   
   const getTranslationDetails = (id: string) => {
+    // Mapeo actualizado para los IDs de API.Bible
     const details: { [key: string]: { readingLevel: string; approach: string; bestFor: string; year: string } } = {
-      nlt: {
+      'de4e12af7f28f599-02': { // NLT
         readingLevel: 'Grade 6',
         approach: 'Thought-for-thought (Dynamic Equivalence)',
         bestFor: 'Daily reading, new believers, memorization',
-        year: '1996 (revised 2004, 2007)'
+        year: '1996 (revised 2004, 2007, 2015)'
       },
-      niv: {
+      '78a9f6124f344018-01': { // NIV
         readingLevel: 'Grade 7-8', 
         approach: 'Balance between word-for-word and thought-for-thought',
         bestFor: 'General study, most popular for memorization',
         year: '1978 (revised 2011)'
       },
-      esv: {
-        readingLevel: 'Grade 8-10',
-        approach: 'Essentially literal (Word-for-word)',
-        bestFor: 'Serious study, preaching, academic work',
-        year: '2001 (revised 2016)'
-      },
-      kjv: {
+      'de4e12af7f28f599-01': { // KJV
         readingLevel: 'Grade 12+',
         approach: 'Formal equivalence (Word-for-word)',
         bestFor: 'Traditional worship, classic literature feel',
         year: '1611 (last major revision 1769)'
-      },
-      nasb: {
-        readingLevel: 'Grade 11-12',
-        approach: 'Highly literal (Word-for-word)',
-        bestFor: 'Detailed study, theological precision',
-        year: '1971 (updated 1995, 2020)'
       }
     };
     
@@ -137,6 +126,17 @@ const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selecte
             }}>
               <strong style={{ color: '#0056b3' }}>Description:</strong> {selectedTranslationData.description}
             </div>
+          </div>
+
+          <div style={{ 
+            marginTop: '1rem',
+            padding: '0.75rem',
+            backgroundColor: '#fff3cd',
+            borderLeft: '4px solid #ffc107',
+            borderRadius: '4px',
+            fontSize: '0.85rem'
+          }}>
+            <strong style={{ color: '#856404' }}>Powered by API.Bible:</strong> High-quality translations from American Bible Society
           </div>
         </div>
       )}
