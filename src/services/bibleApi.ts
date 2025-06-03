@@ -1,11 +1,11 @@
 // src/services/bibleApi.ts
-// Servicio para manejar múltiples traducciones bíblicas con NLT como predeterminada
+// Servicio corregido para manejar múltiples traducciones bíblicas
 
 export interface BibleTranslation {
   id: string;
   name: string;
   fullName: string;
-  apiSource: 'bible-api' | 'bolls' | 'nlt-api';
+  apiSource: 'bible-api' | 'api-bible' | 'bolls';
   description: string;
 }
 
@@ -35,27 +35,27 @@ export interface SearchedVerse {
 
 class BibleApiService {
   
-  // Traducciones disponibles ordenadas por popularidad
+  // Traducciones disponibles con fuentes específicas
   private translations: BibleTranslation[] = [
     {
       id: 'nlt',
       name: 'NLT',
       fullName: 'New Living Translation',
-      apiSource: 'bible-api',
+      apiSource: 'api-bible',
       description: 'Easy to read, thought-for-thought translation'
     },
     {
       id: 'niv',
       name: 'NIV',
       fullName: 'New International Version',
-      apiSource: 'bible-api',
+      apiSource: 'api-bible',
       description: 'Balance between accuracy and readability'
     },
     {
       id: 'esv',
       name: 'ESV',
       fullName: 'English Standard Version',
-      apiSource: 'bible-api',
+      apiSource: 'api-bible',
       description: 'Word-for-word accuracy with modern English'
     },
     {
@@ -66,11 +66,11 @@ class BibleApiService {
       description: 'Classic translation with traditional language'
     },
     {
-      id: 'nasb',
-      name: 'NASB',
-      fullName: 'New American Standard Bible',
+      id: 'web',
+      name: 'WEB',
+      fullName: 'World English Bible',
       apiSource: 'bible-api',
-      description: 'Highly literal and precise translation'
+      description: 'Free public domain translation'
     }
   ];
 
@@ -101,28 +101,34 @@ class BibleApiService {
       }
 
       const cleanedReference = this.cleanReference(reference);
-      console.log(`Searching for verse: ${cleanedReference} in ${translation.name}`);
+      console.log(`🔍 Searching for verse: ${cleanedReference} in ${translation.name} (${translation.id})`);
       
       let verseData: SearchedVerse;
 
       // Usar diferentes APIs según la traducción
       switch (translation.apiSource) {
-        case 'bible-api':
-          verseData = await this.searchWithBibleApi(cleanedReference, translation);
+        case 'api-bible':
+          verseData = await this.searchWithApiBible(cleanedReference, translation);
           break;
+        case 'bolls':
+          verseData = await this.searchWithBolls(cleanedReference, translation);
+          break;
+        case 'bible-api':
         default:
           verseData = await this.searchWithBibleApi(cleanedReference, translation);
+          break;
       }
 
+      console.log(`✅ Found verse in ${translation.name}:`, verseData.text_nlt.substring(0, 50) + '...');
       return verseData;
       
     } catch (error) {
       console.error('Bible API Error:', error);
       
       if (error instanceof Error) {
-        // Si falla la traducción preferida, intentar con bible-api.com (WEB) como fallback
+        // Si falla la traducción preferida, intentar con fallback
         if (translationId !== 'web') {
-          console.log('Attempting fallback to WEB translation...');
+          console.log('⚠️ Attempting fallback to WEB translation...');
           return await this.searchWithFallback(reference);
         }
         
@@ -131,7 +137,7 @@ class BibleApiService {
           throw new Error('Request timed out. Please try again.');
         }
         
-        if (error.message.includes('fetch')) {
+        if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
           throw new Error('Unable to connect to Bible API. Please check your internet connection.');
         }
         
@@ -143,22 +149,104 @@ class BibleApiService {
   }
 
   /**
-   * Busca usando bible-api.com (soporta múltiples traducciones)
+   * Busca usando api.bible (soporta NLT, NIV, ESV y más traducciones comerciales)
    */
-  private async searchWithBibleApi(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
-    // bible-api.com format: https://bible-api.com/john+3:16?translation=nlt
-    const apiTranslationMap: { [key: string]: string } = {
-      'nlt': 'nlt',
-      'niv': 'niv',
-      'esv': 'esv', 
-      'kjv': 'kjv',
-      'nasb': 'nasb'
+  private async searchWithApiBible(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
+    // Para simular api.bible (que requiere API key), usaremos bolls.life que es gratuito
+    return await this.searchWithBolls(reference, translation);
+  }
+
+  /**
+   * Busca usando bolls.life API (gratuito, soporta múltiples traducciones)
+   */
+  private async searchWithBolls(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
+    // bolls.life format: https://bolls.life/get-text/ESV/John/3/16/
+    
+    const translationMapping: { [key: string]: string } = {
+      'nlt': 'NLT',
+      'niv': 'NIV', 
+      'esv': 'ESV',
+      'kjv': 'KJV',
+      'web': 'WEB'
     };
 
-    const apiTranslation = apiTranslationMap[translation.id] || 'web';
-    const url = `https://bible-api.com/${encodeURIComponent(reference)}${apiTranslation !== 'web' ? `?translation=${apiTranslation}` : ''}`;
+    const apiTranslation = translationMapping[translation.id] || 'NLT';
     
-    console.log('API URL:', url);
+    // Parse reference (ej: "John 3:16" -> book: John, chapter: 3, verse: 16)
+    const parsedRef = this.parseReference(reference);
+    if (!parsedRef) {
+      throw new Error('Invalid reference format');
+    }
+
+    const url = `https://bolls.life/get-text/${apiTranslation}/${parsedRef.book}/${parsedRef.chapter}/${parsedRef.verse}/`;
+    
+    console.log('🌐 Bolls API URL:', url);
+    
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        signal: AbortSignal.timeout(10000)
+      });
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (!data || !data.text) {
+        throw new Error('No verse text found in response.');
+      }
+
+      const bibleSearchId = 900000 + Math.floor(Math.random() * 99999);
+      
+      return {
+        id: bibleSearchId,
+        verse_reference: reference,
+        text_nlt: data.text.trim(),
+        context_nlt: `${translation.fullName} (${translation.name})`,
+        translation: translation
+      };
+
+    } catch (fetchError) {
+      console.log('⚠️ Bolls API failed, trying bible-api as fallback...');
+      return await this.searchWithBibleApi(reference, translation);
+    }
+  }
+
+  /**
+   * Busca usando bible-api.com (fallback, limitado pero funcional)
+   */
+  private async searchWithBibleApi(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
+    // bible-api.com solo soporta algunas traducciones
+    const supportedTranslations: { [key: string]: string } = {
+      'kjv': 'kjv',
+      'web': '', // default
+      'nlt': 'nlt', // Limitado
+      'niv': 'niv', // Limitado
+      'esv': 'esv'  // Limitado
+    };
+
+    const apiParam = supportedTranslations[translation.id];
+    
+    // Si la traducción no está soportada, usar WEB como fallback
+    if (apiParam === undefined) {
+      console.log(`⚠️ Translation ${translation.id} not supported by bible-api.com, using WEB...`);
+      const webTranslation = this.translations.find(t => t.id === 'web');
+      if (webTranslation) {
+        translation = webTranslation;
+      }
+    }
+
+    const url = apiParam && apiParam !== '' 
+      ? `https://bible-api.com/${encodeURIComponent(reference)}?translation=${apiParam}`
+      : `https://bible-api.com/${encodeURIComponent(reference)}`;
+    
+    console.log('🌐 Bible-API URL:', url);
     
     const response = await fetch(url, {
       method: 'GET',
@@ -187,6 +275,37 @@ class BibleApiService {
   }
 
   /**
+   * Parsea una referencia bíblica en sus componentes
+   */
+  private parseReference(reference: string): { book: string; chapter: number; verse: number } | null {
+    try {
+      // Manejar casos como "1 John 3:16", "John 3:16", etc.
+      const cleanRef = reference.trim();
+      
+      // Patrón para capturar libro, capítulo y versículo
+      const match = cleanRef.match(/^(\d*\s*\w+)\s*(\d+):(\d+)/i);
+      
+      if (!match) {
+        return null;
+      }
+
+      const [, bookPart, chapterStr, verseStr] = match;
+      const book = bookPart.trim().replace(/\s+/g, '');
+      const chapter = parseInt(chapterStr, 10);
+      const verse = parseInt(verseStr, 10);
+
+      if (isNaN(chapter) || isNaN(verse)) {
+        return null;
+      }
+
+      return { book, chapter, verse };
+    } catch (error) {
+      console.error('Error parsing reference:', error);
+      return null;
+    }
+  }
+
+  /**
    * Fallback usando la API original (WEB translation)
    */
   private async searchWithFallback(reference: string): Promise<SearchedVerse> {
@@ -195,10 +314,12 @@ class BibleApiService {
       name: 'WEB',
       fullName: 'World English Bible',
       apiSource: 'bible-api',
-      description: 'Free public domain translation'
+      description: 'Free public domain translation (fallback)'
     };
 
     const url = `https://bible-api.com/${encodeURIComponent(reference)}`;
+    
+    console.log('🔄 Fallback URL:', url);
     
     const response = await fetch(url, {
       method: 'GET',
@@ -244,18 +365,18 @@ class BibleApiService {
   /**
    * Transforma la respuesta de la API a nuestro formato
    */
-private transformApiResponse(data: BibleApiResponse, translation: BibleTranslation): SearchedVerse {
-  // IDs en rango específico para Bible Search (900,000 - 999,999)
-  const bibleSearchId = 900000 + Math.floor(Math.random() * 99999);
-  
-  return {
-    id: bibleSearchId, // ✅ ID en rango específico
-    verse_reference: data.reference,
-    text_nlt: data.text,
-    context_nlt: `${translation.fullName} (${translation.name})`,
-    translation: translation
-  };
-}
+  private transformApiResponse(data: BibleApiResponse, translation: BibleTranslation): SearchedVerse {
+    // IDs en rango específico para Bible Search (900,000 - 999,999)
+    const bibleSearchId = 900000 + Math.floor(Math.random() * 99999);
+    
+    return {
+      id: bibleSearchId, // ✅ ID en rango específico
+      verse_reference: data.reference,
+      text_nlt: data.text,
+      context_nlt: `${translation.fullName} (${translation.name})`,
+      translation: translation
+    };
+  }
 
   /**
    * Obtiene ejemplos de referencias bíblicas por categoría
