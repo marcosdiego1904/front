@@ -1,23 +1,27 @@
 // src/services/bibleApi.ts
-// API.Bible implementation with NLT, NIV, KJV support
+// bible-api.com implementation with KJV only
 
 export interface BibleTranslation {
   id: string;
   name: string;
   fullName: string;
-  apiSource: 'api-bible';
+  apiSource: 'bible-api';
   description: string;
 }
 
-export interface ApiBibleResponse {
-  data: {
-    id: string;
-    orgId: string;
-    reference: string;
-    content: string;
-    verseCount: number;
-    copyright?: string;
-  };
+export interface BibleApiResponse {
+  reference: string;
+  verses: Array<{
+    book_id: string;
+    book_name: string;
+    chapter: number;
+    verse: number;
+    text: string;
+  }>;
+  text: string;
+  translation_id: string;
+  translation_name: string;
+  translation_note?: string;
 }
 
 export interface SearchedVerse {
@@ -30,71 +34,47 @@ export interface SearchedVerse {
 
 class BibleApiService {
   
-  // ✅ API Key - REEMPLAZA CON TU CLAVE
-  private readonly API_KEY = '8b25da1509dedcec5db13d767c7c3089'; // 🔑 Cambiar por tu API key
-  private readonly BASE_URL = 'https://api.scripture.api.bible/v1';
+  // ✅ Base URL for bible-api.com
+  private readonly BASE_URL = 'https://bible-api.com';
 
-  // ✅ Traducciones disponibles en API.Bible (IDs corregidos - MODO DEBUG)
+  // ✅ Only KJV translation available
   private translations: BibleTranslation[] = [
     {
-      id: 'de4e12af7f28f599-02', // Este es KJV disfrazado, vamos a probarlo
-      name: 'NLT',
-      fullName: 'New Living Translation',
-      apiSource: 'api-bible',
-      description: 'Easy to read, thought-for-thought translation'
-    },
-    {
-      id: 'de4e12af7f28f599-01', // KJV real
+      id: 'kjv',
       name: 'KJV',
       fullName: 'King James Version',
-      apiSource: 'api-bible',
-      description: 'Classic translation with traditional language'
-    },
-    // Vamos a probar otros IDs posibles para NLT
-    {
-      id: 'de4e12af7f28f599-03', // Probar este para NLT
-      name: 'NLT-Test',
-      fullName: 'New Living Translation (Test)',
-      apiSource: 'api-bible',
-      description: 'Testing different ID for NLT'
+      apiSource: 'bible-api',
+      description: 'The classic King James Version from 1611, featuring traditional English and time-tested language.'
     }
   ];
 
-  private defaultTranslation = 'de4e12af7f28f599-02'; // NLT por defecto
+  private defaultTranslation = 'kjv';
 
   /**
-   * Obtiene todas las traducciones disponibles
+   * Obtiene todas las traducciones disponibles (solo KJV)
    */
   getAvailableTranslations(): BibleTranslation[] {
     return this.translations;
   }
 
   /**
-   * Obtiene la traducción predeterminada
+   * Obtiene la traducción predeterminada (KJV)
    */
   getDefaultTranslation(): BibleTranslation {
-    return this.translations.find(t => t.id === this.defaultTranslation) || this.translations[0];
+    return this.translations[0];
   }
 
   /**
-   * Busca un versículo usando la traducción especificada
+   * Busca un versículo usando bible-api.com (siempre KJV)
    */
   async searchVerse(reference: string, translationId: string = this.defaultTranslation): Promise<SearchedVerse> {
     try {
-      // Validar API key
-      if (!this.API_KEY || this.API_KEY === 'TU_API_KEY_AQUI') {
-        throw new Error('API key not configured. Please add your API.Bible key to the service.');
-      }
-
-      const translation = this.translations.find(t => t.id === translationId);
-      if (!translation) {
-        throw new Error(`Translation ${translationId} not found`);
-      }
-
+      const translation = this.translations.find(t => t.id === translationId) || this.translations[0];
       const cleanedReference = this.cleanReference(reference);
-      console.log(`🔍 Searching for verse: ${cleanedReference} in ${translation.name} (${translation.id})`);
       
-      const verseData = await this.searchWithApiBible(cleanedReference, translation);
+      console.log(`🔍 Searching for verse: ${cleanedReference} in ${translation.name}`);
+      
+      const verseData = await this.searchWithBibleApi(cleanedReference, translation);
 
       console.log(`✅ Found verse in ${translation.name}:`, verseData.text_nlt.substring(0, 50) + '...');
       return verseData;
@@ -108,16 +88,8 @@ class BibleApiService {
           throw new Error('Request timed out. Please try again.');
         }
         
-        if (error.message.includes('401')) {
-          throw new Error('Invalid API key. Please check your API.Bible configuration.');
-        }
-
-        if (error.message.includes('403')) {
-          throw new Error('Access denied. Please check your API.Bible permissions.');
-        }
-        
         if (error.message.includes('404')) {
-          throw new Error('Verse not found. Please check your reference format.');
+          throw new Error('Verse not found. Please check your reference format (e.g., "John 3:16").');
         }
         
         if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
@@ -132,63 +104,18 @@ class BibleApiService {
   }
 
   /**
-   * MÉTODO TEMPORAL: Obtener lista de todas las traducciones disponibles
+   * Busca usando bible-api.com
    */
-  async debugGetAllBibles() {
-    try {
-      const response = await fetch(`${this.BASE_URL}/bibles`, {
-        method: 'GET',
-        headers: {
-          'api-key': this.API_KEY,
-          'Accept': 'application/json',
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('🔍 TODAS LAS TRADUCCIONES DISPONIBLES:');
-        
-        // Filtrar solo inglés y mostrar las que nos interesan
-        const englishBibles = data.data.filter((bible: any) => 
-          bible.language.id === 'eng' && 
-          (bible.name.toLowerCase().includes('living') || 
-           bible.name.toLowerCase().includes('international') || 
-           bible.name.toLowerCase().includes('king james') ||
-           bible.abbreviation === 'NLT' ||
-           bible.abbreviation === 'NIV' ||
-           bible.abbreviation === 'KJV')
-        );
-        
-        console.table(englishBibles.map((bible: any) => ({
-          ID: bible.id,
-          Name: bible.name,
-          Abbreviation: bible.abbreviation
-        })));
-        
-        return englishBibles;
-      }
-    } catch (error) {
-      console.error('Error getting all bibles:', error);
-    }
-  }
-
-  /**
-   * Busca usando API.Bible
-   */
-  private async searchWithApiBible(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
-    // Convertir referencia a formato de API.Bible
-    const searchQuery = this.formatReferenceForApiBible(reference);
+  private async searchWithBibleApi(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
+    // bible-api.com acepta referencias como "john+3:16" o "john 3:16"
+    const encodedReference = encodeURIComponent(reference);
+    const url = `${this.BASE_URL}/${encodedReference}?translation=kjv`;
     
-    // Construir URL para buscar el pasaje
-    const url = `${this.BASE_URL}/bibles/${translation.id}/search?query=${encodeURIComponent(searchQuery)}&limit=1`;
-    
-    console.log('🌐 API.Bible Search URL:', url);
-    console.log('📖 Requested translation:', translation.name);
+    console.log('🌐 Bible API URL:', url);
     
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'api-key': this.API_KEY,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
@@ -201,164 +128,62 @@ class BibleApiService {
       throw new Error(`API returned ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data: BibleApiResponse = await response.json();
     
-    console.log('📋 API Search Response:', data);
+    console.log('📋 Bible API Response:', data);
     
-    if (!data.data || !data.data.verses || data.data.verses.length === 0) {
-      // Si la búsqueda no encuentra nada, intentar con pasajes directos
-      return await this.getPassageDirectly(reference, translation);
+    if (!data.text && (!data.verses || data.verses.length === 0)) {
+      throw new Error('No verse found for this reference. Please check the format.');
     }
 
-    // Usar el primer resultado
-    const verse = data.data.verses[0];
-    
-    // Obtener el texto completo del versículo
-    return await this.getVerseContent(verse.id, translation);
+    return this.transformBibleApiResponse(data, translation);
   }
 
   /**
-   * Intenta obtener un pasaje directamente por referencia
+   * Transforma la respuesta de bible-api.com a nuestro formato
    */
-  private async getPassageDirectly(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
-    // Convertir referencia a formato de API.Bible (ej: "JHN.3.16")
-    const passageId = this.convertToPassageId(reference);
+  private transformBibleApiResponse(data: BibleApiResponse, translation: BibleTranslation): SearchedVerse {
+    const bibleSearchId = 800000 + Math.floor(Math.random() * 99999);
     
-    const url = `${this.BASE_URL}/bibles/${translation.id}/passages/${passageId}`;
+    // Usar el texto principal o concatenar versículos individuales
+    let verseText = data.text;
+    let verseReference = data.reference;
     
-    console.log('🌐 API.Bible Passage URL:', url);
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'api-key': this.API_KEY,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      signal: AbortSignal.timeout(10000)
-    });
-
-    if (!response.ok) {
-      throw new Error(`Passage not found: ${response.status}`);
-    }
-
-    const data: ApiBibleResponse = await response.json();
-    
-    return this.transformApiBibleResponse(data, translation, reference);
-  }
-
-  /**
-   * Obtiene el contenido completo de un versículo por ID
-   */
-  private async getVerseContent(verseId: string, translation: BibleTranslation): Promise<SearchedVerse> {
-    const url = `${this.BASE_URL}/bibles/${translation.id}/verses/${verseId}`;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'api-key': this.API_KEY,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      signal: AbortSignal.timeout(10000)
-    });
-
-    if (!response.ok) {
-      throw new Error(`Verse content not found: ${response.status}`);
-    }
-
-    const data: ApiBibleResponse = await response.json();
-    
-    return this.transformApiBibleResponse(data, translation, data.data.reference);
-  }
-
-  /**
-   * Convierte referencia en formato de pasaje de API.Bible
-   */
-  private convertToPassageId(reference: string): string {
-    // Mapeo de libros bíblicos a IDs de API.Bible
-    const bookMap: { [key: string]: string } = {
-      'genesis': 'GEN', 'gen': 'GEN',
-      'exodus': 'EXO', 'exo': 'EXO', 'ex': 'EXO',
-      'matthew': 'MAT', 'mat': 'MAT', 'mt': 'MAT',
-      'mark': 'MRK', 'mrk': 'MRK', 'mk': 'MRK',
-      'luke': 'LUK', 'luk': 'LUK', 'lk': 'LUK',
-      'john': 'JHN', 'jhn': 'JHN', 'jn': 'JHN',
-      'acts': 'ACT', 'act': 'ACT',
-      'romans': 'ROM', 'rom': 'ROM',
-      'psalms': 'PSA', 'psalm': 'PSA', 'psa': 'PSA', 'ps': 'PSA',
-      'proverbs': 'PRO', 'prov': 'PRO', 'pr': 'PRO',
-      'isaiah': 'ISA', 'isa': 'ISA', 'is': 'ISA',
-      'jeremiah': 'JER', 'jer': 'JER',
-      'philippians': 'PHP', 'phil': 'PHP', 'php': 'PHP',
-      '1 corinthians': '1CO', '1co': '1CO', '1 cor': '1CO',
-      '2 corinthians': '2CO', '2co': '2CO', '2 cor': '2CO',
-      '1 john': '1JN', '1jn': '1JN', '1 jn': '1JN',
-      '2 john': '2JN', '2jn': '2JN', '2 jn': '2JN',
-      '3 john': '3JN', '3jn': '3JN', '3 jn': '3JN'
-    };
-
-    try {
-      // Extraer libro, capítulo y versículo
-      const match = reference.match(/^(.+?)\s*(\d+):(\d+)(?:-(\d+))?$/i);
-      if (!match) {
-        throw new Error('Invalid reference format');
+    // Si no hay texto principal, construir desde versículos individuales
+    if (!verseText && data.verses && data.verses.length > 0) {
+      verseText = data.verses.map(v => v.text).join(' ');
+      
+      // Construir referencia si no está disponible
+      if (!verseReference && data.verses.length > 0) {
+        const firstVerse = data.verses[0];
+        const lastVerse = data.verses[data.verses.length - 1];
+        
+        if (data.verses.length === 1) {
+          verseReference = `${firstVerse.book_name} ${firstVerse.chapter}:${firstVerse.verse}`;
+        } else if (firstVerse.chapter === lastVerse.chapter) {
+          verseReference = `${firstVerse.book_name} ${firstVerse.chapter}:${firstVerse.verse}-${lastVerse.verse}`;
+        } else {
+          verseReference = `${firstVerse.book_name} ${firstVerse.chapter}:${firstVerse.verse} - ${lastVerse.chapter}:${lastVerse.verse}`;
+        }
       }
-
-      const [, bookName, chapter, startVerse, endVerse] = match;
-      const bookKey = bookName.toLowerCase().trim();
-      const bookId = bookMap[bookKey] || 'JHN'; // Default a Juan si no se encuentra
-
-      if (endVerse) {
-        return `${bookId}.${chapter}.${startVerse}-${bookId}.${chapter}.${endVerse}`;
-      } else {
-        return `${bookId}.${chapter}.${startVerse}`;
-      }
-    } catch (error) {
-      console.warn('Could not parse reference, using default:', error);
-      return 'JHN.3.16'; // Fallback
     }
-  }
 
-  /**
-   * Formatea referencia para búsqueda en API.Bible
-   */
-  private formatReferenceForApiBible(reference: string): string {
-    return reference.trim();
-  }
-
-  /**
-   * Limpia HTML y obtiene solo el texto
-   */
-  private cleanHtmlContent(htmlContent: string): string {
-    // Remover etiquetas HTML básicas
-    return htmlContent
-      .replace(/<[^>]*>/g, '') // Remover todas las etiquetas HTML
-      .replace(/\s+/g, ' ') // Normalizar espacios
-      .trim();
-  }
-
-  /**
-   * Transforma la respuesta de API.Bible a nuestro formato
-   */
-  private transformApiBibleResponse(data: ApiBibleResponse, translation: BibleTranslation, reference: string): SearchedVerse {
-    const bibleSearchId = 900000 + Math.floor(Math.random() * 99999);
-    
-    // 🔍 DEBUG: Vamos a ver exactamente qué está devolviendo cada traducción
-    console.log(`🔍 DEBUG RESPONSE for ${translation.name} (${translation.id}):`);
-    console.log('Raw content:', data.data.content);
-    console.log('Reference:', data.data.reference);
-    console.log('Data ID:', data.data.id);
-    console.log('---');
-    
-    // Limpiar el contenido HTML
-    const cleanText = this.cleanHtmlContent(data.data.content);
+    // Construir contexto informativo
+    let contextInfo = `${translation.fullName}`;
+    if (data.verses && data.verses.length > 0) {
+      const book = data.verses[0].book_name;
+      contextInfo += ` - Book: ${book}`;
+      
+      if (data.verses.length > 1) {
+        contextInfo += ` (${data.verses.length} verses)`;
+      }
+    }
     
     return {
       id: bibleSearchId,
-      verse_reference: reference,
-      text_nlt: cleanText,
-      context_nlt: `${translation.fullName} (${translation.name}) - ID: ${translation.id}`, // Agregamos el ID para debug
+      verse_reference: verseReference || 'Unknown Reference',
+      text_nlt: verseText || 'No text available',
+      context_nlt: contextInfo,
       translation: translation
     };
   }
@@ -424,7 +249,7 @@ class BibleApiService {
       return { isValid: false, message: 'Reference too long' };
     }
 
-    // Patrones más específicos
+    // Patrones más específicos para bible-api.com
     const patterns = [
       /^[\w\s]+\d+:\d+$/,           // "john 3:16"
       /^\d+\s+[\w\s]+\d+:\d+$/,     // "1 john 3:16"  
@@ -446,10 +271,19 @@ class BibleApiService {
   }
 
   /**
-   * Obtiene información sobre una traducción específica
+   * Obtiene información sobre la traducción KJV
    */
-  getTranslationInfo(translationId: string): BibleTranslation | null {
-    return this.translations.find(t => t.id === translationId) || null;
+  getTranslationInfo(translationId: string = 'kjv'): BibleTranslation | null {
+    return this.translations[0]; // Solo KJV disponible
+  }
+
+  /**
+   * Método debug temporal (no necesario para bible-api.com)
+   */
+  async debugGetAllBibles() {
+    console.log('🔍 Available translation: King James Version (KJV) only');
+    console.log('📖 API Source: bible-api.com');
+    return this.translations;
   }
 }
 

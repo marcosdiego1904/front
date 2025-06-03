@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import bibleApiService, { SearchedVerse } from '../../../src/services/bibleApi';
-import TranslationInfo from './TranslationInfo'; // <-- IMPORTADO
-//import './BibleSearch.css'; // <-- IMPORTADO
+import TranslationInfo from './TranslationInfo';
 
 const BibleSearch: React.FC = () => {
   const [searchInput, setSearchInput] = useState('');
-  const [selectedTranslation, setSelectedTranslation] = useState(bibleApiService.getDefaultTranslation().id);
   const [searchedVerse, setSearchedVerse] = useState<SearchedVerse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // Solo KJV disponible
   const availableTranslations = bibleApiService.getAvailableTranslations();
+  const selectedTranslation = bibleApiService.getDefaultTranslation().id; // Siempre KJV
   const examplesByCategory = bibleApiService.getExampleReferences();
 
   const searchVerse = async () => {
@@ -27,8 +27,6 @@ const BibleSearch: React.FC = () => {
     setSearchedVerse(null);
 
     try {
-      // LÍNEA TEMPORAL - Agregar antes de bibleApiService.searchVerse()
-await bibleApiService.debugGetAllBibles();
       const verse = await bibleApiService.searchVerse(searchInput, selectedTranslation);
       setSearchedVerse(verse);
     } catch (err) {
@@ -38,24 +36,25 @@ await bibleApiService.debugGetAllBibles();
     }
   };
 
-const startLearning = () => {
-  if (searchedVerse) {
-    console.log("🔍 DEBUGGING - Verso original de Bible Search:", searchedVerse);
-    
-    // Crear objeto compatible con el sistema de guardado existente
-    const normalizedVerse = {
-      id: searchedVerse.id,
-      text_nlt: searchedVerse.text_nlt,
-      verse_reference: searchedVerse.verse_reference,
-      context_nlt: searchedVerse.context_nlt,
-    };
-    
-    console.log("🔍 DEBUGGING - Verso normalizado:", normalizedVerse);
-    console.log("🔍 DEBUGGING - Tipo de ID:", typeof normalizedVerse.id);
-    
-    navigate('/learn', { state: { selectedVerse: normalizedVerse } });
-  }
-};
+  const startLearning = () => {
+    if (searchedVerse) {
+      console.log("🔍 DEBUGGING - Verso original de Bible Search:", searchedVerse);
+      
+      // Crear objeto compatible con el sistema de guardado existente
+      const normalizedVerse = {
+        id: searchedVerse.id,
+        text_nlt: searchedVerse.text_nlt,
+        verse_reference: searchedVerse.verse_reference,
+        context_nlt: searchedVerse.context_nlt,
+      };
+      
+      console.log("🔍 DEBUGGING - Verso normalizado:", normalizedVerse);
+      console.log("🔍 DEBUGGING - Tipo de ID:", typeof normalizedVerse.id);
+      
+      navigate('/learn', { state: { selectedVerse: normalizedVerse } });
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       searchVerse();
@@ -71,26 +70,22 @@ const startLearning = () => {
     <div className="bible-search-container">
       <div className="search-header">
         <h1>Bible Search</h1>
-        <p>Search for any Bible verse in your preferred translation and start memorizing instantly</p>
+        <p>Search for any Bible verse in the classic King James Version and start memorizing instantly</p>
       </div>
 
-      {/* Translation Selector */}
-      <div className="translation-selector">
-        <label htmlFor="translation-select">Choose Translation:</label>
-        <select
-          id="translation-select"
-          className="translation-select"
-          value={selectedTranslation}
-          onChange={(e) => setSelectedTranslation(e.target.value)}
-          disabled={isLoading}
-        >
-          {availableTranslations.map((translation) => (
-            <option key={translation.id} value={translation.id}>
-              {translation.name} - {translation.fullName}
-            </option>
-          ))}
-        </select>
-        {/* Componente de Información de Traducción Integrado */}
+      {/* Translation Info - Simplified since only KJV */}
+      <div className="translation-info-section">
+        <div className="current-translation-display">
+          <div className="translation-badge">
+            <span className="translation-icon">📖</span>
+            <div className="translation-details">
+              <span className="translation-name">King James Version</span>
+              <span className="translation-abbr">KJV</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Componente de Información de Traducción */}
         <TranslationInfo
           translations={availableTranslations}
           selectedTranslation={selectedTranslation}
@@ -130,7 +125,7 @@ const startLearning = () => {
         <div className="loading-indicator">
           <div className="loading-spinner"></div>
           <p className="loading-text">
-            Searching for verse in {availableTranslations.find(t => t.id === selectedTranslation)?.name}...
+            Searching for verse in King James Version...
           </p>
         </div>
       )}
@@ -199,9 +194,53 @@ const startLearning = () => {
           <div><strong>Full chapters</strong><br /><span>Psalm 23, Romans 8</span></div>
         </div>
         <div className="instructions-tip">
-          <strong>💡 Tip:</strong> NLT is selected by default for easier reading. Memorized verses are saved to your profile.
+          <strong>💡 Tip:</strong> All verses are from the classic King James Version. Memorized verses are saved to your profile.
         </div>
       </div>
+
+      {/* Agregar estilos para la nueva sección de traducción */}
+      <style>{`
+        .translation-info-section {
+          margin-bottom: 1.5rem;
+        }
+        
+        .current-translation-display {
+          margin-bottom: 1rem;
+        }
+        
+        .translation-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          background-color: #16223d;
+          color: white;
+          border-radius: 8px;
+          max-width: 300px;
+          margin: 0 auto;
+        }
+        
+        .translation-icon {
+          font-size: 1.5rem;
+        }
+        
+        .translation-details {
+          display: flex;
+          flex-direction: column;
+          text-align: left;
+        }
+        
+        .translation-name {
+          font-weight: 600;
+          font-size: 1rem;
+        }
+        
+        .translation-abbr {
+          font-size: 0.8rem;
+          opacity: 0.8;
+        }
+      `}</style>
     </div>
   );
 };

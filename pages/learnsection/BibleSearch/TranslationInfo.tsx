@@ -1,7 +1,7 @@
-// TranslationInfo.tsx - Componente actualizado para API.Bible
+// TranslationInfo.tsx - Componente actualizado para bible-api.com (KJV only)
 import React, { useState } from 'react';
 import { BibleTranslation } from '../../../src/services/bibleApi';
-
+{/**Hacer que el componente se vea en la página de búsqueda de la Biblia */}
 interface TranslationInfoProps {
   translations: BibleTranslation[];
   selectedTranslation: string;
@@ -13,34 +13,24 @@ const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selecte
   const selectedTranslationData = translations.find(t => t.id === selectedTranslation);
   
   const getTranslationDetails = (id: string) => {
-    // Mapeo actualizado para los IDs de API.Bible
-    const details: { [key: string]: { readingLevel: string; approach: string; bestFor: string; year: string } } = {
-      'de4e12af7f28f599-02': { // NLT
-        readingLevel: 'Grade 6',
-        approach: 'Thought-for-thought (Dynamic Equivalence)',
-        bestFor: 'Daily reading, new believers, memorization',
-        year: '1996 (revised 2004, 2007, 2015)'
-      },
-      '78a9f6124f344018-01': { // NIV
-        readingLevel: 'Grade 7-8', 
-        approach: 'Balance between word-for-word and thought-for-thought',
-        bestFor: 'General study, most popular for memorization',
-        year: '1978 (revised 2011)'
-      },
-      'de4e12af7f28f599-01': { // KJV
-        readingLevel: 'Grade 12+',
-        approach: 'Formal equivalence (Word-for-word)',
-        bestFor: 'Traditional worship, classic literature feel',
-        year: '1611 (last major revision 1769)'
+    // Solo información para KJV ya que es la única traducción disponible
+    const details: { [key: string]: { readingLevel: string; approach: string; bestFor: string; year: string; features: string[] } } = {
+      'kjv': {
+        readingLevel: 'Grade 12+ (Advanced)',
+        approach: 'Formal equivalence (Word-for-word translation)',
+        bestFor: 'Traditional worship, literary study, memorization, theological study',
+        year: '1611 (last major revision 1769)',
+        features: [
+          'Most widely memorized translation in history',
+          'Beautiful, poetic language with theological precision',
+          'Time-tested accuracy and reliability',
+          'Rich vocabulary that enhances understanding',
+          'Preferred by many churches and theologians'
+        ]
       }
     };
     
-    return details[id] || {
-      readingLevel: 'N/A',
-      approach: 'Mixed approach',
-      bestFor: 'General use',
-      year: 'Various'
-    };
+    return details[id] || details['kjv']; // Fallback a KJV
   };
 
   if (!selectedTranslationData) return null;
@@ -122,9 +112,20 @@ const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selecte
               backgroundColor: '#e7f3ff',
               borderLeft: '4px solid #007bff',
               borderRadius: '4px',
-              fontSize: '0.9rem'
+              fontSize: '0.9rem',
+              marginBottom: '1rem'
             }}>
               <strong style={{ color: '#0056b3' }}>Description:</strong> {selectedTranslationData.description}
+            </div>
+
+            {/* Nueva sección: Características especiales de KJV */}
+            <div style={{ marginBottom: '0.75rem' }}>
+              <strong style={{ color: '#16223d' }}>Why Choose KJV for Memorization:</strong>
+              <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem', color: '#666' }}>
+                {details.features.map((feature, index) => (
+                  <li key={index} style={{ marginBottom: '0.25rem', fontSize: '0.9rem' }}>{feature}</li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -136,7 +137,7 @@ const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selecte
             borderRadius: '4px',
             fontSize: '0.85rem'
           }}>
-            <strong style={{ color: '#856404' }}>Powered by API.Bible:</strong> High-quality translations from American Bible Society
+            <strong style={{ color: '#856404' }}>Powered by bible-api.com:</strong> Free, reliable access to the timeless King James Version
           </div>
         </div>
       )}
