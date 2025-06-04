@@ -1,0 +1,493 @@
+/* HomeCategoryHighlights.css - UI/UX Revamp with Interactive Topic Explorer */
+
+/* :root definitions (keep as is if they are serving well) */
+:root { 
+  --primary-blue: #16223d;
+  --accent-blue: #007bff;
+  --accent-blue-light: #4da3ff;
+  --accent-blue-dark: #0056b3;
+  --accent-green: #28a745;
+  --accent-green-dark: #218838;
+  --accent-orange: #d48900;
+  --accent-orange-dark: #b67500;
+  --text-dark: #16223d;
+  --text-medium: #444;
+  --text-light: #6c757d;
+  --bg-white: #ffffff;
+  --bg-light: #f8f9fa;
+  --bg-highlight: rgba(0, 123, 255, 0.05);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px; 
+  --radius-pill: 30px; /* For pill shapes */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 5px 10px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.12);
+  --transition-fast: 0.2s ease-out;
+  --transition-normal: 0.3s ease-out;
+}
+
+.home-category-highlights-section {
+  width: 100%;
+  padding: 40px 20px;
+  background-color: var(--bg-light, #f8f9fa);
+  min-height: 100vh; /* Ensure it covers full viewport height */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  display: flex; /* Optional: if vertical centering of content is needed */
+  flex-direction: column; /* Optional: if vertical centering of content is needed */
+  /* justify-content: center; */ /* Optional: to center content vertically if it's shorter than 100vh */
+  margin-top: 0; /* Ensure no top margin pushes it down */
+}
+
+/* --- Formulario de Búsqueda (Styles from global-design-system.css for BibleSearch) --- */
+.search-input-group {
+  display: flex;
+  align-items: center;
+  background-color: white; /* Hardcoded from global-design-system.css */
+  border: 2px solid #ffc107; /* Hardcoded from global-design-system.css */
+  border-radius: 12px; /* Hardcoded from global-design-system.css */
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Hardcoded from global-design-system.css */
+  margin-bottom: 1.5rem; /* Hardcoded from global-design-system.css */
+  width: 100%; /* Added to make it try to fill available width */
+  /* Adjusted max-width to be a bit narrower */
+  max-width: 950px; /* Was 1000px */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-input-field {
+  flex: 1;
+  padding: 1rem 1.25rem; /* Hardcoded from global-design-system.css */
+  font-size: 1rem; /* Hardcoded from global-design-system.css */
+  border: none;
+  outline: none;
+  background-color: transparent;
+  min-width: 0; 
+  color: var(--text-dark); /* Using HCH variable for text color consistency */
+}
+
+.search-input-field::placeholder {
+  color: #999; /* Softer placeholder text, from old HCH styles */
+  font-style: italic;
+}
+
+.search-button {
+  padding: 1rem 1.5rem; /* Hardcoded from global-design-system.css */
+  background-color: #ffc107; /* Hardcoded from global-design-system.css */
+  color: #16223d; /* Hardcoded from global-design-system.css */
+  border: none;
+  cursor: pointer;
+  font-size: 1rem; /* Hardcoded from global-design-system.css */
+  font-weight: bold; /* Hardcoded from global-design-system.css */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Hardcoded from global-design-system.css */
+  transition: background-color 0.3s ease; /* Hardcoded from global-design-system.css */
+}
+
+.search-button:disabled {
+  background-color: #ccc; /* Hardcoded from global-design-system.css */
+  cursor: not-allowed;
+}
+
+/* Note: global-design-system.css did not have explicit :hover for .search-button */
+/* Responsive styles for the new search bar will need to be considered if the default behavior of this bar (not stacking) is not desired on mobile */
+
+/* --- Main Searched Verse Display: Enhanced --- */
+.hch-main-searched-verse-display {
+  background-color: var(--bg-white, #ffffff);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: var(--shadow-lg, 0 10px 20px rgba(0,0,0,0.12));
+  padding: 30px;
+  margin: 40px auto;
+  max-width: 700px;
+  border-top: 5px solid var(--accent-blue, #007bff); /* Top accent border */
+  text-align: center; /* Center content */
+}
+
+.hch-main-searched-verse-display h3 {
+  font-size: 1.8rem; /* Larger reference */
+  color: var(--primary-blue, #16223d);
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.hch-main-searched-verse-display .hch-context {
+  font-size: 1rem;
+  color: var(--text-medium, #444);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.hch-main-searched-verse-display .hch-verse-text {
+  font-size: 1.2rem; /* Larger verse text */
+  color: var(--text-dark, #16223d);
+  line-height: 1.7;
+  margin-bottom: 25px;
+  padding: 20px;
+  background-color: var(--bg-light, #f8f9fa);
+  border-radius: var(--radius-md, 8px);
+  border-left: 4px solid var(--accent-blue-light, #4da3ff);
+  text-align: left;
+}
+
+.hch-main-searched-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hch-learn-btn,
+.hch-clear-search-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: var(--radius-lg, 12px); /* More rounded */
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.hch-learn-btn {
+  background-color: var(--accent-green, #28a745);
+  color: white;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0,0,0,0.07));
+}
+.hch-learn-btn:hover {
+  background-color: var(--accent-green-dark, #218838);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 5px 10px rgba(40,167,69,0.2));
+}
+
+.hch-clear-search-btn {
+  background-color: transparent;
+  color: var(--accent-blue, #007bff);
+  border: 2px solid var(--accent-blue, #007bff);
+  padding: 10px 23px;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0,0,0,0.07));
+}
+.hch-clear-search-btn:hover {
+  background-color: var(--accent-blue, #007bff);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 5px 10px rgba(0,0,0,0.1));
+}
+
+/* --- Interactive Topic Explorer --- */
+.hch-topic-explorer {
+  margin-top: 40px;
+}
+
+.hch-intro-text {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.hch-intro-text h2 {
+  font-size: 2rem; /* More prominent title for this section */
+  color: var(--primary-blue, #16223d);
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+/* Category Selectors (Pills/Tabs) */
+.hch-category-selector-list {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.hch-category-selector {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-blue, #007bff);
+  background-color: var(--bg-white, #ffffff);
+  border: 1px solid var(--accent-blue-light, #4da3ff);
+  border-radius: var(--radius-pill, 30px); /* Pill shape */
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.hch-category-selector:hover {
+  background-color: var(--accent-blue-light, #4da3ff);
+  color: white;
+  border-color: var(--accent-blue, #007bff);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.hch-category-selector.active {
+  background-color: var(--accent-blue, #007bff);
+  color: white;
+  border-color: var(--accent-blue-dark, #0056b3);
+  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+  transform: translateY(-1px); /* Slight lift for active state */
+}
+
+/* Active Category Content Area */
+.hch-active-category-content {
+  background-color: var(--bg-white, #ffffff);
+  border-radius: var(--radius-xl, 16px);
+  padding: 25px 30px;
+  box-shadow: var(--shadow-lg);
+  margin-top: 10px; /* Space from selectors if they wrap */
+  animation: fadeInContent 0.5s var(--transition-normal) forwards;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes fadeInContent {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hch-category-description {
+  font-size: 1.05rem;
+  color: var(--text-medium, #444);
+  margin-bottom: 25px;
+  line-height: 1.6;
+  text-align: center;
+  border-bottom: 1px dashed #e0e0e0;
+  padding-bottom: 20px;
+}
+
+.hch-example-verses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Flexible grid for verse links */
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.hch-example-verse-link {
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--accent-blue, #007bff); /* New: Blue */
+  background-color: var(--bg-white, #ffffff); /* New: White background */
+  border: 1px solid var(--accent-blue-light, #4da3ff); /* New: Light blue border */
+  border-radius: var(--radius-md, 8px);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.hch-example-verse-link:hover:not(:disabled) {
+  background-color: var(--accent-blue-light, #4da3ff); /* New: Light blue background on hover */
+  color: white; /* New: White text on hover */
+  border-color: var(--accent-blue, #007bff); /* New: Blue border on hover */
+  transform: scale(1.03);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* New: Blue shadow */
+}
+
+.hch-example-verse-link:disabled {
+  color: #aaa;
+  background-color: #f0f0f0;
+  border-color: #ddd;
+  cursor: wait;
+  opacity: 0.8;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+}
+
+/* View All button within topic explorer - can use existing or slightly tweaked */
+.hch-view-all-btn.topic-view-all {
+  display: block;
+  width: auto; /* Fit content or a max-width */
+  max-width: 300px;
+  margin: 20px auto 0 auto; /* Centered */
+  padding: 12px 25px;
+  background: var(--accent-orange, #d48900);
+  color: white;
+  border-radius: var(--radius-lg, 12px);
+  font-weight: 600;
+}
+.hch-view-all-btn.topic-view-all:hover:not(:disabled) {
+  background: var(--accent-orange-dark, #b67500);
+  box-shadow: var(--shadow-md);
+}
+
+/* Error Messages (general styling can be kept, specific placement might adjust) */
+.hch-error-message {
+  font-size: 0.95rem;
+  color: #c0392b;
+  padding: 12px 18px;
+  text-align: center;
+  background-color: #fddbd0;
+  border: 1px solid #f5b7b1;
+  border-left: 4px solid #c0392b;
+  border-radius: var(--radius-md, 8px);
+  margin: 15px auto;
+  max-width: 650px;
+}
+
+.hch-error-message.main-search-error {
+  margin-top: -15px;
+  margin-bottom: 25px;
+}
+
+.hch-error-message.example-fetch-error {
+  margin-top: 15px; /* Ensure it has space if it appears */
+  margin-bottom: 15px;
+}
+
+.hch-no-verses-message {
+  font-size: 0.95rem;
+  color: var(--text-medium, #444);
+  padding: 20px;
+  text-align: center;
+  background-color: #f0f4f8;
+  border-radius: var(--radius-md, 8px);
+  margin: 10px 0;
+}
+
+/* --- New styles for Section Intro --- */
+.hch-section-intro {
+  text-align: center;
+  margin-bottom: 35px; /* Space before the search bar */
+  padding: 0 20px; /* Prevents text from touching edges on small screens */
+}
+
+.hch-section-intro h2 {
+  font-size: 2.2rem; /* Prominent size for the section title */
+  color: var(--primary-blue, #16223d);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.hch-section-intro p {
+  font-size: 1.1rem;
+  color: var(--text-medium, #444);
+  line-height: 1.6;
+  max-width: 750px; /* Max width for better readability */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  /* 
+  // Old HCH Search Bar Responsive Styles - Commented out 
+  .hch-main-search-bar {
+    flex-direction: column;
+    gap: 10px;
+    border-radius: var(--radius-xl, 16px); 
+  }
+  .hch-main-search-input,
+  .hch-main-search-button {
+    width: 100%;
+    border-radius: var(--radius-lg, 12px); 
+  }
+  .hch-main-search-input {
+    border: 1px solid #ddd; 
+    padding: 15px;
+  }
+  .hch-main-search-button {
+    padding: 15px;
+  }
+  */
+
+  .hch-main-searched-verse-display h3 {
+    font-size: 1.5rem;
+  }
+  .hch-main-searched-verse-display .hch-verse-text {
+    font-size: 1.1rem;
+  }
+  .hch-learn-btn,
+  .hch-clear-search-btn {
+    min-width: 160px;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+
+  .hch-intro-text h2 {
+    font-size: 1.6rem; /* Adjusted for mobile */
+  }
+  .hch-category-selector-list {
+    gap: 8px; /* Slightly smaller gap for selectors */
+  }
+  .hch-category-selector {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+  .hch-active-category-content {
+    padding: 20px;
+  }
+  .hch-category-description {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+  }
+  .hch-example-verses-grid {
+    grid-template-columns: 1fr; /* Stack verse links on smaller tablets/mobile */
+    gap: 10px;
+  }
+
+  .hch-section-intro h2 {
+    font-size: 1.8rem;
+  }
+  .hch-section-intro p {
+    font-size: 1rem;
+  }
+  .hch-section-intro {
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-category-highlights-section {
+    padding: 20px 15px;
+  }
+  /* 
+  // Old HCH Search Bar Responsive Styles - Commented out 
+  .hch-main-search-input {
+    padding: 12px 15px;
+    font-size: 1rem;
+  }
+  .hch-main-search-button {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+  */
+
+  .hch-main-searched-verse-display {
+    padding: 20px;
+  }
+  .hch-main-searched-verse-display h3 {
+    font-size: 1.3rem;
+  }
+  .hch-main-searched-verse-display .hch-verse-text {
+    font-size: 1rem;
+  }
+
+  .hch-view-all-btn.topic-view-all,
+  .hch-learn-btn,
+  .hch-clear-search-btn {
+    font-size: 0.9rem;
+    padding: 12px 15px;
+    width: 100%; 
+    min-width: unset;
+  }
+  
+  .hch-intro-text h2 {
+    font-size: 1.4rem;
+  }
+  .hch-active-category-content {
+    padding: 15px;
+  }
+  .hch-category-description {
+    font-size: 0.95rem;
+  }
+  .hch-example-verse-link {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+} 

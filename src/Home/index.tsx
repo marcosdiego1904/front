@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
+import "./HomeSearchAndCategories.css";
 import { getCategories } from "../services/api";
 // import Categories from "../../pages/learnsection/categories/Categories"; // Removed
 import HomeCategoryHighlights from "./HomeCategoryHighlights"; // Added
 import { useAuth } from "../auth/context/AuthContext";
-import '../styles/global-design-system.css'
+import '../styles/global-design-system.css';
 
 const Home = () => {
   // Estado para almacenar las categorías
@@ -128,10 +129,13 @@ const Home = () => {
       <div 
         ref={categoriesRef} 
         id="categories-section" 
-        className="pt-5"
+        className="pt-1"
       >
         {/* <Categories /> */}
         <HomeCategoryHighlights />
+
+        {/* NEWLY INSERTED JSX FOR SEARCH AND CATEGORIES */}
+       
       </div>
     </>
   );

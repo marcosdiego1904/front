@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Assuming bibleApiService is correctly set up and can be imported
 import bibleApiService, { SearchedVerse } from '../services/bibleApi'; 
-
+import './HomeCategoryHighlights.css';
 interface VerseToLearn {
   id: number; // Or string, depending on what your /learn page expects
   text_nlt: string;
@@ -66,7 +66,7 @@ const HomeCategoryHighlights: React.FC = () => {
   const handleMainSearch = async () => {
     const validation = bibleApiService.validateReference(mainSearchInput);
     if (!validation.isValid) {
-      setMainSearchError(validation.message || 'Invalid Bible reference format.');
+      setMainSearchError(validation.message || "Invalid format. Try 'John 3:16' or 'Gen 1:1'.");
       setMainSearchedVerse(null);
       return;
     }
@@ -81,7 +81,7 @@ const HomeCategoryHighlights: React.FC = () => {
       setMainSearchedVerse(verse);
     } catch (err) {
       console.error(`Error during main search for ${mainSearchInput}:`, err);
-      setMainSearchError(err instanceof Error ? err.message : 'Failed to search verse. Please try again.');
+      setMainSearchError(err instanceof Error ? err.message : "Couldn't find that verse. Please check the reference or try again.");
       setMainSearchedVerse(null);
     } finally {
       setIsMainSearching(false);
@@ -114,7 +114,7 @@ const HomeCategoryHighlights: React.FC = () => {
       }
     } catch (err) {
       console.error(`Error fetching details for example ${verseReference}:`, err);
-      setExampleVerseFetchError(`Could not load verse: ${verseReference}.`);
+      setExampleVerseFetchError(`Error loading ${verseReference}. Please try again.`);
     } finally {
       setFetchingExampleVerseDetailsRef(null);
     }
@@ -134,23 +134,29 @@ const HomeCategoryHighlights: React.FC = () => {
 
   return (
     <div className="home-category-highlights-section">
-      {/* Main Search Bar */} 
-      <div className="hch-main-search-bar">
+      {/* New Section Intro */}
+      <div className="hch-section-intro">
+        <h2>Find Your Verse</h2>
+        <p>Enter a Bible reference (e.g., John 3:16) to jump directly to a passage, or explore curated topics to discover inspirational scriptures for your daily life.</p>
+      </div>
+
+      {/* Main Search Bar - Updated to match BibleSearch design (from global-design-system.css) */}
+      <div className="search-input-group"> 
         <input
           type="text"
-          className="hch-main-search-input"
-          placeholder="Enter Bible reference (e.g., John 3:16)"
+          className="search-input-field" 
+          placeholder="Enter Bible reference (e.g., John 3:16)" 
           value={mainSearchInput}
           onChange={(e) => setMainSearchInput(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleMainSearch()}
           disabled={isMainSearching}
         />
         <button
-          className="hch-main-search-button"
+          className="search-button" 
           onClick={handleMainSearch}
           disabled={isMainSearching || !mainSearchInput.trim()}
         >
-          {isMainSearching ? 'Searching...' : 'Search Verse'}
+          {isMainSearching ? 'Searching...' : '🔍 Search'}
         </button>
       </div>
       {mainSearchError && <p className="hch-error-message main-search-error">{mainSearchError}</p>}
@@ -162,8 +168,8 @@ const HomeCategoryHighlights: React.FC = () => {
           {mainSearchedVerse.context_nlt && <p className="hch-context"><em>{mainSearchedVerse.context_nlt}</em></p>}
           <p className="hch-verse-text">"{mainSearchedVerse.text_nlt}"</p>
           <div className="hch-main-searched-actions">
-            <button onClick={() => handleLearnVerse(mainSearchedVerse)} className="hch-learn-btn">Learn This Verse</button>
-            <button onClick={clearMainSearch} className="hch-clear-search-btn">Clear Search / View Topics</button>
+            <button onClick={() => handleLearnVerse(mainSearchedVerse)} className="hch-learn-btn">Memorize This Verse</button>
+            <button onClick={clearMainSearch} className="hch-clear-search-btn">Clear & Explore Topics</button>
           </div>
         </div>
       )}
@@ -172,8 +178,8 @@ const HomeCategoryHighlights: React.FC = () => {
       {!mainSearchedVerse && (
         <div className="hch-topic-explorer">
           <div className="hch-intro-text">
-            <h2>Discover Verses for Your Daily Life</h2>
-            <p>Explore topics below for inspiration and guidance in various situations.</p>
+            <h2>Explore Bible Verses by Topic</h2>
+            <p>Browse by category to find inspiration and guidance for every situation.</p>
           </div>
 
           <div className="hch-category-selector-list">
@@ -193,7 +199,7 @@ const HomeCategoryHighlights: React.FC = () => {
               {activeCategoryData.description && <p className="hch-category-description">{activeCategoryData.description}</p>}
               <div className="hch-example-verses-grid"> {/* Changed from hch-verses-list for potentially different styling */}
                 {activeCategoryData.exampleReferences.length === 0 && (
-                    <p className="hch-no-verses-message">No example verses for this topic yet.</p>
+                    <p className="hch-no-verses-message">More verses coming soon for {activeCategoryData.name}!</p>
                 )}
                 {activeCategoryData.exampleReferences.map((reference) => (
                   <button 
@@ -207,12 +213,14 @@ const HomeCategoryHighlights: React.FC = () => {
                 ))}
               </div>
               {exampleVerseFetchError && <p className="hch-error-message example-fetch-error">{exampleVerseFetchError}</p>}
-              <button 
+             {/**
+              * <button 
                 className="hch-view-all-btn topic-view-all"
                 onClick={() => handleViewAllClick(activeCategoryData.name)}
               >
                 View All in {activeCategoryData.name}
               </button>
+              */} 
             </div>
           )}
         </div>
