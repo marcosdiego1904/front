@@ -136,24 +136,72 @@
 @media (max-width: 1024px) { 
   .main-cont {
     flex-direction: column; 
-    height: auto;
+    height: auto; /* Allow height to adjust to content */
+    /* min-height: 93vh; */ /* Optionally, ensure it still feels like a full-page hero */
   }
   
-  .left, .right {
+  .left {
     width: 100%;
+    /* background-color: white; */ /* Remove white background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px; /* Increase padding for better text spacing over image */
+    position: relative; /* For the overlay */
+    background-image: url('./dal.webp'); /* Apply the background image */
+    background-size: cover;
+    background-position: center center; /* Center the image nicely */
+    min-height: 60vh; /* Give it some substantial height */
+    box-sizing: border-box;
+  }
+
+  .left::before { /* This is the overlay */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(22, 34, 61, 0.65); /* var(--primary-blue) with alpha */
+    /* You can also use a gradient: background: linear-gradient(rgba(22, 34, 61, 0.6), rgba(22, 34, 61, 0.8)); */
+    z-index: 1; /* Ensure overlay is above background image but below text */
+  }
+  
+  .right {
+    /* width: 100%; */ /* No longer needed as it will be hidden */
+    display: none; /* Hide the .right section on mobile/tablet */
   }
   
   .text-cont {
     text-align: center;
     align-items: center;
-    padding-top: 30px;
+    padding-top: 0; /* Reset padding-top as .left now has padding */
+    position: relative; /* Ensure text is above the overlay */
+    z-index: 2;
   }
 
-  .right {
-    height: 370px;
+  .text-cont h1 {
+    /* font-size: 2.5rem; */ /* Keep existing responsive font sizes or adjust if needed */
+    /* font-weight: bold; */
+    color: var(--bg-white, #ffffff); /* Change text color to white */
+    /* line-height: 1.2; */
+  }
+
+  .text-cont p {
+    /* font-size: 1.2rem; */
+    color: var(--bg-light, #f8f9fa); /* Change text color to a light shade */
+    /* line-height: 1.6; */
+    /* margin-top: 5px; */
+  }
+
+  .text-cont p:last-of-type {
+    /* font-size: 1.2rem; */
+    /* font-weight: bold; */
+    color: #ffcc00; /* Example: Use a highlight color from your palette, or keep light */
+    /* text-align: center; */
   }
   
-  .image-overlay {
+  .image-overlay { /* This class was for .right, no longer directly styled here for mobile hero */
     height: 100%;
   }
 
@@ -172,7 +220,7 @@
 /* Tablet Styling */
 @media (min-width: 768px) and (max-width: 1024px) {
   .right {
-    min-height: 515px;
+    min-height: 320px;
   }
 
   .buttons button {
@@ -190,6 +238,19 @@
     font-size: 15px;
     flex-wrap: nowrap;
     padding: 12px;
+  }
+  .right {
+    height: 25vh;
+    min-height: 200px;
+  }
+  .text-cont h1 {
+    font-size: 2rem;
+  }
+  .text-cont p {
+    font-size: 1rem;
+  }
+  .text-cont p:last-of-type {
+    font-size: 1rem;
   }
 }
 
@@ -262,6 +323,19 @@
   animation: pulse 2s infinite;
 }
 
+/* Mobile adjustments for .get-started-btn */
+@media (max-width: 768px) {
+  .get-started-btn {
+    /* Slightly reduce animation intensity or change it */
+    animation: pulse 2.5s infinite; /* Example: make it a bit slower */
+    /* Slightly reduce shadow */
+    box-shadow: 0px 4px 12px rgba(255, 204, 0, 0.35);
+  }
+  .get-started-btn:hover {
+    box-shadow: 0px 6px 18px rgba(255, 204, 0, 0.45);
+  }
+}
+
 /* Mantener los otros botones menos prominentes */
 .resume-btn, .learned-btn {
   opacity: 0.9;
@@ -305,7 +379,18 @@
 
 /* Aplicar animación más fuerte */
 .get-started-btn {
-  animation: strongPulse 2.5s infinite;
+  /* animation: strongPulse 2.5s infinite; */ /* Base animation is 'pulse', strongPulse is an alternative defined later */
+}
+
+/* Mobile adjustments for .get-started-btn (alternative strongPulse) */
+@media (max-width: 768px) {
+  .get-started-btn.strong-pulse-variant { /* if you were to use a class to switch */
+    animation: strongPulse 3s infinite; /* Slower for mobile */
+    box-shadow: 0 6px 15px rgba(255, 149, 0, 0.35), 0 0 0 0 rgba(255, 204, 0, 0.5);
+  }
+  .get-started-btn.strong-pulse-variant:hover {
+    box-shadow: 0 10px 20px rgba(255, 149, 0, 0.45), 0 0 0 4px rgba(255, 204, 0, 0.15);
+  }
 }
 
 /* Agregar indicador visual para reforzar que es el botón principal */

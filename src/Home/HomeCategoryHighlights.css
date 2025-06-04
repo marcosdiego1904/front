@@ -395,6 +395,26 @@
   }
   */
 
+  /* New styles for stacking the .search-input-group */
+  .search-input-group {
+    flex-direction: column;
+    align-items: stretch; /* Makes children take full width */
+    gap: 10px; /* Adds space between input and button */
+    border-radius: var(--radius-xl, 16px); /* Retain some rounding */
+  }
+
+  .search-input-field,
+  .search-button {
+    width: 100%; 
+    margin-left: 0; 
+    margin-right: 0;
+  }
+  /* It's good practice to ensure the button text is centered if it has flex properties */
+  .search-button {
+    justify-content: center;
+  }
+  /* End of new styles for .search-input-group */
+
   .hch-main-searched-verse-display h3 {
     font-size: 1.5rem;
   }
@@ -413,7 +433,18 @@
   }
   .hch-category-selector-list {
     gap: 8px; /* Slightly smaller gap for selectors */
+    /* Added for horizontal scrolling on mobile */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    overflow-x: auto; /* Enable horizontal scroll */
+    justify-content: flex-start; /* Align items to the start */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
   }
+  .hch-category-selector-list::-webkit-scrollbar { 
+    display: none; /* Hide scrollbar for Chrome, Safari, Opera */
+  }
+  /* End of horizontal scroll additions */
+
   .hch-category-selector {
     font-size: 0.9rem;
     padding: 8px 15px;
@@ -457,6 +488,23 @@
     font-size: 0.9rem;
   }
   */
+
+  /* Ensure stacking applies to even smaller screens if not covered by 768px */
+  /* Redundant if 768px already covers it, but good for explicit override if needed */
+  .search-input-group {
+    flex-direction: column;
+    align-items: stretch; 
+    gap: 10px; 
+  }
+
+  .search-input-field,
+  .search-button {
+    width: 100%;
+  }
+   .search-button {
+    justify-content: center;
+  }
+  /* End of redundant styles, can be removed if 768px is sufficient */
 
   .hch-main-searched-verse-display {
     padding: 20px;
