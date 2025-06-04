@@ -3,6 +3,23 @@
  * the progress tracker and learning components.
  */
 
+/* ========= HomeCategoryHighlights Styles ========= */
+
+/* HomeCategoryHighlights.css - UI/UX Revamp with Interactive Topic Explorer */
+
+/* The local :root block, if it was here, is being ensured it's removed. 
+   Styles below will use the global :root. */
+
+.home-category-highlights-section {
+  width: 100%;
+  // ... existing code ...
+}
+
+/* ========= HARMONIZED DESIGN SYSTEM =========
+ * This stylesheet coordinates the visual language between
+ * the progress tracker and learning components.
+ */
+
  :root {
     /* Color palette */
     --primary-blue: #16223d;
@@ -46,6 +63,7 @@
     --radius-md: 8px;
     --radius-lg: 12px;
     --radius-xl: 15px;
+    --radius-pill: 30px;
     
     /* Shadows */
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1408,93 +1426,6 @@
     }
   }
   /* Improved navbar toggle button positioning for mobile view */
-
-/* Default position of toggle button */
-.navbar-toggle-btn {
-    position: fixed;
-    top: 15px; /* Position it at the top of the screen */
-    left: 15px; /* Position it at the left of the screen */
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--accent-gold, #ffc107);
-    color: var(--primary-blue, #16223d);
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    z-index: 2000; /* Make sure it's above other elements */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-  }
-  
-  /* When toggle is active (clicked), change its position */
-  .navbar-toggle-btn.active {
-    top: 15px; /* Keep it at the top */
-    left: 15px; /* Keep the same horizontal position */
-    background-color: #f0ad4e; /* Changed color when active */
-    z-index: 2100; /* Increase z-index to ensure it stays above the expanded menu */
-  }
-  
-  /* For smaller mobile screens, adjust position */
-  @media (max-width: 480px) {
-    .navbar-toggle-btn {
-      top: 12px;
-      left: 12px;
-      width: 36px;
-      height: 36px;
-      font-size: 18px;
-    }
-    
-    .navbar-toggle-btn.active {
-      top: 12px; /* Keep at top for smaller screens too */
-      z-index: 2100; /* Keep higher z-index */
-    }
-  }
-  
-  /* Fix for navbar alignment and spacing */
-  .logo {
-    margin-left: 50px; /* Add left margin to the logo to avoid overlap with toggle */
-  }
-  
-  /* Style for the open menu so links don't get covered by toggle */
-  .collapse.navbar-collapse.show {
-    padding-top: 15px; /* Reduced padding to minimize the gap */
-    z-index: 2000; /* Make sure it's below the toggle button */
-  }
-  
-  /* Add minimal margin to nav items to ensure they don't get hidden under the toggle */
-  .navbar-nav {
-    margin-top: 5px; /* Reduced from 10px */
-  }
-  
-  /* Make sure the navbar has enough height */
-  .navbar {
-    min-height: 50px;
-  }
-  
-  /* For very small screens */
-  @media (max-width: 320px) {
-    .navbar-toggle-btn {
-      top: 10px;
-      left: 10px;
-      width: 32px;
-      height: 32px;
-    }
-    
-    .navbar-toggle-btn.active {
-      top: 10px; /* Keep at the top */
-      z-index: 2100; /* Maintain higher z-index */
-    }
-    
-    .logo {
-      margin-left: 40px;
-      font-size: 24px; /* Reduce logo font size for very small screens */
-    }
-  }
-  /* Mobile Button Sizing Fix */
 
 /* Update the responsive adjustments for mobile to respect the design system */
 @media (max-width: 768px) {

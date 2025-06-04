@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 import { getCategories } from "../services/api";
-import Categories from "../../pages/learnsection/categories/Categories";
+// import Categories from "../../pages/learnsection/categories/Categories"; // Removed
+import HomeCategoryHighlights from "./HomeCategoryHighlights"; // Added
 import { useAuth } from "../auth/context/AuthContext";
+import '../styles/global-design-system.css'
 
 const Home = () => {
   // Estado para almacenar las categorías
@@ -128,7 +130,8 @@ const Home = () => {
         id="categories-section" 
         className="pt-5"
       >
-        <Categories />
+        {/* <Categories /> */}
+        <HomeCategoryHighlights />
       </div>
     </>
   );
