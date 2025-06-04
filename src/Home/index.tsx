@@ -115,9 +115,9 @@ const Home = () => {
               </button>
             </div>
 
-            <p style={{ marginTop: "40px" }}>
-              Memorize your first verse in under 5 minutes – challenge yourself today!
-            </p>
+            <p>
+  Memorize your first verse in under 5 minutes – challenge yourself today!
+</p>
           </div>
         </div>
         <div className="right">

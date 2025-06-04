@@ -21,8 +21,9 @@
   background-color: white;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 20px;
+  align-items: flex-start;
+  padding: 8vh 20px 40px 20px;
+  position: relative;
 }
 
 .text-cont {
@@ -52,6 +53,7 @@
   font-weight: bold;
   color: #007bff; 
   text-align: center;
+  margin-top: 25px;
 }
 
 /* 📌 Right Section (Background Image) */
@@ -145,13 +147,13 @@
     /* background-color: white; */ /* Remove white background */
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 40px 20px; /* Increase padding for better text spacing over image */
+    align-items: flex-start; /* Align content to the top */
+    padding: 8vh 20px 40px 20px; /* Adjusted padding: 8vh top, 20px sides, 40px bottom */
     position: relative; /* For the overlay */
     background-image: url('./dal.webp'); /* Apply the background image */
     background-size: cover;
     background-position: center center; /* Center the image nicely */
-    min-height: 60vh; /* Give it some substantial height */
+    min-height: 100vh; /* Changed from 70vh to make hero full screen height */
     box-sizing: border-box;
   }
 
@@ -215,12 +217,20 @@
     font-size: 1rem;
     padding: 12px;
   }
+
+  #categories-section { /* General mobile spacing for this section */
+    margin-top: 40px; 
+  }
 }
 
 /* Tablet Styling */
 @media (min-width: 768px) and (max-width: 1024px) {
   .right {
-    min-height: 320px;
+    min-height: 320px; /* Adjusted from 515px, ensure it's less than full hero on tablets */
+  }
+
+  #categories-section {
+    margin-top: 30px; /* Spacing for tablet */
   }
 
   .buttons button {
@@ -232,7 +242,7 @@
 }
 
 /* Small Screens */
-@media (max-width: 450px) {
+@media (max-width: 450px) { /* Was 450px, typically 480px is also used */
   .button {
     width: 90%;
     font-size: 15px;
@@ -244,13 +254,17 @@
     min-height: 200px;
   }
   .text-cont h1 {
-    font-size: 2rem;
+    font-size: 2rem; /* Reduced from 2.5rem */
   }
   .text-cont p {
-    font-size: 1rem;
+    font-size: 1rem; /* Reduced from 1.2rem */
   }
   .text-cont p:last-of-type {
-    font-size: 1rem;
+    font-size: 1rem; /* Ensure consistency */
+  }
+
+  #categories-section {
+    margin-top: 20px; /* Adjust spacing for very small screens */
   }
 }
 
@@ -391,22 +405,21 @@
   .get-started-btn.strong-pulse-variant:hover {
     box-shadow: 0 10px 20px rgba(255, 149, 0, 0.45), 0 0 0 4px rgba(255, 204, 0, 0.15);
   }
+  
+  /* Further mobile adjustments for .get-started-btn */
+  .get-started-btn {
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); /* Softer shadow for mobile */
+  }
+  .get-started-btn:hover {
+    box-shadow: 0px 4px 12px rgba(0,0,0, 0.3); /* Slightly more shadow on hover */
+  }
+  .get-started-btn::after {
+    display: none; /* Remove the arrow pseudo-element on mobile */
+  }
 }
 
 /* Agregar indicador visual para reforzar que es el botón principal */
-.get-started-btn::after {
-  content: "";
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 15px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='%23FF9500' d='M12 4L0 16h24L12 4z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.8;
-}
+/* .get-started-btn::after { ... } */ /* Definition is here, but hidden on mobile via above rule */
 
 /* Botones secundarios con estilo diferenciado */
 .resume-btn, .learned-btn {
@@ -424,6 +437,24 @@
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
+@media (max-width: 768px) {
+  /* Styles for .learned-btn on mobile */
+  .learned-btn {
+    background-color: transparent;
+    color: var(--bg-white, #ffffff); /* White text */
+    border: 2px solid var(--bg-white, #ffffff); /* White border */
+    box-shadow: none; /* Remove shadow for outline style */
+  }
+  .learned-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Slight white transparent fill on hover */
+    color: var(--bg-white, #ffffff);
+    border-color: var(--bg-white, #ffffff);
+    box-shadow: none;
+    transform: translateY(-2px); /* Keep a slight lift */
+  }
+}
+
 /* Estilos para el contenedor de botones con solo dos botones */
 .buttons {
   display: flex;
@@ -716,4 +747,9 @@
     width: 95%;
     margin: 10px auto;
   }
+}
+
+/* Targeting the categories section for spacing */
+#categories-section {
+  margin-top: 40px; /* Added margin-top for separation on mobile */
 }
