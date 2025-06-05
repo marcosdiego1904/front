@@ -98,6 +98,7 @@
     right: 0;
     z-index: 1000;
     box-shadow: var(--shadow-md);
+    /* Removed the erroneous '// ... existing code ...' line and restored common properties */
   }
   
   .progress-steps {
@@ -1290,79 +1291,6 @@
   
   /* When toggle is active (clicked), change its position */
   .navbar-toggle-btn.active {
-    top: 60px; /* Move it BELOW the navbar instead of just changing color */
-    left: 15px; /* Keep the same horizontal position */
-    background-color: #f0ad4e; /* Changed color when active */
-  }
-  
-  /* For smaller mobile screens, adjust position */
-  @media (max-width: 480px) {
-    .navbar-toggle-btn {
-      top: 12px;
-      left: 12px;
-      width: 36px;
-      height: 36px;
-      font-size: 18px;
-    }
-    
-    .navbar-toggle-btn.active {
-      top: 55px; /* Adjusted for smaller screens */
-    }
-  }
-  
-  /* Fix for navbar alignment and spacing */
-  .logo {
-    margin-left: 50px; /* Add left margin to the logo to avoid overlap with toggle */
-  }
-  
-  /* Make sure the navbar has enough height */
-  .navbar {
-    min-height: 50px;
-  }
-  
-  /* For very small screens */
-  @media (max-width: 320px) {
-    .navbar-toggle-btn {
-      top: 10px;
-      left: 10px;
-      width: 32px;
-      height: 32px;
-    }
-    
-    .navbar-toggle-btn.active {
-      top: 50px;
-    }
-    
-    .logo {
-      margin-left: 40px;
-      font-size: 24px; /* Reduce logo font size for very small screens */
-    }
-  }
-  /* Improved navbar toggle button positioning for mobile view */
-
-/* Default position of toggle button */
-.navbar-toggle-btn {
-    position: fixed;
-    top: 15px; /* Position it at the top of the screen */
-    left: 15px; /* Position it at the left of the screen */
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--accent-gold, #ffc107);
-    color: var(--primary-blue, #16223d);
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    z-index: 2000; /* Make sure it's above other elements */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-  }
-  
-  /* When toggle is active (clicked), change its position */
-  .navbar-toggle-btn.active {
     top: 15px; /* Keep it at the top */
     left: 15px; /* Keep the same horizontal position */
     background-color: #f0ad4e; /* Changed color when active */
@@ -1388,17 +1316,6 @@
   /* Fix for navbar alignment and spacing */
   .logo {
     margin-left: 50px; /* Add left margin to the logo to avoid overlap with toggle */
-  }
-  
-  /* Style for the open menu so links don't get covered by toggle */
-  .collapse.navbar-collapse.show {
-    padding-top: 50px; /* Add padding to the top of the opened menu */
-    z-index: 2000; /* Make sure it's below the toggle button */
-  }
-  
-  /* Add margin to nav items to ensure they don't get hidden under the toggle */
-  .navbar-nav {
-    margin-top: 10px;
   }
   
   /* Make sure the navbar has enough height */
@@ -1551,27 +1468,6 @@
       max-width: 180px; /* Even more constrained for tiny screens */
     }
   }
-  /* JavaScript necesario (para referencia):
-  document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.querySelector('.navbar-toggle-btn');
-    const sidebarMenu = document.querySelector('.sidebar-menu');
-    const overlay = document.querySelector('.menu-overlay');
-    
-    toggleBtn.addEventListener('click', function() {
-      toggleBtn.classList.toggle('active');
-      sidebarMenu.classList.toggle('active');
-      overlay.classList.toggle('active');
-      document.body.classList.toggle('menu-open');
-    });
-    
-    overlay.addEventListener('click', function() {
-      toggleBtn.classList.remove('active');
-      sidebarMenu.classList.remove('active');
-      overlay.classList.remove('active');
-      document.body.classList.remove('menu-open');
-    });
-  });
-  */
   /* BibleSearch.css */
 
 /* --- Estilos Base y Animaciones --- */
@@ -1592,16 +1488,16 @@
 
 /* --- Contenedor Principal --- */
 .bible-search-container {
-  max-width: 900px;
-  margin: 40px auto 0 auto; /* Reducido el margen superior para móviles */
-  padding: 1rem; /* Padding base para móviles */
+  max-width: 1100px; /* Aumentado para el layout de dos columnas */
+  margin: 40px auto 0 auto; 
+  padding: 1rem; 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* --- Encabezado --- */
 .search-header {
-  text-align: center;
-  margin-bottom: 2rem;
+  text-align: center; /* Reverted to center globally */
+  margin-bottom: var(--space-lg, 1.5rem); /* Reduced from --space-xl */
 }
 
 .search-header h1 {
@@ -1613,13 +1509,18 @@
 .search-header p {
   font-size: 1rem;
   color: #666;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0; /* Removed specific margin, parent handles spacing */
 }
 
 /* --- Selector de Traducción --- */
 .translation-selector {
-  margin-bottom: 1.5rem;
+  /* margin-bottom: var(--space-lg, 1.5rem); */ /* Original margin, now handled by parent or self if needed */
   text-align: center;
+  display: flex; /* Added to arrange label, select, and info button */
+  align-items: center; /* Vertically align items in the row */
+  gap: var(--space-sm, 0.5rem); /* Space between label, select, info button */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: center; /* Center items if they wrap or in general */
 }
 
 .translation-selector label {
@@ -1650,7 +1551,7 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg, 1.5rem); /* Standardized */
 }
 
 .search-input-field {
@@ -1690,7 +1591,7 @@
   border-left: 4px solid #f44336;
   border-radius: 8px;
   color: #d32f2f;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg, 1.5rem); /* Standardized */
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -1701,7 +1602,7 @@
   text-align: center;
   background-color: #f8f9fa;
   border-radius: 12px;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg, 1.5rem); /* Standardized */
   border: 2px solid #ffc107;
 }
 
@@ -1728,7 +1629,7 @@
   border-radius: 15px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.15);
   overflow: hidden;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl, 2rem); /* Standardized */
   border: 3px solid #ffc107;
   animation: slideInFromTop 0.5s ease;
 }
@@ -1763,7 +1664,7 @@
   font-style: italic;
   line-height: 1.8;
   color: #16223d;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg, 1.5rem); /* Standardized */
   padding: 1.5rem;
   background-color: #f8f9fa;
   border-left: 5px solid #ffc107;
@@ -1817,17 +1718,17 @@
 
 /* --- Versículos de Ejemplo --- */
 .examples-section {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl, 2rem); /* Standardized */
 }
 .examples-section h3 {
   text-align: center;
   color: #16223d;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg, 1.5rem); /* Standardized */
 }
 .example-category h4 {
   color: #ffc107;
   font-size: 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-md, 1rem); /* Standardized */
   text-align: center;
 }
 .example-buttons {
@@ -1865,7 +1766,7 @@
 .instructions-section h3 {
   color: #16223d;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg, 1.5rem); /* Standardized */
 }
 .instructions-grid {
   display: grid;
@@ -1892,12 +1793,199 @@
   color: #16223d;
 }
 
+/* === START: Styles for TranslationInfo Component === */
+.translation-info-container {
+  /* margin: var(--space-md, 1rem) 0; */ 
+  padding: var(--space-md, 1rem);
+  background-color: var(--bg-light, #f8f9fa); /* Default background for mobile */
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid #e9ecef; /* Default border for mobile */
+  width: 100%; 
+  max-width: 450px; /* Default max-width, mainly for mobile when stacked */
+  box-sizing: border-box;
+}
+
+/* Styles for when TranslationInfo container is directly inside .translation-selector */
+.translation-selector > .translation-info-container {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  width: auto; 
+  max-width: none;
+  flex-shrink: 0; 
+  position: relative; /* This was already here and is correct */
+}
+
+.translation-info-toggle-btn {
+  /* General styles for the NEW icon button look, replacing previous text toggle styles */
+  background-color: transparent;
+  border: 1px solid var(--primary-blue-light, #243659); 
+  color: var(--primary-blue, #16223d);
+  width: 28px; 
+  height: 28px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: var(--font-size-sm, 0.875rem); /* Size of 'i' */
+  font-weight: bold;
+  /* line-height: 26px; /* Adjust for vertical centering of 'i', often auto with flex */
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex; /* For better centering of the 'i' */
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0; 
+  transition: background-color var(--transition-fast, 0.2s);
+}
+
+.translation-info-toggle-btn:hover {
+  background-color: var(--bg-highlight, rgba(0, 123, 255, 0.1));
+}
+
+/* Remove or ensure the old :hover for the text button doesn't conflict if it had underline etc. */
+/* The .translation-info-arrow class is no longer used in the button */
+
+.translation-info-details-wrapper {
+  /* Default styles, will be overridden for absolute positioning below */
+  margin-top: var(--space-md, 1rem);
+  padding: var(--space-md, 1rem);
+  background-color: var(--bg-white, white);
+  border-radius: var(--radius-sm, 6px);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Enhanced styles for when details wrapper is part of the inline info button */
+.translation-selector > .translation-info-container .translation-info-details-wrapper {
+  position: absolute;
+  top: calc(100% + var(--space-xs, 4px)); /* Position below the button with a small gap */
+  left: 50%; /* Start from center of the button container */
+  transform: translateX(-50%); /* Center it under the button */
+  width: 340px; /* Define a specific width for the popup */
+  max-width: calc(100vw - 32px); /* Ensure it doesn't overflow viewport */
+  background-color: var(--bg-white, white);
+  border: 1px solid var(--primary-blue-light, #ccc); /* Softer border for popup */
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-xl, 0 10px 20px rgba(0,0,0,0.2)); /* More prominent shadow for popup */
+  padding: var(--space-lg, 1.5rem); /* Generous padding inside */
+  z-index: 100; /* Ensure it's above other elements */
+  margin-top: 0; /* Override default margin-top */
+  /* Consider adding max-height and overflow-y: auto if content can be very long */
+  /* max-height: 70vh; */
+  /* overflow-y: auto; */
+}
+
+/* Optional: Add a small triangle/caret pointing to the button */
+.translation-selector > .translation-info-container .translation-info-details-wrapper::before {
+  content: '';
+  position: absolute;
+  bottom: 100%; /* Positioned at the top of the panel */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent var(--bg-white, white) transparent;
+  /* This creates a triangle pointing upwards. Adjust border-color for the border version */
+  /* border-color: transparent transparent var(--primary-blue-light, #ccc) transparent; */
+}
+
+.translation-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjusted minmax */
+  gap: var(--space-md, 1rem);
+  color: var(--text-medium, #666);
+}
+
+.translation-info-grid strong {
+  color: var(--text-dark, #16223d);
+}
+
+.translation-info-section {
+  margin-top: var(--space-md, 1rem);
+  color: var(--text-medium, #666);
+}
+
+.translation-info-section strong {
+  color: var(--text-dark, #16223d);
+}
+
+.translation-info-subsection {
+  margin-bottom: var(--space-md, 0.75rem); /* approx value */
+}
+
+.translation-info-description-box {
+  padding: var(--space-sm, 0.75rem);
+  background-color: #e7f3ff; /* Specific color, consider a variable if used elsewhere */
+  border-left: 4px solid var(--accent-blue, #007bff);
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--font-size-sm, 0.9rem);
+  margin-bottom: var(--space-md, 1rem);
+}
+
+.translation-info-description-box strong {
+  color: var(--accent-blue-dark, #0056b3);
+}
+
+.translation-info-features-list {
+  margin: var(--space-sm, 0.5rem) 0;
+  padding-left: var(--space-lg, 1.5rem);
+  font-size: var(--font-size-sm, 0.9rem);
+  list-style-position: outside;
+}
+
+.translation-info-features-list li {
+  margin-bottom: var(--space-xs, 0.25rem);
+}
+
+.translation-info-specific-note {
+  margin-top: var(--space-md, 1rem);
+  padding: var(--space-sm, 0.75rem);
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--font-size-xs, 0.85rem); /* approx value */
+}
+
+.translation-info-specific-note.kjv-note {
+  background-color: #fff8e1;
+  border-left: 4px solid #ffc107; /* var(--accent-orange) */
+}
+.translation-info-specific-note.kjv-note strong {
+  color: #856404; /* Dark yellow/brown */
+}
+
+.translation-info-specific-note.web-note {
+  background-color: #e8f5e8;
+  border-left: 4px solid var(--accent-green, #28a745);
+}
+.translation-info-specific-note.web-note strong {
+  color: var(--accent-green-dark, #155724);
+}
+
+.translation-info-specific-note.asv-note {
+  background-color: #f3e5f5;
+  border-left: 4px solid #6f42c1; /* Purple, consider a variable */
+}
+.translation-info-specific-note.asv-note strong {
+  color: #493057; /* Dark purple */
+}
+
+.translation-info-powered-by {
+  margin-top: var(--space-md, 1rem);
+  padding: var(--space-sm, 0.75rem);
+  background-color: #fff3cd; /* Light yellow, var related to accent-orange? */
+  border-left: 4px solid #ffc107; /* var(--accent-orange) */
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--font-size-xs, 0.85rem);
+}
+
+.translation-info-powered-by strong {
+  color: #856404; /* Dark yellow/brown */
+}
+/* === END: Styles for TranslationInfo Component === */
 
 /* --- Media Query para Tablets (768px y más) --- */
 @media (min-width: 768px) {
   .bible-search-container {
     padding: 2rem;
-    margin-top: 60px;
+    margin-top: 60px; 
   }
   .search-header h1 {
     font-size: 2.5rem;
@@ -1905,6 +1993,46 @@
   .search-header p {
     font-size: 1.2rem;
   }
+
+  .translation-selection-section {
+    flex-direction: row; 
+    justify-content: center; 
+    align-items: center; 
+    gap: var(--space-sm, 0.5rem); 
+    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem); 
+    margin-bottom: var(--space-md, 1rem); 
+  }
+
+  /* Remove the old specific styling for .translation-info-container and .translation-info-toggle-btn 
+     when they were direct children of .translation-selection-section and the toggle was text-based. 
+     The new global styles for these elements should now apply correctly. */
+
+  /* .translation-selection-section > .translation-selector { */
+     /* flex-shrink: 0; This was when .translation-selector was simpler, may not be needed now */
+  /* } */
+  
+  /* OLD styles that are being replaced by the global icon button style: */
+  /* .translation-info-container { ... old desktop subtle styles ... } */
+  /* .translation-info-toggle-btn { ... old desktop subtle styles for text button ... } */
+
+  .translation-selector {
+    /* On desktop, ensure it doesn't take full width if not needed */
+    /* width: auto; /* Let it size by content */
+    /* justify-content: flex-start; /* Align label/select/icon to the start if preferred over center */
+  }
+
+  .translation-select {
+    width: auto; /* Let it shrink to content if less than max-width */
+    min-width: 280px; /* Ensure it has a decent minimum width */
+  }
+
+  .search-input-group {
+    max-width: 700px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    margin-bottom: var(--space-md, 1rem); /* Reduced margin-bottom */
+  }
+
   .verse-card-actions {
     flex-direction: row; /* Botones en fila */
   }
@@ -1931,3 +2059,253 @@
     font-size: 1.4rem;
   }
 }
+
+/* === START: Styles moved from BibleSearch/index.tsx === */
+
+/* Styles for .translation-selection-section from inline - merging with existing if any */
+.translation-selection-section {
+  margin-bottom: var(--space-lg, 1.5rem); 
+  padding: 1rem;
+  background-color: #f8f9fa; /* var(--bg-light) */
+  border-radius: 8px; /* var(--radius-md) */
+  border: 1px solid #e9ecef;
+  /* Base mobile will be column, centered by default from previous flex settings if any */
+  /* Or ensure they stack and center by default for mobile */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md, 1rem);
+}
+
+/* Styles for .translation-selector from inline - merging */
+.translation-selector {
+  margin-bottom: 1rem; /* This was var(--space-md) */
+  /* width: auto; and margin-bottom: 0; were set for >=768px */
+}
+
+.translation-selector label {
+  display: block;
+  margin-bottom: 0.5rem; /* var(--space-sm) */
+  font-weight: 600; /* Consider var(--font-weight-bold) if defined */
+  color: #16223d; /* var(--primary-blue) or var(--text-dark) */
+}
+
+/* Styles for .translation-dropdown from inline - merging with .translation-select */
+.translation-dropdown, .translation-select { /* Merging .translation-dropdown into .translation-select */
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da; /* Softer border than the original .translation-select's theme border */
+  border-radius: 6px; /* var(--radius-sm) or slightly less than --radius-md */
+  font-size: 1rem; /* var(--font-size-md) */
+  background-color: white; /* var(--bg-white) */
+  color: #495057; /* Consider var(--text-medium) */
+  cursor: pointer;
+  transition: border-color 0.2s ease; /* var(--transition-fast) */
+  /* max-width: 350px; was on .translation-select */
+  /* min-width: 280px; and width: auto; were for >=768px on .translation-select */
+}
+
+.translation-dropdown:focus, .translation-select:focus {
+  outline: none;
+  border-color: #ffc107; /* var(--accent-orange) or a focus color variable */
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2); /* Consider a focus shadow variable */
+}
+
+/* Styles for .current-translation-display from inline (JSX for this was commented out) */
+.current-translation-display {
+  margin-bottom: 1rem; /* var(--space-md) */
+}
+
+.translation-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem; /* Consider var(--space-sm) or var(--space-xs) */
+  padding: 0.75rem 1rem;
+  background-color: #16223d; /* var(--primary-blue) */
+  color: white; /* var(--bg-white) */
+  border-radius: 8px; /* var(--radius-md) */
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.translation-icon {
+  font-size: 1.5rem; /* var(--font-size-xl) */
+}
+
+.translation-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.translation-name {
+  font-weight: 600;
+  font-size: 1rem; /* var(--font-size-md) */
+}
+
+.translation-abbr {
+  font-size: 0.8rem; /* ~var(--font-size-xs) */
+  opacity: 0.8;
+}
+
+/* Styles for .verse-card-header from inline (modifying existing) */
+.verse-card-header {
+  /* existing styles: 
+    background: linear-gradient(135deg, #16223d 0%, #2a3a5c 100%);
+    color: white;
+    padding: 1.5rem; (2rem for >=1024px)
+    text-align: center;
+  */
+  display: flex; /* Added from inline */
+  flex-direction: column; /* Added from inline */
+  gap: 0.5rem; /* Added from inline, consider var(--space-sm) */
+}
+
+/* Styles for .translation-used from inline */
+.translation-used {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Consider var(--space-sm) */
+}
+
+.translation-label {
+  background-color: #ffc107; /* var(--accent-orange) */
+  color: #16223d; /* var(--primary-blue) */
+  padding: 0.25rem 0.5rem; /* var(--space-xs) var(--space-sm) */
+  border-radius: 4px; /* var(--radius-sm) */
+  font-size: 0.8rem; /* ~var(--font-size-xs) */
+  font-weight: 600;
+}
+
+.translation-status {
+  background-color: #28a745; /* var(--accent-green) */
+  color: white; /* var(--bg-white) */
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px; /* var(--radius-sm) */
+  font-size: 0.7rem; /* < var(--font-size-xs) */
+  font-weight: 500;
+}
+
+/* Media query from inline styles */
+@media (max-width: 768px) {
+  .translation-badge { /* This specific rule for max-width: 768px */
+    flex-direction: column;
+    gap: 0.5rem; /* var(--space-sm) */
+    text-align: center;
+  }
+  
+  .translation-details { /* This specific rule for max-width: 768px */
+    text-align: center;
+  }
+}
+/* Note: The media query @media (min-width: 768px) from the inline styles that targeted 
+   .translation-selection-section, .translation-selector, .translation-select, .search-input-group 
+   was already present in the global CSS with similar or identical rules. 
+   I've ensured those are covered by the existing global media query.
+*/
+/* === END: Styles moved from BibleSearch/index.tsx === */
+
+/* === START: BibleSearch Two-Column Layout Styles === */
+.bible-search-layout-main {
+  /* Mobile first: default to single column */
+}
+
+.search-controls-column {
+  /* Styles for the left column (search header, translation, search bar) */
+  margin-bottom: var(--space-lg, 1.5rem); /* Space before results on mobile */
+}
+
+.search-results-column {
+  /* Styles for the right column (verse card, loading, error) */
+  min-height: 300px; /* Ensure it has some height even when empty initially */
+}
+
+@media (min-width: 992px) { /* Breakpoint for desktop layout */
+  .bible-search-layout-main {
+    display: flex;
+    gap: var(--space-xxl, 2.5rem); 
+    align-items: flex-start; 
+  }
+
+  .search-controls-column {
+    flex: 0 0 380px; /* Ligero aumento de base, sin max-width por ahora */
+    margin-bottom: 0; 
+    display: flex; /* Para usar gap para espaciado interno */
+    flex-direction: column;
+    gap: var(--space-xl, 2rem); /* Espacio entre grupos de controles y secciones de abajo */
+  }
+
+  .search-controls-column .search-header {
+    text-align: left; 
+  }
+  
+  .search-controls-column .translation-selection-section {
+    background-color: transparent; 
+    border: none; 
+    padding: 0; 
+    /* Los hijos directos de translation-selection-section (como translation-selector)
+       ya usan flex y gap, así que el espaciado interno debería estar bien. 
+       Aseguramos que la sección en sí no tenga márgenes que interfieran con el gap de la columna. */
+    margin-bottom: 0; /* Eliminar si tenía alguno por defecto */
+  }
+  
+  .search-controls-column .translation-selector {
+    justify-content: flex-start; 
+  }
+
+  /* Ajustar el input group para que no tenga margen inferior si el gap de la columna ya lo maneja */
+  .search-controls-column .search-input-group {
+    margin-bottom: 0;
+  }
+
+  .search-controls-column .examples-section,
+  .search-controls-column .instructions-section {
+    width: 100%; /* Ocupan todo el ancho de la columna de controles */
+    margin-bottom: 0; /* El gap de la columna maneja el espaciado */
+    /* Considerar si necesitan un fondo/borde para separarse visualmente 
+       de los controles de arriba si el gap no es suficiente distinción */
+    /* background-color: var(--bg-light); */
+    /* border-radius: var(--radius-md); */
+    /* padding: var(--space-md); */
+  }
+
+  .search-results-column {
+    flex: 1; /* Toma el espacio restante, crecerá más que la columna de controles */
+    display: flex; 
+    flex-direction: column;
+    /* gap: var(--space-xl, 2rem); /* Eliminado ya que solo tendrá un hijo principal (verse-card, loading o error) */
+  }
+
+  .search-results-column .verse-card {
+    margin-top: 0; 
+    width: 100%;
+    box-shadow: var(--shadow-lg, 0 8px 16px rgba(0,0,0,0.15)); /* Sombra más prominente */
+  }
+
+  .search-results-column .loading-indicator,
+  .search-results-column .error-message {
+    margin-top: 0;
+  }
+  
+  .search-results-column .examples-section,
+  .search-results-column .instructions-section {
+    margin-bottom: 0; /* Eliminar margen inferior si lo tenían */
+    /* Considerar si necesitan un fondo/borde o si se integran bien sin él */
+  }
+
+  /* Styles for examples-section when it is in the results column */
+  .search-results-column .examples-section {
+    width: 100%;
+    margin-top: 0; /* Align with top if it's the first/only item */
+    margin-bottom: 0; /* Reset default bottom margin */
+    /* If it needs a card-like appearance in this context, uncomment below */
+    /* background-color: var(--bg-white, white); */
+    /* padding: var(--space-lg, 1.5rem); */
+    /* border-radius: var(--radius-xl, 15px); */
+    /* box-shadow: var(--shadow-md, 0 4px 8px rgba(0,0,0,0.12)); */
+  }
+
+}
+/* === END: BibleSearch Two-Column Layout Styles === */

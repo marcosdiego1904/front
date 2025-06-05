@@ -1,5 +1,5 @@
 // src/services/bibleApi.ts
-// bible-api.com implementation with KJV only
+// bible-api.com implementation with KJV, WEB, and ASV
 
 export interface BibleTranslation {
   id: string;
@@ -7,6 +7,11 @@ export interface BibleTranslation {
   fullName: string;
   apiSource: 'bible-api';
   description: string;
+  readingLevel: string;
+  approach: string;
+  bestFor: string;
+  year: string;
+  features: string[];
 }
 
 export interface BibleApiResponse {
@@ -37,21 +42,68 @@ class BibleApiService {
   // ✅ Base URL for bible-api.com
   private readonly BASE_URL = 'https://bible-api.com';
 
-  // ✅ Only KJV translation available
+  // ✅ Multiple translations available (con identificadores corregidos)
   private translations: BibleTranslation[] = [
     {
       id: 'kjv',
       name: 'KJV',
       fullName: 'King James Version',
       apiSource: 'bible-api',
-      description: 'The classic King James Version from 1611, featuring traditional English and time-tested language.'
+      description: 'The classic King James Version from 1611, featuring traditional English and time-tested language.',
+      readingLevel: 'Grade 12+ (Advanced)',
+      approach: 'Formal equivalence (Word-for-word translation)',
+      bestFor: 'Traditional worship, literary study, memorization, theological study',
+      year: '1611 (last major revision 1769)',
+      features: [
+        'Most widely memorized translation in history',
+        'Beautiful, poetic language with theological precision',
+        'Time-tested accuracy and reliability',
+        'Rich vocabulary that enhances understanding',
+        'Preferred by many churches and theologians'
+      ]
+    },
+    {
+      id: 'web',
+      name: 'WEB',
+      fullName: 'World English Bible',
+      apiSource: 'bible-api',
+      description: 'A modern, easy-to-read translation that maintains accuracy while using contemporary English.',
+      readingLevel: 'Grade 8-10 (Intermediate)',
+      approach: 'Formal equivalence with modern language',
+      bestFor: 'Daily reading, new Christians, modern worship, general study',
+      year: '2000 (ongoing updates)',
+      features: [
+        'Public domain - completely free to use',
+        'Modern English that\'s easy to understand',
+        'Accurate translation from original languages',
+        'Great for new believers and casual reading',
+        'No copyright restrictions'
+      ]
+    },
+    {
+      id: 'asv',
+      name: 'ASV',
+      fullName: 'American Standard Version',
+      apiSource: 'bible-api',
+      description: 'A precise, scholarly translation known for its literal accuracy and attention to detail.',
+      readingLevel: 'Grade 11-12 (Advanced)',
+      approach: 'Formal equivalence (Very literal translation)',
+      bestFor: 'Serious Bible study, theological research, comparison studies',
+      year: '1901',
+      features: [
+        'Extremely literal and precise translation',
+        'Preferred by Bible scholars and seminaries',
+        'Excellent for cross-referencing and word studies',
+        'Foundation for many modern translations',
+        'Maintains original text structure'
+      ]
     }
   ];
 
   private defaultTranslation = 'kjv';
 
   /**
-   * Obtiene todas las traducciones disponibles (solo KJV)
+   * Obtiene todas las traducciones disponibles
    */
   getAvailableTranslations(): BibleTranslation[] {
     return this.translations;
@@ -61,11 +113,18 @@ class BibleApiService {
    * Obtiene la traducción predeterminada (KJV)
    */
   getDefaultTranslation(): BibleTranslation {
-    return this.translations[0];
+    return this.translations.find(t => t.id === this.defaultTranslation) || this.translations[0];
   }
 
   /**
-   * Busca un versículo usando bible-api.com (siempre KJV)
+   * Obtiene una traducción específica por ID
+   */
+  getTranslationById(translationId: string): BibleTranslation | null {
+    return this.translations.find(t => t.id === translationId) || null;
+  }
+
+  /**
+   * Busca un versículo usando bible-api.com
    */
   async searchVerse(reference: string, translationId: string = this.defaultTranslation): Promise<SearchedVerse> {
     try {
@@ -109,9 +168,20 @@ class BibleApiService {
   private async searchWithBibleApi(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
     // bible-api.com acepta referencias como "john+3:16" o "john 3:16"
     const encodedReference = encodeURIComponent(reference);
-    const url = `${this.BASE_URL}/${encodedReference}?translation=kjv`;
+    
+    // Para WEB (World English Bible), la API usa 'web' pero si no especificas nada, usa WEB por defecto
+    // Para ASV (American Standard Version), la API usa 'asv'  
+    // Para KJV (King James Version), la API usa 'kjv'
+    let apiTranslationParam = '';
+    if (translation.id !== 'web') {
+      // Solo agregamos parámetro si NO es WEB (que es el default)
+      apiTranslationParam = `?translation=${translation.id}`;
+    }
+    
+    const url = `${this.BASE_URL}/${encodedReference}${apiTranslationParam}`;
     
     console.log('🌐 Bible API URL:', url);
+    console.log('🔍 Requested translation:', translation.name, `(${translation.id})`);
     
     const response = await fetch(url, {
       method: 'GET',
@@ -131,6 +201,7 @@ class BibleApiService {
     const data: BibleApiResponse = await response.json();
     
     console.log('📋 Bible API Response:', data);
+    console.log('📖 Translation returned by API:', data.translation_name || 'Not specified');
     
     if (!data.text && (!data.verses || data.verses.length === 0)) {
       throw new Error('No verse found for this reference. Please check the format.');
@@ -168,8 +239,14 @@ class BibleApiService {
       }
     }
 
-    // Construir contexto informativo
+    // Construir contexto informativo con información de la API
     let contextInfo = `${translation.fullName}`;
+    
+    // Agregar información de la traducción real devuelta por la API si está disponible
+    if (data.translation_name && data.translation_name !== translation.fullName) {
+      contextInfo += ` (API returned: ${data.translation_name})`;
+    }
+    
     if (data.verses && data.verses.length > 0) {
       const book = data.verses[0].book_name;
       contextInfo += ` - Book: ${book}`;
@@ -271,17 +348,17 @@ class BibleApiService {
   }
 
   /**
-   * Obtiene información sobre la traducción KJV
+   * Obtiene información sobre una traducción específica
    */
-  getTranslationInfo(translationId: string = 'kjv'): BibleTranslation | null {
-    return this.translations[0]; // Solo KJV disponible
+  getTranslationInfo(translationId: string): BibleTranslation | null {
+    return this.translations.find(t => t.id === translationId) || null;
   }
 
   /**
-   * Método debug temporal (no necesario para bible-api.com)
+   * Método debug para ver todas las traducciones disponibles
    */
   async debugGetAllBibles() {
-    console.log('🔍 Available translation: King James Version (KJV) only');
+    console.log('🔍 Available translations:', this.translations.map(t => `${t.name} (${t.id})`));
     console.log('📖 API Source: bible-api.com');
     return this.translations;
   }
