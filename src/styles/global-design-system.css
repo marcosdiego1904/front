@@ -12,7 +12,7 @@
 
 .home-category-highlights-section {
   width: 100%;
-  // ... existing code ...
+  /* ... existing code ... */
 }
 
 /* ========= HARMONIZED DESIGN SYSTEM =========
@@ -98,7 +98,6 @@
     right: 0;
     z-index: 1000;
     box-shadow: var(--shadow-md);
-    /* Removed the erroneous '// ... existing code ...' line and restored common properties */
   }
   
   .progress-steps {
@@ -289,13 +288,13 @@
   .intro-section {
     background-color: var(--bg-white);
     width: 90%;
-    max-width: 1100px;
+    max-width: 900px; /* Refined for better readability */
     border-radius: var(--radius-xl);
-    padding: var(--space-lg) var(--space-xl); /* Reduced padding */
+    padding: var(--space-xl); /* Consistent padding */
     box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-md); /* Adjusted gap for better flow */
     text-align: center;
     position: relative;
   }
@@ -320,10 +319,10 @@
   /* Common citation style */
   .cite,
   .verse-citation {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-xxl);
     font-weight: bold;
     color: var(--primary-blue);
-    margin: var(--space-md) 0;
+    margin: 0; /* Let the container gap handle spacing */
   }
   
   /* Common verse style */
@@ -334,9 +333,25 @@
     border-left: 5px solid var(--accent-blue);
     background-color: var(--bg-highlight);
     border-radius: var(--radius-md);
-    margin: var(--space-md) auto;
-    max-width: 90%;
+    margin: 0;
+    max-width: 85%; /* Constrain width for readability on long verses */
     line-height: 1.6;
+    display: inline-block; /* Allow the container to shrink-to-fit content */
+    text-align: left; /* Better for reading blocks of text */
+  }
+  
+  .verse-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .context {
+    font-size: var(--font-size-md);
+    color: var(--text-medium);
+    line-height: 1.5;
+    max-width: 85%;
+    margin: 0 auto; /* Center the context text */
   }
   
   /* Common verse part style */
@@ -919,9 +934,9 @@
   /* ========= INTRO SECTION ========= */
   .header {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Align return button to the left */
     width: 100%;
-    margin-bottom: var(--space-md);
+    margin-bottom: 0; /* Remove margin as gap will handle it */
   }
   
   .return-button {
@@ -1349,10 +1364,28 @@
     /* Improve content container size and padding */
     .intro-section {
       width: 90%;
-      padding: var(--space-md);
-      max-width: 500px;
+      padding: var(--space-lg);
+      gap: var(--space-md); /* Tighter gap for mobile */
+      text-align: left;
     }
     
+    .return-button {
+      padding: 8px 14px;
+      font-size: var(--font-size-xs);
+    }
+    
+    .cite {
+      font-size: var(--font-size-lg); /* Reduced from xl for better harmony */
+    }
+    
+    .context {
+      font-size: var(--font-size-sm);
+    }
+    
+    .verse, .context {
+      max-width: 95%; /* More width on smaller screens */
+    }
+
     /* Fix button group layout */
     .button-group {
       flex-direction: column;
@@ -1385,7 +1418,28 @@
   @media (max-width: 480px) {
     .intro-section {
       width: 92%;
-      padding: var(--space-sm) var(--space-md);
+      padding: var(--space-md);
+      gap: var(--space-sm); /* Even tighter spacing for small screens */
+    }
+
+    .return-button {
+      padding: 6px 12px;
+      font-size: var(--font-size-xs); /* Corrected from lg */
+    }
+
+    .cite {
+      font-size: var(--font-size-md); /* Reduced from lg */
+    }
+    
+    .context {
+      font-size: var(--font-size-xs);
+      margin-top: 0; /* Remove top margin to tighten space */
+    }
+    
+    .start-learning-btn {
+      padding: 12px 20px;
+      font-size: var(--font-size-sm);
+      margin: var(--space-sm) auto;
     }
     
     .button-group {
@@ -1408,7 +1462,7 @@
     }
     
     .verse, .verse-part, .verse-fragment {
-      font-size: var(--font-size-md);
+      font-size: var(--font-size-sm); /* Adjusted from md for very small screens */
       padding: var(--space-sm);
     }
   }
@@ -1795,7 +1849,7 @@
 
 /* === START: Styles for TranslationInfo Component === */
 .translation-info-container {
-  /* margin: var(--space-md, 1rem) 0; */ 
+  /* margin: var(--space-md, 1rem) 0; 
   padding: var(--space-md, 1rem);
   background-color: var(--bg-light, #f8f9fa); /* Default background for mobile */
   border-radius: var(--radius-md, 8px);
