@@ -239,29 +239,30 @@ class BibleApiService {
       }
     }
 
-    // Construir contexto informativo con información de la API
-    let contextInfo = `${translation.fullName}`;
+    // The context string is no longer needed as the translation is displayed separately.
+    // let contextInfo = `${translation.fullName}`;
     
-    // Agregar información de la traducción real devuelta por la API si está disponible
-    if (data.translation_name && data.translation_name !== translation.fullName) {
-      contextInfo += ` (API returned: ${data.translation_name})`;
-    }
+    // if (data.translation_name && data.translation_name !== translation.fullName) {
+    //   contextInfo += ` (API returned: ${data.translation_name})`;
+    // }
     
-    if (data.verses && data.verses.length > 0) {
-      const book = data.verses[0].book_name;
-      contextInfo += ` - Book: ${book}`;
+    // if (data.verses && data.verses.length > 0) {
+    //   const bookName = data.verses[0].book_name;
+    //   const uniqueBooks = [...new Set(data.verses.map(v => v.book_name))];
       
-      if (data.verses.length > 1) {
-        contextInfo += ` (${data.verses.length} verses)`;
-      }
-    }
+    //   if (uniqueBooks.length === 1) {
+    //     contextInfo += ` - Book: ${bookName}`;
+    //   } else {
+    //     contextInfo += ` - Books: ${uniqueBooks.join(', ')}`;
+    //   }
+    // }
     
     return {
       id: bibleSearchId,
-      verse_reference: verseReference || 'Unknown Reference',
-      text_nlt: verseText || 'No text available',
-      context_nlt: contextInfo,
-      translation: translation
+      verse_reference: verseReference.trim(),
+      text_nlt: verseText.replace(/(\r\n|\n|\r)/gm, " ").trim(),
+      context_nlt: '', // Set to empty string to avoid displaying extra info
+      translation: translation,
     };
   }
 

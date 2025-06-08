@@ -42,12 +42,12 @@
 
 /* --- Formulario de Búsqueda (Styles from global-design-system.css for BibleSearch) --- */
 .search-input-group {
+  position: relative;
   display: flex;
   align-items: center;
   background-color: white; /* Hardcoded from global-design-system.css */
   border: 2px solid #ffc107; /* Hardcoded from global-design-system.css */
   border-radius: 12px; /* Hardcoded from global-design-system.css */
-  overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Hardcoded from global-design-system.css */
   margin-bottom: 1.5rem; /* Hardcoded from global-design-system.css */
   width: 100%; /* Added to make it try to fill available width */
@@ -58,10 +58,12 @@
 }
 
 .search-input-field {
-  flex: 1;
+  flex-grow: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
   padding: 1rem 1.25rem; /* Hardcoded from global-design-system.css */
   font-size: 1rem; /* Hardcoded from global-design-system.css */
-  border: none;
   outline: none;
   background-color: transparent;
   min-width: 0; 
@@ -73,7 +75,120 @@
   font-style: italic;
 }
 
+/* --- New styles for relocated translation selector --- */
+.hch-translation-selection-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative; /* For the dropdown */
+}
+
+.hch-translation-selection-area label {
+  font-size: 0.95rem;
+  color: var(--text-medium, #444);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.hch-translation-selector-container {
+  position: relative; /* Dropdown will be positioned relative to this */
+  width: 100%;
+  max-width: 400px; /* Or a width that suits the design */
+}
+
+.hch-translation-selector-toggle {
+  width: 100%;
+  height: auto;
+  padding: 12px 16px;
+  background-color: var(--bg-white, #ffffff);
+  border: 1px solid #ced4da;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  color: #495057;
+  text-align: left;
+}
+
+.hch-translation-selector-toggle:hover {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.hch-arrow {
+  border: solid #495057;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.hch-arrow.down {
+  transform: rotate(45deg);
+}
+
+.hch-arrow.up {
+  transform: rotate(-135deg);
+}
+
+.hch-translation-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  z-index: 1000;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.hch-translation-option {
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  border-bottom: 1px solid #f1f3f5;
+  font-size: 0.95rem;
+}
+
+.hch-translation-option:last-child {
+  border-bottom: none;
+}
+
+.hch-translation-option:hover {
+  background-color: #e9ecef; /* A more prominent hover color */
+}
+
+.hch-translation-option.active {
+  background-color: #e7f5ff;
+  color: #1971c2;
+  font-weight: 500;
+}
+
+.hch-translation-option strong {
+  font-weight: 700;
+  color: #343a40;
+  margin-right: 8px;
+}
+
+.hch-translation-option.active strong {
+  color: inherit;
+}
+
+/* --- End of new styles --- */
+
 .search-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   padding: 1rem 1.5rem; /* Hardcoded from global-design-system.css */
   background-color: #ffc107; /* Hardcoded from global-design-system.css */
   color: #16223d; /* Hardcoded from global-design-system.css */
@@ -122,15 +237,19 @@
 }
 
 .hch-main-searched-verse-display .hch-verse-text {
-  font-size: 1.2rem; /* Larger verse text */
-  color: var(--text-dark, #16223d);
-  line-height: 1.7;
-  margin-bottom: 25px;
-  padding: 20px;
-  background-color: var(--bg-light, #f8f9fa);
-  border-radius: var(--radius-md, 8px);
-  border-left: 4px solid var(--accent-blue-light, #4da3ff);
-  text-align: left;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+  color: #333;
+}
+
+.hch-verse-translation-note {
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-align: right;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  font-style: italic;
 }
 
 .hch-main-searched-actions {
@@ -330,8 +449,8 @@
 }
 
 .hch-error-message.main-search-error {
-  margin-top: -15px;
-  margin-bottom: 25px;
+  text-align: center;
+  margin-top: 1rem;
 }
 
 .hch-error-message.example-fetch-error {

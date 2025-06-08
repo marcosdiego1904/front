@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Assuming bibleApiService is correctly set up and can be imported
-import bibleApiService, { SearchedVerse } from '../services/bibleApi'; 
+import bibleApiService, { SearchedVerse, BibleTranslation } from '../services/bibleApi'; 
 import './HomeCategoryHighlights.css';
 interface VerseToLearn {
   id: number; // Or string, depending on what your /learn page expects
@@ -49,6 +49,7 @@ const PREDEFINED_CATEGORIES: CategoryHighlight[] = [
 
 const HomeCategoryHighlights: React.FC = () => {
   const navigate = useNavigate();
+  const translationSelectorRef = useRef<HTMLDivElement>(null);
 
   // State for the main search bar
   const [mainSearchInput, setMainSearchInput] = useState('');
@@ -59,6 +60,11 @@ const HomeCategoryHighlights: React.FC = () => {
   // State for fetching details when clicking an example reference
   const [fetchingExampleVerseDetailsRef, setFetchingExampleVerseDetailsRef] = useState<string | null>(null);
   const [exampleVerseFetchError, setExampleVerseFetchError] = useState<string | null>(null);
+  
+  // State for translation selection
+  const [translations] = useState<BibleTranslation[]>(bibleApiService.getAvailableTranslations());
+  const [selectedTranslation, setSelectedTranslation] = useState<string>(bibleApiService.getDefaultTranslation().id);
+  const [isTranslationSelectorOpen, setIsTranslationSelectorOpen] = useState(false);
 
   // State for the new Interactive Topic Explorer
   const [activeCategoryName, setActiveCategoryName] = useState<string>(PREDEFINED_CATEGORIES[0]?.name || '');
@@ -77,7 +83,7 @@ const HomeCategoryHighlights: React.FC = () => {
     setExampleVerseFetchError(null); // Clear errors from example clicks
 
     try {
-      const verse = await bibleApiService.searchVerse(mainSearchInput);
+      const verse = await bibleApiService.searchVerse(mainSearchInput, selectedTranslation);
       setMainSearchedVerse(verse);
     } catch (err) {
       console.error(`Error during main search for ${mainSearchInput}:`, err);
@@ -106,7 +112,7 @@ const HomeCategoryHighlights: React.FC = () => {
     setMainSearchError(null);
 
     try {
-      const verseData = await bibleApiService.searchVerse(verseReference);
+      const verseData = await bibleApiService.searchVerse(verseReference, selectedTranslation);
       if (verseData) {
         handleLearnVerse(verseData); // Navigate to learn page
       } else {
@@ -117,6 +123,37 @@ const HomeCategoryHighlights: React.FC = () => {
       setExampleVerseFetchError(`Error loading ${verseReference}. Please try again.`);
     } finally {
       setFetchingExampleVerseDetailsRef(null);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (translationSelectorRef.current && !translationSelectorRef.current.contains(event.target as Node)) {
+        setIsTranslationSelectorOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleTranslationChange = (translationId: string) => {
+    setSelectedTranslation(translationId);
+    setIsTranslationSelectorOpen(false);
+    // Optional: if a verse is displayed, re-fetch it with the new translation
+    if (mainSearchedVerse && mainSearchInput) {
+      // Temporarily clear the verse to show a loading state implicitly
+      setMainSearchedVerse(null);
+      setIsMainSearching(true);
+      
+      bibleApiService.searchVerse(mainSearchInput, translationId)
+        .then(setMainSearchedVerse)
+        .catch(err => {
+          setMainSearchError(err instanceof Error ? err.message : "Couldn't find that verse in the new translation.");
+        })
+        .finally(() => setIsMainSearching(false));
     }
   };
 
@@ -140,7 +177,35 @@ const HomeCategoryHighlights: React.FC = () => {
         <p>Enter a Bible reference (e.g., John 3:16) to jump directly to a passage, or explore curated topics to discover inspirational scriptures for your daily life.</p>
       </div>
 
-      {/* Main Search Bar - Updated to match BibleSearch design (from global-design-system.css) */}
+      {/* Relocated Translation Selector */}
+      <div className="hch-translation-selection-area" ref={translationSelectorRef}>
+        <label htmlFor="hch-translation-toggle">Choose a Translation:</label>
+        <div className="hch-translation-selector-container">
+          <button
+            id="hch-translation-toggle"
+            className="hch-translation-selector-toggle"
+            onClick={() => setIsTranslationSelectorOpen(!isTranslationSelectorOpen)}
+          >
+            <span>{translations.find(t => t.id === selectedTranslation)?.fullName || '...'}</span>
+            <span className={`hch-arrow ${isTranslationSelectorOpen ? 'up' : 'down'}`}></span>
+          </button>
+          {isTranslationSelectorOpen && (
+            <div className="hch-translation-dropdown">
+              {translations.map(translation => (
+                <div
+                  key={translation.id}
+                  className={`hch-translation-option ${selectedTranslation === translation.id ? 'active' : ''}`}
+                  onClick={() => handleTranslationChange(translation.id)}
+                >
+                  <strong>{translation.name}</strong> - {translation.fullName}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Search Bar */}
       <div className="search-input-group"> 
         <input
           type="text"
@@ -167,6 +232,7 @@ const HomeCategoryHighlights: React.FC = () => {
           <h3>{mainSearchedVerse.verse_reference}</h3>
           {mainSearchedVerse.context_nlt && <p className="hch-context"><em>{mainSearchedVerse.context_nlt}</em></p>}
           <p className="hch-verse-text">"{mainSearchedVerse.text_nlt}"</p>
+          <p className="hch-verse-translation-note">Translation: {mainSearchedVerse.translation.fullName}</p>
           <div className="hch-main-searched-actions">
             <button onClick={() => handleLearnVerse(mainSearchedVerse)} className="hch-learn-btn">Memorize This Verse</button>
             <button onClick={clearMainSearch} className="hch-clear-search-btn">Clear & Explore Topics</button>
