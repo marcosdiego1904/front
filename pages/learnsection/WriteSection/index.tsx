@@ -9,10 +9,9 @@ interface Props {
   prevStep: () => void;
 }
 
-// Helper function to clean text (removes punctuation, trims spaces, ignores case)
 // Helper function to clean text (removes punctuation, trims spaces, ignores case & quotes)
 const cleanText = (text: string) => 
-  text.replace(/[.,;:!?“”"'`]/g, "").trim().toLowerCase();
+  text.replace(/[.,;:!?"""'`]/g, "").trim().toLowerCase();
 
 
 const WriteFromMemorySection = ({ verse, cite, onNext, prevStep }: Props) => {
@@ -30,7 +29,7 @@ const WriteFromMemorySection = ({ verse, cite, onNext, prevStep }: Props) => {
 
   return (
     <main className="main-container3">
-      <div className="intro-section">
+      <div className="intro-section write-from-memory-section">
         {/* Título */}
         <h1 className="title">Write the Verse from Memory</h1>
         <p className="instruction">

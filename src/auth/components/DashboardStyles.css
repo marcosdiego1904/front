@@ -618,6 +618,10 @@
   background-color: var(--accent-gold-dark);
 }
 
+.no-spin {
+  animation: none !important;
+}
+
 /* Loading spinner */
 
 

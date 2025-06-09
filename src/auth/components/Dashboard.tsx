@@ -413,7 +413,7 @@ const Dashboard: React.FC = () => {
             
             {isLoading ? (
               <div className="loading-spinner">
-                <div className="spinner"></div>
+                <div className="spinner no-spin"></div>
                 <span>Calculating your journey progress...</span>
               </div>
             ) : (
@@ -437,7 +437,7 @@ const Dashboard: React.FC = () => {
             
             {isLoading ? (
               <div className="loading-spinner">
-                <div className="spinner"></div>
+                <div className="spinner no-spin"></div>
                 <span>Loading your verses...</span>
               </div>
             ) : error ? (

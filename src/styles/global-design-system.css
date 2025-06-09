@@ -810,7 +810,7 @@
     border: 3px solid rgba(0, 0, 0, 0.1);
     border-top-color: var(--accent-blue);
     border-radius: 50%;
-    animation: memorization-spin 1s linear infinite;
+    /* animation: memorization-spin 1s linear infinite; */
   }
   
   .memorization-login-container {
@@ -862,12 +862,12 @@
   }
   
   .memorization-home-button {
-    background-color: var(--text-light);
+    background-color: var(--accent-blue);
     color: white;
   }
   
   .memorization-home-button:hover {
-    background-color: #5a6268;
+    background-color: var(--accent-blue-dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
   }
@@ -1441,6 +1441,16 @@
       font-size: var(--font-size-sm);
       line-height: 1.4;
     }
+
+    .memory-input {
+      height: 150px; /* More space for typing on mobile */
+      font-size: var(--font-size-md);
+    }
+
+    .main-container3 .verse {
+      min-height: 80px; /* Ensure space for feedback text */
+      line-height: 1.5;
+    }
   }
   
   /* Extra small devices */
@@ -1514,6 +1524,15 @@
       width: 90px;
       height: 36px;
       font-size: var(--font-size-sm);
+    }
+
+    .memory-input {
+      height: 120px;
+    }
+
+    .verse-fragment {
+      font-size: var(--font-size-sm);
+      padding: var(--space-sm);
     }
   }
   
@@ -1733,7 +1752,7 @@
   border: 4px solid #e0e0e0;
   border-top: 4px solid #ffc107;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  /* animation: spin 1s linear infinite; */
   margin-bottom: 1rem;
 }
 
