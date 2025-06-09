@@ -619,9 +619,10 @@
 }
 
 /* Loading spinner */
-.loading-spinner .spinner {
-  animation: none !important;
-}
+
+
+
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

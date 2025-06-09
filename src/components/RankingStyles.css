@@ -467,14 +467,10 @@
   border: 3px solid rgba(22, 34, 61, 0.1);
   border-top-color: var(--accent-gold);
   border-radius: 50%;
-  animation: spin 1s infinite linear;
+
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+
 
 /* Responsive adjustments */
 @media (min-width: 768px) {
