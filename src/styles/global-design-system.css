@@ -294,7 +294,7 @@
     box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
-    gap: var(--space-md); /* Adjusted gap for better flow */
+    gap: var(--space-sm); /* Adjusted gap for better flow */
     text-align: center;
     position: relative;
   }
@@ -304,8 +304,7 @@
     font-size: var(--font-size-xxl);
     font-weight: bold;
     color: var(--primary-blue);
-    margin-bottom: var(--space-sm);
-    margin-top: 0; /* Removed top margin */
+    margin: 0;
   }
   
   /* Common instruction style */
@@ -313,7 +312,7 @@
     font-size: var(--font-size-lg);
     font-weight: bold;
     color: var(--accent-blue);
-    margin-bottom: var(--space-md);
+    margin: 0;
   }
   
   /* Common citation style */
@@ -333,7 +332,7 @@
     border-left: 5px solid var(--accent-blue);
     background-color: var(--bg-highlight);
     border-radius: var(--radius-md);
-    margin: 0;
+    margin: var(--space-sm) auto;
     max-width: 85%; /* Constrain width for readability on long verses */
     line-height: 1.6;
     display: inline-block; /* Allow the container to shrink-to-fit content */
