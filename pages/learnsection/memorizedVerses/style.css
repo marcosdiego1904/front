@@ -37,21 +37,7 @@
     padding: 2rem;
   }
   
-  .verse-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(22, 34, 61, 0.1);
-    border-top-color: var(--primary-blue);
-    border-radius: 50%;
-    animation: verse-spin 1s linear infinite;
-    margin-bottom: 1rem;
-  }
-  
-  @keyframes verse-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
+ 
   
   /* Error message */
   .error-message {
