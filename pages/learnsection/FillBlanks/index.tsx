@@ -76,7 +76,7 @@ const FillInTheBlanksSection = ({ verse, onNext, prevStep }: Props) => {
 
   return (
     <main className="main-container2">
-      <div className="intro-section">
+      <div className="intro-section fill-blanks-section">
         <h1 className="title">Fill in the Blanks</h1>
         <p className="instruction">Complete the missing words from the verse.</p>
 

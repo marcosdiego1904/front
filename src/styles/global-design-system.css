@@ -558,6 +558,15 @@
   }
   
   /* ========= FILL BLANKS SECTION ========= */
+  .fill-blanks-section .verse {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-xs);
+    justify-content: center;
+    line-height: 1.8; /* Improve readability */
+  }
+
   .blank-input {
     width: 130px;
     height: 45px;
@@ -571,6 +580,7 @@
     outline: none;
     transition: border-color var(--transition-normal);
     padding: var(--space-xs);
+    vertical-align: baseline;
   }
   
   .blank-input:focus {
@@ -631,7 +641,7 @@
   
   /* ========= BREAKDOWN SECTION ========= */
   .breakdown-section {
-    gap: var(--space-md);
+    gap: var(--space-lg);
     max-width: 900px;
     margin: 0 auto;
   }
@@ -688,7 +698,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 120px;
+    min-height: 110px;
   }
   
   .verse-fragment {
@@ -704,6 +714,10 @@
     max-width: 90%;
     margin: 0 auto;
     animation: fadeIn 0.5s ease;
+    align-items: center;
+    width: 100%;
+    margin-top: var(--space-sm);
+    gap: var(--space-sm);
   }
   
   .fragment-navigation {
@@ -711,7 +725,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-top: 0;
+    margin-top: var(--space-sm);
+    gap: 0;
   }
   
   .button-placeholder {
@@ -1366,7 +1381,7 @@
       width: 90%;
       padding: var(--space-lg);
       gap: var(--space-md); /* Tighter gap for mobile */
-      text-align: left;
+      text-align: center;
     }
     
     .return-button {
@@ -1374,7 +1389,7 @@
       font-size: var(--font-size-xs);
     }
     
-    .cite {
+    .cite, .verse-citation {
       font-size: var(--font-size-lg); /* Reduced from xl for better harmony */
     }
     
@@ -1399,10 +1414,14 @@
     .button {
       width: 100%;
       max-width: 240px;
-      height: 45px;
+      height: 40px;
       padding: var(--space-xs) var(--space-md);
       margin: 0 auto;
       font-size: var(--font-size-sm);
+    }
+
+    .verse-fragment {
+      font-size: var(--font-size-lg);
     }
     
     /* Specific adjustments for different button types */
@@ -1412,14 +1431,25 @@
     .prev-button {
       width: 100%;
     }
+
+    .blank-input {
+      width: 100px;
+      height: 38px;
+      font-size: var(--font-size-md);
+    }
+
+    .fill-blanks-section .hint {
+      font-size: var(--font-size-sm);
+      line-height: 1.4;
+    }
   }
   
   /* Extra small devices */
   @media (max-width: 480px) {
     .intro-section {
       width: 92%;
-      padding: var(--space-md);
-      gap: var(--space-sm); /* Even tighter spacing for small screens */
+      padding: var(--space-lg);
+      gap: var(--space-lg); /* Even tighter spacing for small screens */
     }
 
     .return-button {
@@ -1427,7 +1457,7 @@
       font-size: var(--font-size-xs); /* Corrected from lg */
     }
 
-    .cite {
+    .cite, .verse-citation {
       font-size: var(--font-size-md); /* Reduced from lg */
     }
     
@@ -1440,6 +1470,16 @@
       padding: 12px 20px;
       font-size: var(--font-size-sm);
       margin: var(--space-sm) auto;
+    }
+
+    .fragment-container {
+      padding: var(--space-md);
+      margin-top: var(--space-sm);
+    }
+    
+    .verse-fragment-wrapper {
+      min-height: 90px;
+      padding: var(--space-xs);
     }
     
     .button-group {
@@ -1454,16 +1494,27 @@
     
     /* Reduce font sizes to fit better on small screens */
     .title {
-      font-size: var(--font-size-xl);
+      font-size: var(--font-size-lg);
     }
     
     .instruction {
-      font-size: var(--font-size-md);
+      font-size: var(--font-size-sm);
     }
     
-    .verse, .verse-part, .verse-fragment {
+    .verse, .verse-part {
       font-size: var(--font-size-sm); /* Adjusted from md for very small screens */
+      padding: var(--space-md);
+    }
+
+    .verse-fragment {
+      font-size: var(--font-size-sm);
       padding: var(--space-sm);
+    }
+
+    .blank-input {
+      width: 90px;
+      height: 36px;
+      font-size: var(--font-size-sm);
     }
   }
   
@@ -1471,7 +1522,17 @@
   @media (max-width: 320px) {
     .intro-section {
       width: 95%;
-      padding: var(--space-xs) var(--space-sm);
+      padding: var(--space-md);
+      gap: var(--space-sm);
+    }
+
+    .fragment-container {
+      padding: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+
+    .verse-fragment-wrapper {
+        min-height: 70px;
     }
     
     .button-group {
@@ -1482,6 +1543,11 @@
       max-width: 180px;
       height: 38px;
     }
+
+    .blank-input {
+      width: 75px;
+      height: 34px;
+    }
   }
   /* Add spacing between stacked buttons in fragment navigation */
 
@@ -1489,30 +1555,31 @@
 .fragment-navigation .button-group {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Add space between stacked buttons */
+    gap: var(--space-xs);
     max-width: 200px; /* Constrain width */
     margin: 0 auto; /* Center the button group */
+    width: 100%;
   }
   
   /* Adjust individual buttons for better mobile layout */
   .fragment-navigation .button {
     width: 100%;
-    margin-bottom: 8px; /* Additional spacing method as fallback */
+    margin-bottom: 0; /* Additional spacing method as fallback */
   }
   
   /* Make sure back button has proper spacing */
   .fragment-navigation .back-button {
-    margin-top: 16px; /* Adds extra space above the back button to separate it */
+    margin-top: 0; /* Adds extra space above the back button to separate it */
   }
   
   /* Media queries for responsive adjustments */
   @media (max-width: 768px) {
     .fragment-navigation .button-group {
-      gap: 10px; /* Slightly more space on mobile for easier touch targets */
+      gap: var(--space-xs); /* Slightly more space on mobile for easier touch targets */
     }
     
     .fragment-navigation .back-button {
-      margin-top: 20px; /* More separation on mobile */
+      margin-top: 0; /* More separation on mobile */
     }
   }
   

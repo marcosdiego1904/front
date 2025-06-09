@@ -79,10 +79,10 @@ const VerseBreakdownSection = ({ verse, onNext, prevStep }: Props) => {
                 Continue to Next Step
               </button>
             )}
+            
+            {/* Botón de regreso */}
+            <button className="button back-button" onClick={prevStep}>← Back</button>
           </div>
-          
-          {/* Botón de regreso */}
-          <button className="button back-button" onClick={prevStep}>← Back</button>
         </div>
       </div>
     </main>
