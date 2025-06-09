@@ -618,15 +618,10 @@
   background-color: var(--accent-gold-dark);
 }
 
-.no-spin {
+/* Loading spinner */
+.loading-spinner .spinner {
   animation: none !important;
 }
-
-/* Loading spinner */
-
-
-
-
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
