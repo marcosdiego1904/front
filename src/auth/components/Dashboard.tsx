@@ -412,8 +412,8 @@ const Dashboard: React.FC = () => {
             </div>
             
             {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner"></div>
+              <div className="">
+                <div className=""></div>
                 <span>Calculating your journey progress...</span>
               </div>
             ) : (
