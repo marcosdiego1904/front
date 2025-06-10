@@ -48,6 +48,7 @@ const Dashboard: React.FC = () => {
   const [nextRank, setNextRank] = useState<BiblicalRank | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAllVerses, setShowAllVerses] = useState(false);
   
   // Create refs for the sections we want to scroll to
   const dashboardRef = useRef<HTMLElement>(null);
@@ -432,7 +433,11 @@ const Dashboard: React.FC = () => {
           <div ref={memorizedVersesRef} id="memorizedVerses" className="memorized-verses-section">
             <div className="section-header">
               <h3>Memorized Verses</h3>
-              <a href="/memorized-verses" className="view-all-btn">View All</a>
+              {memorizedVerses.length > 5 && (
+                <button onClick={() => setShowAllVerses(!showAllVerses)} className="view-all-btn">
+                  {showAllVerses ? 'Show Less' : 'View All'}
+                </button>
+              )}
             </div>
             
             {isLoading ? (
@@ -446,7 +451,7 @@ const Dashboard: React.FC = () => {
               </div>
             ) : memorizedVerses.length > 0 ? (
               <div className="verses-list">
-                {memorizedVerses.slice(0, 5).map((verse) => (
+                {(showAllVerses ? memorizedVerses : memorizedVerses.slice(0, 5)).map((verse) => (
                   <div key={verse.id} className="verse-item">
                     <div className="verse-reference">{verse.verse_reference}</div>
                     <div className="verse-text">"{verse.verse_text}"</div>
@@ -455,7 +460,7 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
                 ))}
-                {memorizedVerses.length > 5 && (
+                {!showAllVerses && memorizedVerses.length > 5 && (
                   <div className="more-verses">
                     + {memorizedVerses.length - 5} more verse{memorizedVerses.length - 5 !== 1 ? 's' : ''}
                   </div>
