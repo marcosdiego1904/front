@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Bloquear áreas privadas
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /api/
+
+# Permitir específicamente páginas importantes
+Allow: /
+Allow: /learn
+Allow: /bible-search
+Allow: /about
+Allow: /support
+
+# Sitemap
+Sitemap: https://lamptomyfeet.co/sitemap.xml
+
+# Crawl-delay (opcional, para ser gentil con el servidor)
+Crawl-delay: 1
