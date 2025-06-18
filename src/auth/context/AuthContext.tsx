@@ -30,8 +30,13 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// API base URL - updated to the new official domain
-const API_URL = 'https://api.lamptomyfeet.co';
+// API base URL - configurable for development and production
+const API_BASE_URL = 'https://api.lamptomyfeet.co';
+const DEV_API_URL = 'http://localhost:3001';
+
+// Use the appropriate URL based on environment
+const isProduction = import.meta.env.PROD;
+const API_URL = isProduction ? API_BASE_URL : DEV_API_URL;
 
 // Create context with a default value
 const AuthContext = createContext<AuthContextType | null>(null);

@@ -26,8 +26,13 @@ export interface PasswordResetResponse {
   message: string;
 }
 
-// Base URL for all API requests - updated to use the new official domain
-const API_URL = 'https://api.lamptomyfeet.co';
+// Base URL for all API requests - configurable for development and production
+const API_BASE_URL = 'https://api.lamptomyfeet.co';
+const DEV_API_URL = 'http://localhost:3001';
+
+// Use the appropriate URL based on environment
+const isProduction = import.meta.env.PROD;
+const API_URL = isProduction ? API_BASE_URL : DEV_API_URL;
 
 /**
  * Register a new user

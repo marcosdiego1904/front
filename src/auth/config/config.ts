@@ -3,7 +3,12 @@
  */
 
 // API configuration
-export const API_URL = process.env.REACT_APP_API_URL || 'https://your-backend-url.vercel.app';
+const API_BASE_URL = "https://api.lamptomyfeet.co";
+const DEV_API_URL = "http://localhost:3001";
+
+// Use the appropriate URL based on environment
+const isProduction = import.meta.env.PROD;
+export const API_URL = isProduction ? API_BASE_URL : DEV_API_URL;
 
 // Authentication settings
 export const AUTH_TOKEN_KEY = 'token';
