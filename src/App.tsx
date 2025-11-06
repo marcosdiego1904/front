@@ -1,4 +1,4 @@
-import { BrowserRouter, useRoutes, Navigate } from "react-router-dom";
+import { BrowserRouter, useRoutes, Navigate, useLocation } from "react-router-dom";
 import Home from "../src/Home/index";
 import LearnSection from "../pages/learnsection/Learn";
 import BibleSearch from "../pages/learnsection/BibleSearch"; // ← NUEVA IMPORTACIÓN
@@ -78,13 +78,25 @@ const AppRoutes = () => {
   ]);
 };
 
+// Layout component that conditionally renders Navbar
+const Layout = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  return (
+    <>
+      {!isHomePage && <Navbar />}
+      <AppRoutes />
+    </>
+  );
+};
+
 // Main App component
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Navbar />
-        <AppRoutes />
+        <Layout />
       </BrowserRouter>
     </AuthProvider>
   );
