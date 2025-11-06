@@ -1,15 +1,65 @@
-
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import bibleApiService from "../services/bibleApi"
 
 export default function HeroSection() {
   const [searchValue, setSearchValue] = useState("")
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const [animateIn, setAnimateIn] = useState(false)
+  const [selectedTranslation, setSelectedTranslation] = useState(bibleApiService.getDefaultTranslation().id)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
+
+  const availableTranslations = bibleApiService.getAvailableTranslations()
 
   useEffect(() => {
     setAnimateIn(true)
   }, [])
+
+  const handleSearch = async () => {
+    if (!searchValue.trim()) return
+
+    // Validate reference
+    const validation = bibleApiService.validateReference(searchValue)
+    if (!validation.isValid) {
+      setError(validation.message || 'Invalid reference')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const verse = await bibleApiService.searchVerse(searchValue, selectedTranslation)
+
+      // Navigate to Learn page with the verse
+      const normalizedVerse = {
+        id: verse.id,
+        text_nlt: verse.text_nlt,
+        verse_reference: verse.verse_reference,
+        context_nlt: verse.context_nlt,
+      }
+
+      navigate('/learn', { state: { selectedVerse: normalizedVerse } })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to search verse. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  const handlePopularVerseClick = (verse: string) => {
+    setSearchValue(verse)
+    setError(null)
+  }
 
   const popularVerses = ["John 3:16", "Psalm 23:1", "Romans 8:28", "Philippians 4:13"]
 
@@ -82,18 +132,53 @@ export default function HeroSection() {
                   <input
                     type="text"
                     value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value)
+                      setError(null)
+                    }}
+                    onKeyPress={handleKeyPress}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
-                    placeholder="Try 'John 3:16', 'Psalm 23', or 'love'..."
+                    placeholder="Try 'John 3:16', 'Psalm 23', or 'Romans 8:28'..."
+                    disabled={isLoading}
                     className="flex-1 py-5 text-base sm:text-lg outline-none text-[#2C3E50] placeholder:text-gray-400 bg-transparent pr-4 sm:pr-0"
                   />
                 </div>
-                <Button className="relative overflow-hidden m-2 px-8 sm:px-10 py-5 sm:py-6 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg group/button">
-                  <span className="relative z-10">Search</span>
+                <Button
+                  onClick={handleSearch}
+                  disabled={isLoading || !searchValue.trim()}
+                  className="relative overflow-hidden m-2 px-8 sm:px-10 py-5 sm:py-6 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg group/button disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="relative z-10">{isLoading ? 'Searching...' : 'Search'}</span>
                   <div className="absolute inset-0 -translate-x-full group-hover/button:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
                 </Button>
               </div>
+
+              {/* Bible Version Selector - Mobile First */}
+              <div className="mt-3 flex items-center justify-center gap-2">
+                <label htmlFor="version-select" className="text-sm text-[#2C3E50]/60 font-medium">
+                  Bible Version:
+                </label>
+                <select
+                  id="version-select"
+                  value={selectedTranslation}
+                  onChange={(e) => setSelectedTranslation(e.target.value)}
+                  className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 bg-white/60 backdrop-blur-sm text-[#2C3E50] hover:bg-white/80 hover:border-amber-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent cursor-pointer"
+                >
+                  {availableTranslations.map((translation) => (
+                    <option key={translation.id} value={translation.id}>
+                      {translation.name} - {translation.fullName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Error Message */}
+              {error && (
+                <div className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">
+                  {error}
+                </div>
+              )}
             </div>
           </div>
 
@@ -104,6 +189,7 @@ export default function HeroSection() {
             {popularVerses.map((verse, index) => (
               <button
                 key={index}
+                onClick={() => handlePopularVerseClick(verse)}
                 className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-200 text-[#2C3E50]/80 text-sm hover:bg-amber-50/80 hover:backdrop-blur-md hover:border-amber-300 hover:text-[#2C3E50] transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105"
               >
                 {verse}
