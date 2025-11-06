@@ -68,6 +68,17 @@
   }
 }
 
+/* No underline utility */
+.no-underline {
+  text-decoration: none !important;
+}
+
+.no-underline:hover,
+.no-underline:focus,
+.no-underline:active {
+  text-decoration: none !important;
+}
+
 /* Original styles preserved */
 .memory-input {
     width: 100%;
