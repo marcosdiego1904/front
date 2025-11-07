@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import bibleApiService from "../services/bibleApi"
 
@@ -10,6 +10,8 @@ export default function HeroSection() {
   const [selectedTranslation, setSelectedTranslation] = useState(bibleApiService.getDefaultTranslation().id)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [activeTopicPopover, setActiveTopicPopover] = useState<string | null>(null)
+  const popoverRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
   const availableTranslations = bibleApiService.getAvailableTranslations()
@@ -17,6 +19,23 @@ export default function HeroSection() {
   useEffect(() => {
     setAnimateIn(true)
   }, [])
+
+  // Close popover when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setActiveTopicPopover(null)
+      }
+    }
+
+    if (activeTopicPopover) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [activeTopicPopover])
 
   const handleSearch = async () => {
     if (!searchValue.trim()) return
@@ -61,14 +80,50 @@ export default function HeroSection() {
     setError(null)
   }
 
+  const handleTopicClick = (topicName: string) => {
+    if (activeTopicPopover === topicName) {
+      setActiveTopicPopover(null)
+    } else {
+      setActiveTopicPopover(topicName)
+    }
+  }
+
+  const handleVerseSelect = (verse: string) => {
+    setSearchValue(verse)
+    setError(null)
+    setActiveTopicPopover(null)
+    // Scroll to search bar
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   const popularVerses = ["John 3:16", "Psalm 23:1", "Romans 8:28", "Philippians 4:13"]
 
   const topics = [
-    { name: "Faith", emoji: "✝️" },
-    { name: "Hope", emoji: "🌟" },
-    { name: "Love", emoji: "❤️" },
-    { name: "Strength", emoji: "💪" },
-    { name: "Peace", emoji: "🕊️" },
+    {
+      name: "Faith",
+      emoji: "✝️",
+      verses: ["Hebrews 11:1", "Romans 10:17", "James 2:17"]
+    },
+    {
+      name: "Hope",
+      emoji: "🌟",
+      verses: ["Romans 15:13", "Jeremiah 29:11", "Psalm 39:7"]
+    },
+    {
+      name: "Love",
+      emoji: "❤️",
+      verses: ["1 Corinthians 13:4-7", "John 13:34", "1 John 4:8"]
+    },
+    {
+      name: "Strength",
+      emoji: "💪",
+      verses: ["Philippians 4:13", "Isaiah 40:31", "Psalm 46:1"]
+    },
+    {
+      name: "Peace",
+      emoji: "🕊️",
+      verses: ["John 14:27", "Philippians 4:6-7", "Romans 15:13"]
+    },
   ]
 
   return (
@@ -207,17 +262,56 @@ export default function HeroSection() {
             className={`flex flex-wrap items-center justify-center gap-4 transition-all duration-700 delay-600 ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
             {topics.map((topic, index) => (
-              <button
-                key={index}
-                className="group px-8 py-4 rounded-2xl bg-gradient-to-br from-white/70 to-amber-50/40 backdrop-blur-sm border border-gray-200 hover:border-amber-300 hover:from-amber-50/80 hover:to-orange-50/80 hover:backdrop-blur-md transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-lg"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl group-hover:scale-125 transition-transform duration-300">
-                    {topic.emoji}
-                  </span>
-                  <span className="text-[#2C3E50] font-semibold text-base">{topic.name}</span>
-                </div>
-              </button>
+              <div key={index} className="relative" ref={activeTopicPopover === topic.name ? popoverRef : null}>
+                <button
+                  onClick={() => handleTopicClick(topic.name)}
+                  className={`group px-8 py-4 rounded-2xl bg-gradient-to-br from-white/70 to-amber-50/40 backdrop-blur-sm border transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-lg ${
+                    activeTopicPopover === topic.name
+                      ? 'border-amber-400 from-amber-50/90 to-orange-50/90 scale-110'
+                      : 'border-gray-200 hover:border-amber-300 hover:from-amber-50/80 hover:to-orange-50/80'
+                  } hover:backdrop-blur-md`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl group-hover:scale-125 transition-transform duration-300">
+                      {topic.emoji}
+                    </span>
+                    <span className="text-[#2C3E50] font-semibold text-base">{topic.name}</span>
+                  </div>
+                </button>
+
+                {/* Topic Popover */}
+                {activeTopicPopover === topic.name && (
+                  <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-amber-200/50 p-4 min-w-[280px]">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-semibold text-[#2C3E50]">Try these verses:</h3>
+                        <button
+                          onClick={() => setActiveTopicPopover(null)}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                          aria-label="Close"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="space-y-2">
+                        {topic.verses.map((verse, vIndex) => (
+                          <button
+                            key={vIndex}
+                            onClick={() => handleVerseSelect(verse)}
+                            className="w-full text-left px-3 py-2 rounded-lg bg-gradient-to-r from-amber-50/50 to-orange-50/50 hover:from-amber-100/70 hover:to-orange-100/70 border border-amber-200/30 hover:border-amber-300 transition-all duration-200 text-sm text-[#2C3E50] font-medium hover:scale-105 hover:shadow-md"
+                          >
+                            {verse}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Arrow pointing up */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/90 border-l border-t border-amber-200/50 rotate-45 backdrop-blur-xl"></div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
