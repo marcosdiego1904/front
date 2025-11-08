@@ -1,51 +1,72 @@
 /* Support Page Styles - Versión Mejorada para Lamp to my feet */
 
-/* Variables personalizadas */
+/* Variables personalizadas - Design System */
 :root {
-  --primary-blue: #16223d;
-  --primary-blue-light: #223356;
-  --primary-blue-dark: #0d1525;
-  --primary-blue-transparent: rgba(22, 34, 61, 0.05);
-  --accent-gold: #ffc107;
+  /* Design System Colors */
+  --slate-dark: #2C3E50;
+  --slate-800: rgb(30, 41, 59);
+  --slate-700: rgb(51, 65, 85);
+  --slate-600: rgb(71, 85, 105);
+  --slate-900: rgb(15, 23, 42);
+
+  --primary-blue: #2C3E50;
+  --primary-blue-light: rgb(51, 65, 85);
+  --primary-blue-dark: rgb(15, 23, 42);
+  --primary-blue-transparent: rgba(44, 62, 80, 0.05);
+
+  /* Accent Colors from Design System */
+  --accent-gold: #FFD700;
   --accent-gold-light: #ffda6a;
   --accent-gold-dark: #e6a800;
+  --accent-amber: #F59E0B;
+  --accent-orange: #F59E0B;
   --accent-green: #28a745;
   --accent-green-light: #34ce57;
   --accent-green-dark: #1e7e34;
   --accent-red: #dc3545;
   --accent-blue: #007bff;
   --accent-blue-light: #4da3ff;
-  
-  --text-light: #f8f9fa;
-  --text-muted: #6c757d;
-  --text-dark: #333;
-  
+
+  /* Background Colors from Design System */
+  --bg-warm-white: #FEFCF8;
   --bg-white: #ffffff;
   --bg-light: #f8f9fa;
   --bg-light-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  
+
+  /* Text Colors */
+  --text-light: #f8f9fa;
+  --text-muted: #6c757d;
+  --text-dark: #2C3E50;
+
+  /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
-  
+
+  /* Border Radius */
   --border-radius-xs: 3px;
   --border-radius-sm: 5px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
   --border-radius-xl: 20px;
-  
+
+  /* Shadows */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 12px 28px rgba(0, 0, 0, 0.2);
-  
+
+  /* Transitions */
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
-  
-  --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Typography - Design System */
+  --font-lora: 'Lora', Georgia, serif;
+  --font-nunito-sans: 'Nunito Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family: var(--font-nunito-sans);
 }
 
 /* Estilos generales */
@@ -53,16 +74,15 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
-  background-color: var(--primary-blue);
   color: var(--text-dark);
 }
 
 .support-page {
   min-height: 100vh;
-  background-color: var(--primary-blue);
-  background-image: radial-gradient(circle at top right, rgba(255, 193, 7, 0.05) 0%, transparent 70%),
-                     radial-gradient(circle at bottom left, rgba(40, 167, 69, 0.05) 0%, transparent 70%);
-  padding: 2rem 0;
+  background-color: var(--bg-warm-white);
+  background-image: radial-gradient(circle at top right, rgba(255, 215, 0, 0.08) 0%, transparent 70%),
+                     radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
+  padding: 8rem 0 2rem 0;
   color: var(--text-dark);
 }
 
@@ -70,12 +90,14 @@ body {
   width: 92%;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: var(--bg-white);
-  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
   box-shadow: var(--shadow-xl);
   padding: var(--spacing-lg);
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(232, 184, 109, 0.15);
 }
 
 /* Decoración de fondo sutil */
@@ -103,14 +125,17 @@ body {
   background: radial-gradient(circle, rgba(40, 167, 69, 0.03) 0%, transparent 70%);
 }
 
-/* Título y encabezados */
+/* Título y encabezados - Design System Typography */
 .support-title {
-  color: var(--primary-blue);
+  color: var(--slate-dark);
+  font-family: var(--font-lora);
   font-size: 2.8rem;
+  font-weight: 700;
   text-align: center;
   margin-bottom: var(--spacing-lg);
   position: relative;
   padding-bottom: var(--spacing-sm);
+  line-height: 1.2;
 }
 
 .support-title::after {
@@ -126,11 +151,14 @@ body {
 }
 
 .support-container h2 {
-  color: var(--primary-blue);
+  color: var(--slate-dark);
+  font-family: var(--font-lora);
   font-size: 2.2rem;
+  font-weight: 700;
   margin: var(--spacing-xl) 0 var(--spacing-lg);
   text-align: center;
   position: relative;
+  line-height: 1.3;
 }
 
 .support-container h2::after {
@@ -143,6 +171,21 @@ body {
   height: 3px;
   background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
   border-radius: 2px;
+}
+
+.support-container h3 {
+  font-family: var(--font-lora);
+  font-weight: 600;
+}
+
+.support-container h4 {
+  font-family: var(--font-lora);
+  font-weight: 600;
+}
+
+.support-container p {
+  font-family: var(--font-nunito-sans);
+  line-height: 1.7;
 }
 
 /* Mensaje personal del desarrollador */
@@ -216,13 +259,15 @@ body {
 }
 
 .message-content h3 {
-  color: var(--primary-blue);
+  color: var(--slate-dark);
+  font-family: var(--font-lora);
   font-size: 1.6rem;
   margin-bottom: var(--spacing-xs);
   font-weight: 700;
 }
 
 .message-content p {
+  font-family: var(--font-nunito-sans);
   font-size: 1.1rem;
   line-height: 1.7;
   margin-bottom: var(--spacing-sm);
@@ -248,10 +293,11 @@ body {
 }
 
 .video-btn {
-  background-color: var(--primary-blue);
+  background: linear-gradient(to right, var(--slate-800), var(--slate-700));
   color: white;
   padding: 10px 20px;
-  border-radius: var(--border-radius-md);
+  border-radius: 12px;
+  font-family: var(--font-nunito-sans);
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
@@ -260,12 +306,13 @@ body {
   transition: all var(--transition-normal);
   border: none;
   margin-top: var(--spacing-xs);
+  box-shadow: var(--shadow-lg);
 }
 
 .video-btn:hover {
-  background-color: var(--primary-blue-light);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(to right, var(--slate-700), var(--slate-600));
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-xl);
 }
 
 .pulse-btn {
@@ -325,19 +372,21 @@ body {
 }
 
 .expense-card {
-  background: var(--bg-white);
-  border-radius: var(--border-radius-md);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
+  border: 1px solid rgba(232, 184, 109, 0.2);
   display: flex;
   flex-direction: column;
 }
 
 .expense-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(232, 184, 109, 0.4);
 }
 
 .expense-icon {
@@ -436,21 +485,23 @@ body {
 }
 
 .support-option {
-  background: var(--bg-white);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
   padding: var(--spacing-lg);
-  border-radius: var(--border-radius-lg);
+  border-radius: 16px;
   text-align: center;
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-normal);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
   position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(232, 184, 109, 0.2);
   display: flex;
   flex-direction: column;
 }
 
 .support-option:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(232, 184, 109, 0.4);
 }
 
 .support-icon {
@@ -561,32 +612,36 @@ body {
 }
 
 .support-btn {
-  background-color: var(--accent-gold);
-  color: var(--primary-blue-dark);
+  background: linear-gradient(to right, var(--slate-800), var(--slate-700));
+  color: white;
+  font-family: var(--font-nunito-sans);
   font-weight: 600;
+  font-size: 1rem;
   padding: 12px 24px;
   border: none;
-  border-radius: var(--border-radius-md);
+  border-radius: 12px;
   cursor: pointer;
   transition: all var(--transition-normal);
   min-width: 150px;
+  box-shadow: var(--shadow-lg);
 }
 
 .support-btn:hover {
-  background-color: var(--accent-gold-dark);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-sm);
+  background: linear-gradient(to right, var(--slate-700), var(--slate-600));
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-xl);
 }
 
 .support-btn-secondary {
-  background-color: transparent;
-  border: 2px solid var(--accent-gold);
-  color: var(--primary-blue);
+  background: transparent;
+  border: 2px solid var(--slate-dark);
+  color: var(--slate-dark);
 }
 
 .support-btn-secondary:hover {
-  background-color: rgba(255, 193, 7, 0.1);
-  border-color: var(--accent-gold-dark);
+  background: rgba(44, 62, 80, 0.05);
+  border-color: var(--slate-700);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .share-message {
@@ -686,12 +741,14 @@ body {
 }
 
 .testimonial-btn {
-  background-color: var(--accent-green);
+  background: linear-gradient(to right, var(--accent-green), var(--accent-green-dark));
   color: white;
 }
 
 .testimonial-btn:hover {
-  background-color: var(--accent-green-dark);
+  background: linear-gradient(to right, var(--accent-green-dark), #1a6428);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-xl);
 }
 
 /* Sección de impacto */
@@ -755,10 +812,13 @@ body {
 }
 
 .testimonial-card {
-  background: white;
-  border-radius: var(--border-radius-md);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
   overflow: hidden;
   height: 100%;
+  border: 1px solid rgba(232, 184, 109, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .testimonial-content {
@@ -1049,11 +1109,12 @@ body {
 }
 
 .contact-submit {
-  background-color: var(--primary-blue);
+  background: linear-gradient(to right, var(--slate-800), var(--slate-700));
   color: white;
   border: none;
   padding: 14px 28px;
-  border-radius: var(--border-radius-md);
+  border-radius: 12px;
+  font-family: var(--font-nunito-sans);
   font-weight: 600;
   font-size: 1.1rem;
   cursor: pointer;
@@ -1063,12 +1124,13 @@ body {
   justify-content: center;
   gap: 10px;
   width: 100%;
+  box-shadow: var(--shadow-lg);
 }
 
 .contact-submit:hover {
-  background-color: var(--primary-blue-light);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(to right, var(--slate-700), var(--slate-600));
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-xl);
 }
 
 .form-thank-you {

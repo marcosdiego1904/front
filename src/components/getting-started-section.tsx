@@ -57,10 +57,10 @@ export default function GettingStartedSection() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/30 to-amber-100/30 rounded-full blur-2xl"></div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Header */}
+      <div className="max-w-6xl mx-auto text-center relative z-10">
+        {/* Header - Centered at top like method section */}
         <div
-          className={`text-center mb-16 transition-all duration-800 ${
+          className={`mb-16 transition-all duration-1000 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -68,82 +68,64 @@ export default function GettingStartedSection() {
             Start Your Transformation in{" "}
             <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Minutes</span>
           </h2>
-          <p className="text-xl text-[#2C3E50]/80 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-[#2C3E50]/80 max-w-3xl mx-auto leading-relaxed font-medium">
             No complicated setup. No overwhelming lessons. Just 3 simple steps to your first memorized verse.
           </p>
         </div>
 
-        {/* Timeline */}
-        <div className="max-w-3xl mx-auto mb-16">
-          <div className="relative">
-            {/* Timeline line - vertical */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-200 via-orange-200 to-amber-200 transform -translate-x-1/2 hidden sm:block"></div>
+        {/* Steps Grid - 3 columns like method section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className={`bg-white/80 backdrop-blur-sm rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-700 border border-amber-100/50 relative ${
+                visibleSteps.includes(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              }`}
+              style={{
+                transitionDelay: visibleSteps.includes(index) ? `${600 + index * 200}ms` : "0ms",
+              }}
+            >
+              {/* Step number badge */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-base shadow-lg">
+                {index + 1}
+              </div>
 
-            {/* Steps */}
-            <div className="flex flex-col gap-12">
-              {steps.map((step, index) => (
-                <div
-                  key={index}
-                  className={`relative transition-all duration-700 delay-${index * 200} ${
-                    visibleSteps.includes(index)
-                      ? "opacity-100 translate-y-0 scale-100"
-                      : "opacity-0 translate-y-8 scale-95"
-                  }`}
-                >
-                  {/* Step card */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-amber-100/50 relative z-10">
-                    {/* Step number */}
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                      {index + 1}
-                    </div>
-
-                    {/* Emoji icon */}
-                    <div className="text-5xl mb-4">{step.emoji}</div>
-
-                    {/* Title */}
-                    <h3 className="text-2xl font-bold text-[#2C3E50] mb-3 font-inter">{step.title}</h3>
-
-                    {/* Description */}
-                    <p className="text-[#2C3E50]/70 mb-4 leading-relaxed">{step.description}</p>
-
-                    {/* Time */}
-                    <div className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
-                      {step.time}
-                    </div>
-                  </div>
-
-                  {/* Connection arrow (vertical) */}
-                  {index < steps.length - 1 && (
-                    <div className="hidden sm:block absolute left-1/2 -bottom-6 transform -translate-x-1/2 z-20">
-                      <div className="w-8 h-8 bg-white rounded-full border-4 border-amber-300 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  )}
+              {/* Emoji icon */}
+              <div className="mb-6 flex justify-center">
+                <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl">
+                  <div className="text-6xl transition-transform duration-300 hover:scale-110">{step.emoji}</div>
                 </div>
-              ))}
+              </div>
+
+              {/* Title */}
+              <h3 className="text-2xl font-bold text-[#2C3E50] mb-4 font-inter">{step.title}</h3>
+
+              {/* Description */}
+              <p className="text-base text-[#2C3E50]/75 leading-relaxed mb-4">{step.description}</p>
+
+              {/* Time badge */}
+              <div className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+                {step.time}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Bottom section */}
+        {/* CTA Section - Centered at bottom like method section */}
         <div
-          className={`text-center transition-all duration-800 delay-800 ${
+          className={`text-center transition-all duration-800 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
+          style={{
+            transitionDelay: isVisible ? "1400ms" : "0ms",
+          }}
         >
-          <p className="text-lg text-[#2C3E50]/80 mb-8 font-medium">
+          <p className="text-xl text-[#2C3E50]/80 mb-8 font-medium">
             Most Christians experience their first mental click within{" "}
             <span className="text-amber-600 font-bold">24 hours</span>
           </p>
 
-          <button className="group relative px-8 py-4 bg-gradient-to-r from-slate-800 to-slate-900 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:from-slate-700 hover:to-slate-800 hover:scale-105 hover:shadow-xl">
+          <button className="group relative px-10 py-4 bg-gradient-to-r from-slate-800 to-slate-900 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:from-slate-700 hover:to-slate-800 hover:scale-105 hover:shadow-2xl">
             <span className="relative z-10">Get Your First Verse Now - Free</span>
             <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>

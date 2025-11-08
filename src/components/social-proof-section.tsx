@@ -93,10 +93,10 @@ export default function SocialProofSection() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/10 to-amber-100/10 rounded-full blur-2xl"></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Header */}
+      <div className="max-w-6xl mx-auto text-center relative z-10">
+        {/* Header - Centered at top like method section */}
         <div
-          className={`text-center mb-16 transition-all duration-1000 ${
+          className={`mb-16 transition-all duration-1000 ease-out ${
             animatedElements.header ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -106,23 +106,26 @@ export default function SocialProofSection() {
               Transformation
             </span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto font-inter">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto font-inter leading-relaxed">
             See how Christians are rediscovering their most powerful ally
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="flex flex-col gap-8 mb-16 max-w-3xl mx-auto">
+        {/* Testimonial Cards Grid - 3 columns like method section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className={`bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-700 border border-amber-100/50 ${
+              className={`bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-700 border border-amber-100/50 text-left ${
                 animatedElements.testimonials[index] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
+              style={{
+                transitionDelay: animatedElements.testimonials[index] ? `${600 + index * 200}ms` : "0ms",
+              }}
             >
               {/* Avatar */}
               <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4 flex-shrink-0">
                   {testimonial.avatar}
                 </div>
                 <div>
@@ -142,11 +145,14 @@ export default function SocialProofSection() {
           ))}
         </div>
 
-        {/* CTA Section */}
+        {/* CTA Section - Centered at bottom like method section */}
         <div
-          className={`text-center transition-all duration-1000 ${
+          className={`text-center transition-all duration-800 ease-out ${
             animatedElements.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
+          style={{
+            transitionDelay: animatedElements.cta ? "1400ms" : "0ms",
+          }}
         >
           <p className="text-xl text-slate-700 mb-8 font-inter">
             Join 2,847+ Christians who transformed their relationship with Scripture

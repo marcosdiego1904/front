@@ -135,7 +135,7 @@ export default function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full py-20">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full py-20 pb-64">
         <div className="space-y-12 text-center">
           {/* Badge */}
           <div
@@ -152,6 +152,7 @@ export default function HeroSection() {
           >
             Strengthen Your{" "}
             <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Faith</span>,
+            <br />
             One Verse at a Time
           </h1>
 
@@ -165,17 +166,12 @@ export default function HeroSection() {
             className={`max-w-2xl mx-auto transition-all duration-700 delay-300 ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
             <div
-              className={`relative group transition-all duration-300 ${isSearchFocused ? "scale-105 shadow-2xl" : ""}`}
+              className={`flex flex-col sm:flex-row items-stretch bg-white border-[3px] sm:rounded-full rounded-2xl overflow-hidden transition-all duration-300 ${isSearchFocused ? "shadow-[0_6px_28px_rgba(217,119,6,0.35)] -translate-y-0.5" : "shadow-[0_4px_20px_rgba(217,119,6,0.2)]"}`}
+              style={{ borderColor: 'rgb(217, 119, 6)' }}
             >
-              <div
-                className={`absolute -inset-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity ${isSearchFocused ? "opacity-100" : ""}`}
-              ></div>
-              <div
-                className={`relative flex flex-col sm:flex-row items-stretch sm:items-center bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 ${isSearchFocused ? "bg-white/90 backdrop-blur-2xl border-amber-300" : "group-hover:bg-white/85 group-hover:backdrop-blur-xl"}`}
-              >
                 <div className="flex items-center flex-1">
-                  <div className="pl-6 pr-3">
-                    <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="pl-5 pr-3 sm:pl-6 sm:pr-4">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -196,45 +192,55 @@ export default function HeroSection() {
                     onBlur={() => setIsSearchFocused(false)}
                     placeholder="Try 'John 3:16', 'Psalm 23', or 'Romans 8:28'..."
                     disabled={isLoading}
-                    className="flex-1 py-5 text-base sm:text-lg outline-none text-[#2C3E50] placeholder:text-gray-400 bg-transparent pr-4 sm:pr-0"
+                    className="flex-1 py-4 sm:py-[1.125rem] px-2 text-sm sm:text-lg outline-none text-[#2C3E50] placeholder:text-gray-400 bg-transparent"
                   />
                 </div>
-                <Button
+                <button
                   onClick={handleSearch}
                   disabled={isLoading || !searchValue.trim()}
-                  className="relative overflow-hidden m-2 px-8 sm:px-10 py-5 sm:py-6 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg group/button disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="relative overflow-hidden px-8 sm:px-10 py-4 sm:py-[1.125rem] bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white text-base sm:text-lg font-bold transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed border-t-2 sm:border-t-0 sm:border-l-2 border-slate-600/30"
                 >
-                  <span className="relative z-10">{isLoading ? 'Searching...' : 'Search'}</span>
-                  <div className="absolute inset-0 -translate-x-full group-hover/button:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                </Button>
-              </div>
-
-              {/* Bible Version Selector - Mobile First */}
-              <div className="mt-3 flex items-center justify-center gap-2">
-                <label htmlFor="version-select" className="text-sm text-[#2C3E50]/60 font-medium">
-                  Bible Version:
-                </label>
-                <select
-                  id="version-select"
-                  value={selectedTranslation}
-                  onChange={(e) => setSelectedTranslation(e.target.value)}
-                  className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 bg-white/60 backdrop-blur-sm text-[#2C3E50] hover:bg-white/80 hover:border-amber-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent cursor-pointer"
-                >
-                  {availableTranslations.map((translation) => (
-                    <option key={translation.id} value={translation.id}>
-                      {translation.name} - {translation.fullName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">
-                  {error}
-                </div>
-              )}
+                  <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                    {isLoading ? (
+                      'Searching...'
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Search
+                      </>
+                    )}
+                  </span>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                </button>
             </div>
+
+            {/* Bible Version Selector - Mobile First */}
+            <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2">
+              <label htmlFor="version-select" className="text-sm text-[#2C3E50]/60 font-medium">
+                Bible Version:
+              </label>
+              <select
+                id="version-select"
+                value={selectedTranslation}
+                onChange={(e) => setSelectedTranslation(e.target.value)}
+                className="w-full sm:w-auto text-sm px-4 py-2 rounded-lg border border-gray-300 bg-white/90 backdrop-blur-sm text-[#2C3E50] shadow-sm hover:bg-white hover:border-amber-400 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent cursor-pointer font-medium"
+              >
+                {availableTranslations.map((translation) => (
+                  <option key={translation.id} value={translation.id}>
+                    {translation.name} - {translation.fullName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">
+                {error}
+              </div>
+            )}
           </div>
 
           <div
@@ -281,8 +287,10 @@ export default function HeroSection() {
 
                 {/* Topic Popover */}
                 {activeTopicPopover === topic.name && (
-                  <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-amber-200/50 p-4 min-w-[280px]">
+                  <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
+                    {/* Arrow pointing up */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/90 border-l border-t border-amber-200/50 rotate-45 backdrop-blur-xl -z-10"></div>
+                    <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-amber-200/50 p-4 min-w-[280px]">
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-semibold text-[#2C3E50]">Try these verses:</h3>
                         <button
@@ -307,8 +315,6 @@ export default function HeroSection() {
                         ))}
                       </div>
                     </div>
-                    {/* Arrow pointing up */}
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/90 border-l border-t border-amber-200/50 rotate-45 backdrop-blur-xl"></div>
                   </div>
                 )}
               </div>
@@ -316,7 +322,7 @@ export default function HeroSection() {
           </div>
 
           <div
-            className={`pt-8 transition-all duration-700 delay-700 ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
+            className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-0 transition-all duration-700 delay-700 ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
             <div className="flex flex-col items-center gap-2 text-[#2C3E50]/50 animate-bounce">
               <span className="text-sm">Scroll to learn more</span>

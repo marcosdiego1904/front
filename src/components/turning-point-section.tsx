@@ -62,7 +62,7 @@ export default function TurningPointSection() {
 
   const handleStruggleSelect = (struggleId: string) => {
     setSelectedStruggle(struggleId)
-    setIsRevealed(false)
+    setIsRevealed(true)
     setTimeout(() => {
       const element = document.getElementById("turning-point-section")
       if (element) {
@@ -101,23 +101,26 @@ export default function TurningPointSection() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 w-full">
         {/* Header */}
-        <div
-          className={`text-center mb-12 sm:mb-16 transition-all duration-800 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-        >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{ color: "#2C3E50" }}>
-            From Text on a Page to{" "}
-            <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Power</span>{" "}
-            in Your Life
-          </h2>
-          <p
-            className="text-xl max-w-3xl mx-auto leading-relaxed font-medium"
-            style={{ color: "#2C3E50", opacity: 0.8 }}
+        {!selectedStruggle && (
+          <div
+            className={`text-center mb-12 sm:mb-16 transition-all duration-800 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            The Bible isn't a distant textbook; it's a practical guide for your daily life.
-            <br />
-            <strong>Choose a real-life situation below to experience the shift.</strong>
-          </p>
-        </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-relaxed" style={{ color: "#2C3E50" }}>
+              From Text on a Page to{" "}
+              <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Power</span>
+              <br />
+              in Your Life
+            </h2>
+            <p
+              className="text-xl max-w-3xl mx-auto leading-relaxed font-medium"
+              style={{ color: "#2C3E50", opacity: 0.8 }}
+            >
+              The Bible isn't a distant textbook; it's a practical guide for your daily life.
+              <br />
+              <strong>Choose a real-life situation below to experience the shift.</strong>
+            </p>
+          </div>
+        )}
 
         {/* Interactive Experience */}
         <div className="max-w-4xl mx-auto">
@@ -134,7 +137,7 @@ export default function TurningPointSection() {
                   style={{ animationDelay: `${index * 200}ms` }}
                 >
                   <div
-                    className="bg-slate-800 backdrop-blur-sm rounded-2xl p-8 sm:p-10 text-center shadow-xl hover:shadow-2xl border border-slate-700/50 transition-all duration-300 group-hover:border-amber-400 group-hover:bg-slate-700 group-hover:shadow-amber-500/30 min-h-[200px] flex flex-col justify-center"
+                    className="bg-slate-800 backdrop-blur-sm rounded-2xl p-8 sm:p-10 text-center shadow-xl hover:shadow-2xl border border-slate-700/50 transition-all duration-300 group-hover:border-amber-400 group-hover:bg-slate-700 group-hover:shadow-amber-500/30 h-[240px] flex flex-col justify-center"
                     style={{
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
                     }}
@@ -253,51 +256,52 @@ export default function TurningPointSection() {
                     ) : (
                       /* Back of Card - Solution State */
                       <div
-                        className="p-6 sm:p-8 text-center flex flex-col justify-center min-h-[350px] animate-fade-in"
+                        className="p-6 sm:p-8 text-center flex flex-col justify-center min-h-[350px] animate-fade-in relative overflow-hidden"
                         style={{
-                          background: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 50%, #F59E0B 100%)",
+                          background: "linear-gradient(135deg, #FEFEFE 0%, #FAF8F5 50%, #F5F3EF 100%)",
                         }}
                       >
+                        {/* Subtle Accent Border */}
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-orange-500"></div>
                         {/* Light Ray Effect */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-200/30 via-transparent to-amber-200/20 pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/30 via-transparent to-orange-50/20 pointer-events-none"></div>
 
                         <div className="relative z-10">
                           {/* Transformed Icon */}
-                          <div className="mb-4">
-                            <div className="w-12 h-12 mx-auto rounded-full bg-white/90 flex items-center justify-center mb-4 shadow-lg animate-pulse">
-                              <svg className="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                          <div className="mb-6">
+                            <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mb-4 shadow-lg">
+                              <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                               </svg>
                             </div>
                           </div>
 
                           <blockquote
-                            className="font-lora text-lg sm:text-xl leading-snug mb-4 italic font-medium text-balance"
+                            className="font-lora text-xl sm:text-2xl leading-relaxed mb-6 italic font-medium text-balance"
                             style={{
                               color: "#1F2937",
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
-                              lineHeight: "1.3",
+                              lineHeight: "1.5",
                             }}
                           >
                             "{selectedStruggleData?.verse}"
                           </blockquote>
 
                           <p
-                            className="font-nunito-sans text-base font-semibold mb-5 tracking-wide"
-                            style={{ color: "#374151" }}
+                            className="font-nunito-sans text-base font-bold mb-6 tracking-wide"
+                            style={{ color: "#D97706" }}
                           >
                             - {selectedStruggleData?.reference}
                           </p>
 
                           <div
-                            className="bg-white/90 rounded-xl p-4 mb-5 backdrop-blur-sm border border-white/50"
+                            className="bg-amber-50/80 rounded-xl p-5 mb-6 backdrop-blur-sm border border-amber-100"
                             style={{
-                              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.5)",
+                              boxShadow: "0 4px 16px rgba(217, 119, 6, 0.08)",
                             }}
                           >
                             <p
                               className="font-nunito-sans text-sm sm:text-base leading-relaxed text-balance"
-                              style={{ color: "#1F2937" }}
+                              style={{ color: "#374151" }}
                             >
                               {selectedStruggleData?.explanation}
                             </p>
@@ -305,6 +309,7 @@ export default function TurningPointSection() {
 
                           <Button
                             size="lg"
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             className="bg-gradient-to-r from-slate-800 to-slate-700 hover:from-slate-700 hover:to-slate-600 text-white font-nunito-sans font-semibold text-base px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-slate-600/20"
                           >
                             Learn Your First Life-Changing Verse

@@ -288,23 +288,43 @@ class BibleApiService {
   /**
    * Obtiene ejemplos de referencias bíblicas por categoría
    */
-  getExampleReferences(): { category: string; verses: string[] }[] {
+  getExampleReferences(): { category: string; verses: string[]; emoji: string; description: string }[] {
     return [
       {
-        category: 'Popular Verses',
+        category: 'Popular Favorites',
+        emoji: '⭐',
+        description: 'Most memorized verses of all time',
         verses: ['John 3:16', 'Romans 8:28', 'Philippians 4:13', 'Jeremiah 29:11']
       },
       {
+        category: 'Anxiety & Worry',
+        emoji: '🕊️',
+        description: 'Find peace in stressful moments',
+        verses: ['Philippians 4:6-7', 'Matthew 6:34', 'Isaiah 41:10', 'Psalm 94:19']
+      },
+      {
+        category: 'Strength & Courage',
+        emoji: '💪',
+        description: 'Power to face any challenge',
+        verses: ['Joshua 1:9', 'Isaiah 40:31', 'Psalm 46:1', 'Ephesians 6:10']
+      },
+      {
         category: 'Comfort & Peace',
-        verses: ['Psalm 23:1', 'Isaiah 41:10', 'Matthew 11:28', 'John 14:27']
+        emoji: '🌿',
+        description: 'Rest for your weary soul',
+        verses: ['Psalm 23:1', 'Matthew 11:28', 'John 14:27', '2 Corinthians 1:3-4']
       },
       {
-        category: 'Faith & Trust',
-        verses: ['Proverbs 3:5-6', 'Hebrews 11:1', 'Romans 10:17', '2 Corinthians 5:7']
+        category: 'Love & Relationships',
+        emoji: '❤️',
+        description: 'God\'s love and how to love others',
+        verses: ['1 Corinthians 13:4-7', '1 John 4:8', 'John 13:34', 'Romans 5:8']
       },
       {
-        category: 'Love & Grace',
-        verses: ['1 Corinthians 13:4', 'Ephesians 2:8-9', '1 John 4:8', 'Romans 5:8']
+        category: 'Wisdom & Guidance',
+        emoji: '🧭',
+        description: 'Direction for life\'s decisions',
+        verses: ['Proverbs 3:5-6', 'James 1:5', 'Psalm 32:8', 'Proverbs 16:3']
       }
     ];
   }

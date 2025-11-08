@@ -3,6 +3,7 @@ import Home from "../src/Home/index";
 import LearnSection from "../pages/learnsection/Learn";
 import BibleSearch from "../pages/learnsection/BibleSearch"; // ← NUEVA IMPORTACIÓN
 import Navbar from "./Navbar";
+import HomepageNavigation from "./components/homepage-navigation";
 import "./App.css";
 
 // Import authentication components
@@ -83,9 +84,12 @@ const Layout = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
+  // Pages that should use HomepageNavigation
+  const usesHomepageNav = ['/', '/bible-search', '/about', '/support'].includes(location.pathname);
+
   return (
     <>
-      {!isHomePage && <Navbar />}
+      {usesHomepageNav ? <HomepageNavigation /> : <Navbar />}
       <AppRoutes />
     </>
   );
