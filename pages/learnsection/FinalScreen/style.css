@@ -1,70 +1,119 @@
-/* FinalScreen Redesigned Styles */
+/* ========================================
+   FINAL SCREEN / COMPLETION
+   Import shared design system & add celebration styles
+   ======================================== */
+@import '../shared-learning-styles.css';
 
+/* Main container aligned with new design */
 .memorization-final-container {
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  padding: 2.5rem;
-  max-width: 600px;
+  position: relative;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--card-shadow),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  border: 1px solid var(--card-border);
+  max-width: 700px;
   margin: 50px auto;
   text-align: center;
-  position: relative;
   overflow: hidden;
+  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.memorization-header {
-  margin-bottom: 1.5rem;
-  color: #343a40;
-  font-size: 2.2rem;
-  font-weight: 700;
+/* Subtle animated gradient overlay */
+.memorization-final-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.03) 0%, transparent 70%);
+  animation: rotate 30s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure content is above background */
+.memorization-final-container > * {
   position: relative;
+  z-index: 1;
 }
 
+/* Header with gradient text */
+.memorization-header {
+  margin-bottom: var(--spacing-lg);
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Confetti icons animation */
 .memorization-confetti-icon {
-  font-size: 2.4rem;
-  margin: 0 10px;
+  font-size: 2.5rem;
+  margin: 0 12px;
   display: inline-block;
   animation: bounce 1s ease infinite alternate;
 }
 
+@keyframes bounce {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-12px) rotate(5deg); }
+}
+
+/* Description text */
 .memorization-description {
-  font-size: 1.1rem;
-  color: #495057;
-  line-height: 1.6;
-  margin-bottom: 0.8rem;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-sm);
 }
 
 .memorization-tip {
-  font-size: 1.1rem;
-  color: #495057;
+  font-size: 1rem;
+  color: var(--text-muted);
   font-style: italic;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm);
+  background: rgba(217, 119, 6, 0.03);
+  border-radius: var(--radius-sm);
 }
 
-/* Status Messages */
+/* ========================================
+   STATUS MESSAGES
+   ======================================== */
 .memorization-status-message {
-  padding: 16px;
-  border-radius: 8px;
-  margin: 20px 0;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
   font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
+  backdrop-filter: blur(8px);
 }
 
 .memorization-success-message {
-  background-color: rgba(47, 201, 112, 0.1);
-  border-left: 4px solid #2fc970;
-  color: #1a7943;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+  border-left: 4px solid var(--color-success);
+  color: #047857;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
 .memorization-error-message {
-  background-color: rgba(233, 76, 88, 0.1);
-  border-left: 4px solid #e94c58;
-  color: #b12432;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  border-left: 4px solid var(--color-error);
+  color: #b91c1c;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
+/* Loading indicator */
 .memorization-loading-indicator {
   display: flex;
   align-items: center;
@@ -73,185 +122,249 @@
 }
 
 .memorization-spinner {
-  width: 22px;
-  height: 22px;
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #007bff;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(217, 119, 6, 0.2);
+  border-top-color: var(--accent-amber);
   border-radius: 50%;
-  animation: memorization-spin 1s linear infinite;
+  animation: memorization-spin 0.8s linear infinite;
 }
 
-/* Login Prompt */
+@keyframes memorization-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   LOGIN PROMPT
+   ======================================== */
 .memorization-login-container {
-  background-color: rgba(52, 152, 219, 0.1);
-  border-left: 4px solid #3498db;
-  padding: 16px;
-  border-radius: 8px;
-  margin: 20px 0;
-  color: #2874a6;
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), rgba(234, 88, 12, 0.05));
+  border-left: 4px solid var(--accent-amber);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+  color: #92400e;
+  backdrop-filter: blur(8px);
 }
 
 .memorization-login-button {
   display: inline-block;
-  background-color: #3498db;
+  background: var(--button-primary-bg);
   color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  margin-top: 10px;
-  transition: all 0.3s ease;
+  margin-top: 12px;
+  transition: all var(--transition-base);
   border: none;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.3);
 }
 
 .memorization-login-button:hover {
-  background-color: #2874a6;
+  background: var(--button-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(51, 65, 85, 0.4);
 }
 
-/* Buttons Container */
+/* ========================================
+   BUTTONS
+   ======================================== */
 .memorization-buttons-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
-  margin-top: 30px;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
 }
 
 .memorization-button {
-  padding: 12px 20px;
-  border-radius: 8px;
+  padding: 14px 24px;
+  border-radius: 14px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 140px;
-}
-
-.memorization-home-button {
-  background-color: #6c757d;
-  color: white;
-}
-
-.memorization-home-button:hover {
-  background-color: #545b62;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.memorization-restart-button {
-  background-color: #28a745;
-  color: white;
-  display: flex;
+  min-width: 160px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-family: var(--font-sans);
+}
+
+/* Home button - secondary style */
+.memorization-home-button {
+  background: var(--button-secondary-bg);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.memorization-home-button:hover {
+  background: var(--button-secondary-hover);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Restart button - amber accent */
+.memorization-restart-button {
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.3);
 }
 
 .memorization-restart-button:hover {
-  background-color: #218838;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
 }
 
+/* Profile button - slate like continue */
 .memorization-profile-button {
-  background-color: #007bff;
+  background: var(--button-primary-bg);
   color: white;
+  box-shadow: 0 4px 16px rgba(51, 65, 85, 0.3);
 }
 
 .memorization-profile-button:hover {
-  background-color: #0069d9;
+  background: var(--button-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(51, 65, 85, 0.4);
 }
 
 /* Back button */
 .memorization-navigation-container {
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: var(--spacing-lg);
 }
 
 .memorization-back-button {
-  background-color: #e67e22;
-  color: white;
+  background: var(--button-secondary-bg);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  transition: all 0.3s ease;
-  border: none;
+  transition: all var(--transition-base);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  width: 140px;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .memorization-back-button:hover {
-  background-color: #d35400;
+  background: var(--button-secondary-hover);
+  color: var(--text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Background decorations */
+/* ========================================
+   BACKGROUND DECORATIONS
+   ======================================== */
 .memorization-decoration {
   position: absolute;
   opacity: 0.05;
   z-index: 0;
+  border-radius: 50%;
+  filter: blur(40px);
 }
 
 .memorization-decoration-1 {
-  top: -20px;
-  right: -20px;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: #007bff;
+  top: -30px;
+  right: -30px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--accent-amber), transparent);
 }
 
 .memorization-decoration-2 {
-  bottom: -30px;
-  left: -30px;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: #28a745;
+  bottom: -40px;
+  left: -40px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, var(--color-success), transparent);
 }
 
-/* Animations */
-@keyframes memorization-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* ========================================
+   RESPONSIVE - MOBILE FIRST
+   ======================================== */
+@media (max-width: 640px) {
   .memorization-final-container {
-    padding: 1.5rem;
-    margin: 0 1rem;
+    padding: var(--spacing-md);
+    margin: var(--spacing-md);
+    max-width: 100%;
   }
-  
+
+  .memorization-header {
+    font-size: 1.875rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .memorization-confetti-icon {
+    font-size: 2rem;
+    margin: 0 8px;
+  }
+
+  .memorization-description {
+    font-size: 1rem;
+  }
+
   .memorization-buttons-container {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    gap: var(--spacing-sm);
   }
-  
+
   .memorization-button {
     width: 100%;
-    max-width: 250px;
+    min-width: unset;
+  }
+
+  .memorization-back-button {
+    width: 100%;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .memorization-final-container {
+    padding: var(--spacing-lg);
+    max-width: 650px;
+  }
+
+  .memorization-buttons-container {
+    gap: var(--spacing-md);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.memorization-button:focus-visible,
+.memorization-login-button:focus-visible,
+.memorization-back-button:focus-visible {
+  outline: 3px solid var(--accent-amber);
+  outline-offset: 3px;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .memorization-confetti-icon,
+  .memorization-spinner,
+  .memorization-final-container::before {
+    animation: none;
+  }
+
+  .memorization-button:hover,
+  .memorization-login-button:hover,
+  .memorization-back-button:hover {
+    transform: none;
   }
 }
