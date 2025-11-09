@@ -1,0 +1,854 @@
+/* ========================================
+   LEARNING INTERFACE DESIGN SYSTEM
+   Aligned with Homepage Brand Identity
+   Mobile-First Approach
+   ======================================== */
+
+/* Import beautiful fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@400;700&display=swap');
+
+/* ========================================
+   DESIGN TOKENS
+   ======================================== */
+:root {
+  /* Brand Colors - From Homepage */
+  --text-primary: #2C3E50;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* Accent Colors - Amber/Orange from Homepage */
+  --accent-amber: #d97706;
+  --accent-orange: #ea580c;
+  --accent-gradient: linear-gradient(135deg, #d97706, #ea580c);
+
+  /* Validation Colors */
+  --color-success: #10b981;
+  --color-success-light: #34d399;
+  --color-error: #ef4444;
+  --color-error-light: #f87171;
+
+  /* Button Colors - Slate from Homepage */
+  --button-primary-bg: linear-gradient(135deg, #334155, #1e293b);
+  --button-primary-hover: linear-gradient(135deg, #1e293b, #0f172a);
+  --button-secondary-bg: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  --button-secondary-hover: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+
+  /* Backgrounds */
+  --bg-light-gradient: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  --bg-warm-gradient: linear-gradient(135deg, #faf8f5 0%, #f5f1ed 100%);
+
+  /* Card Styles */
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(217, 119, 6, 0.1);
+  --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  --card-shadow-hover: 0 24px 72px rgba(0, 0, 0, 0.2);
+
+  /* Verse Display */
+  --verse-bg: linear-gradient(135deg, rgba(217, 119, 6, 0.03), rgba(234, 88, 12, 0.03));
+  --verse-border: rgba(217, 119, 6, 0.3);
+
+  /* Spacing */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   MAIN CONTAINERS
+   ======================================== */
+.main-container1,
+.main-container2,
+.main-container3 {
+  background: var(--bg-light-gradient);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl) var(--spacing-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle animated background elements - like homepage */
+.main-container1::before,
+.main-container2::before,
+.main-container3::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.main-container1::after,
+.main-container2::after,
+.main-container3::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 15%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: float-delayed 25s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ========================================
+   CARD STYLES - Glassmorphic like Homepage
+   ======================================== */
+.intro-section,
+.read-aloud-section,
+.breakdown-section,
+.fill-blanks-section,
+.write-from-memory-section {
+  position: relative;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--card-shadow),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  border: 1px solid var(--card-border);
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  text-align: center;
+  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+/* Subtle animated gradient overlay */
+.intro-section::before,
+.read-aloud-section::before,
+.breakdown-section::before,
+.fill-blanks-section::before,
+.write-from-memory-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.02) 0%, transparent 70%);
+  animation: rotate 30s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+.title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-amber) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-sm);
+}
+
+.instruction {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-md);
+}
+
+.highlight {
+  color: var(--accent-amber);
+  font-weight: 700;
+}
+
+.text-accent {
+  color: var(--accent-orange);
+  font-weight: 700;
+}
+
+/* ========================================
+   VERSE DISPLAY - Sacred & Beautiful
+   ======================================== */
+.verse-container {
+  position: relative;
+  padding: var(--spacing-xl);
+  margin: var(--spacing-lg) 0;
+  background: var(--verse-bg);
+  border-radius: var(--radius-xl);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 0 8px 32px rgba(217, 119, 6, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.verse-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  padding: 2px;
+  background: var(--accent-gradient);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.3;
+}
+
+.cite {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-amber);
+  margin-bottom: var(--spacing-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.cite::before,
+.cite::after {
+  content: '✦';
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+.verse {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  line-height: 1.8;
+  color: var(--text-primary);
+  font-weight: 400;
+  text-align: center;
+  position: relative;
+  margin: var(--spacing-md) 0;
+}
+
+/* Opening quote mark decoration */
+.verse-container .verse::before {
+  content: '"';
+  font-size: 4rem;
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  color: rgba(217, 119, 6, 0.1);
+  font-family: Georgia;
+  line-height: 1;
+}
+
+/* ========================================
+   BUTTONS - Matching Homepage Style
+   ======================================== */
+.button {
+  min-width: 180px;
+  height: 56px;
+  padding: 0 var(--spacing-lg);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-sans);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Continue button - Dark slate like homepage search */
+.continue-button {
+  background: var(--button-primary-bg);
+  color: white;
+  box-shadow: 0 4px 16px rgba(51, 65, 85, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.continue-button:hover:not(:disabled) {
+  background: var(--button-primary-hover);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(51, 65, 85, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.continue-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Back button - Light secondary style */
+.back-button {
+  background: var(--button-secondary-bg);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.back-button:hover {
+  background: var(--button-secondary-hover);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.back-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Disabled state */
+.button:disabled,
+.continue-button:disabled {
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Ripple effect on click */
+.button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Button group layout */
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   INPUTS - Fill in the Blanks
+   ======================================== */
+.blank-input {
+  min-width: 120px;
+  height: 48px;
+  padding: 0 var(--spacing-sm);
+  margin: 0 6px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+  font-family: var(--font-serif);
+
+  /* Glassmorphic style like homepage search */
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
+              inset 0 1px 2px rgba(255, 255, 255, 0.5);
+
+  transition: all var(--transition-base);
+  outline: none;
+}
+
+/* Focus state - amber glow like homepage */
+.blank-input:focus {
+  border-color: var(--accent-amber);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1),
+              0 4px 16px rgba(217, 119, 6, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Correct answer - emerald with celebration */
+.blank-input.correct {
+  border-color: var(--color-success);
+  color: var(--color-success);
+  background: linear-gradient(135deg,
+    rgba(16, 185, 129, 0.05) 0%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15),
+              0 4px 16px rgba(16, 185, 129, 0.2);
+  animation: successPulse 0.6s ease-out;
+}
+
+/* Incorrect answer - gentle feedback */
+.blank-input.incorrect {
+  border-color: var(--color-error-light);
+  color: var(--color-error);
+  background: rgba(239, 68, 68, 0.03);
+  animation: shake 0.4s ease-out;
+}
+
+/* ========================================
+   TEXTAREA - Write from Memory
+   ======================================== */
+.memory-input {
+  width: 100%;
+  min-height: 200px;
+  padding: var(--spacing-md);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+
+  background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.95),
+    rgba(249, 250, 251, 0.95)
+  );
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04),
+              0 4px 12px rgba(0, 0, 0, 0.04);
+
+  transition: all var(--transition-base);
+  resize: vertical;
+  outline: none;
+}
+
+.memory-input:focus {
+  border-color: var(--accent-amber);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1),
+              inset 0 2px 8px rgba(0, 0, 0, 0.04),
+              0 8px 24px rgba(217, 119, 6, 0.15);
+}
+
+.memory-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Word validation in write section */
+.correct-word {
+  color: var(--color-success);
+  font-weight: 600;
+  padding: 2px 4px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 4px;
+  margin: 0 2px;
+  transition: all var(--transition-fast);
+}
+
+.incorrect-word {
+  color: var(--text-muted);
+  opacity: 0.4;
+  margin: 0 2px;
+}
+
+/* ========================================
+   INFO BUTTON & EXPLANATION
+   ======================================== */
+.info-btn {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  color: var(--accent-amber);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  text-decoration: none;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.info-btn:hover {
+  color: var(--accent-orange);
+  background: rgba(217, 119, 6, 0.05);
+}
+
+.explanation-container {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-slow),
+              opacity var(--transition-base);
+}
+
+.explanation-container.show {
+  max-height: 300px;
+  opacity: 1;
+}
+
+.explanation {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  padding: var(--spacing-md);
+  border-left: 4px solid var(--accent-amber);
+  background: rgba(217, 119, 6, 0.05);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-md);
+  text-align: left;
+  line-height: 1.7;
+}
+
+/* ========================================
+   HINT TEXT
+   ======================================== */
+.hint {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(217, 119, 6, 0.05);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-md);
+  text-align: left;
+}
+
+/* ========================================
+   FRAGMENT NAVIGATION
+   ======================================== */
+.fragment-container {
+  position: relative;
+  padding: var(--spacing-xl);
+  background: var(--verse-bg);
+  border-radius: var(--radius-xl);
+  margin: var(--spacing-lg) 0;
+}
+
+.fragment-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right,
+    rgba(217, 119, 6, 0.15),
+    rgba(234, 88, 12, 0.15)
+  );
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+}
+
+.fragment-progress-fill {
+  height: 100%;
+  background: var(--accent-gradient);
+  border-radius: 3px;
+  transition: width var(--transition-slow);
+  position: relative;
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.5);
+}
+
+/* Animated shimmer effect */
+.fragment-progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+.fragment-counter {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--accent-gradient);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  margin-bottom: var(--spacing-md);
+}
+
+.verse-fragment-wrapper {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+.verse-fragment {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  line-height: 2;
+  color: var(--text-primary);
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fragment-navigation {
+  margin-top: var(--spacing-lg);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes successPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@keyframes shimmer {
+  to { left: 100%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-30px, 30px) scale(1.05); }
+  66% { transform: translate(20px, -20px) scale(0.95); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE FIRST
+   ======================================== */
+
+/* Mobile devices (< 640px) */
+@media (max-width: 640px) {
+  .intro-section,
+  .read-aloud-section,
+  .breakdown-section,
+  .fill-blanks-section,
+  .write-from-memory-section {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-xl);
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .instruction {
+    font-size: 1rem;
+  }
+
+  .verse {
+    font-size: 1.25rem;
+    line-height: 1.7;
+  }
+
+  .verse-container {
+    padding: var(--spacing-md);
+  }
+
+  .button {
+    width: 100%;
+    height: 52px;
+    font-size: 0.95rem;
+  }
+
+  .button-group {
+    flex-direction: column-reverse;
+    gap: var(--spacing-sm);
+  }
+
+  .blank-input {
+    min-width: 90px;
+    width: 90px;
+    height: 44px;
+    font-size: 1rem;
+    margin: 4px;
+  }
+
+  .memory-input {
+    font-size: 1.125rem;
+    min-height: 180px;
+  }
+
+  .verse-fragment {
+    font-size: 1.375rem;
+    line-height: 1.8;
+  }
+
+  /* Reduce animation intensity on mobile for performance */
+  .main-container1::before,
+  .main-container2::before,
+  .main-container3::before,
+  .main-container1::after,
+  .main-container2::after,
+  .main-container3::after {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* Tablets (640px - 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .intro-section,
+  .read-aloud-section,
+  .breakdown-section,
+  .fill-blanks-section,
+  .write-from-memory-section {
+    padding: var(--spacing-lg);
+    max-width: 750px;
+  }
+
+  .blank-input {
+    min-width: 110px;
+    width: 110px;
+  }
+}
+
+/* Desktop (> 1024px) */
+@media (min-width: 1025px) {
+  .intro-section,
+  .read-aloud-section,
+  .breakdown-section,
+  .fill-blanks-section,
+  .write-from-memory-section {
+    max-width: 900px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus indicators for keyboard navigation */
+.button:focus-visible,
+.blank-input:focus-visible,
+.memory-input:focus-visible,
+.info-btn:focus-visible {
+  outline: 3px solid var(--accent-amber);
+  outline-offset: 3px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .button,
+  .blank-input,
+  .memory-input {
+    border-width: 3px;
+  }
+
+  .title,
+  .verse {
+    font-weight: 700;
+  }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --card-bg: rgba(30, 41, 59, 0.95);
+    --bg-light-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+
+  .verse {
+    color: #f1f5f9;
+  }
+
+  .blank-input,
+  .memory-input {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: rgba(148, 163, 184, 0.3);
+    color: #f1f5f9;
+  }
+}

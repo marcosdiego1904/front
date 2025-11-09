@@ -1,0 +1,201 @@
+/* ========================================
+   INTRO SECTION
+   Import shared design system
+   ======================================== */
+@import '../shared-learning-styles.css';
+
+/* Intro section uses all base styles from shared file */
+.intro-section {
+  /* All styles inherited from shared-learning-styles.css */
+}
+
+/* ========================================
+   INTRO-SPECIFIC ELEMENTS
+   ======================================== */
+
+/* Header with return button */
+.header {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.return-button {
+  padding: 10px 20px;
+  background: var(--button-secondary-bg);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.return-button:hover {
+  background: var(--button-secondary-hover);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Context text */
+.context {
+  font-size: 1.0625rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md);
+  background: rgba(217, 119, 6, 0.03);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--accent-amber);
+}
+
+/* Start Learning button - prominent CTA */
+.start-learning-btn {
+  padding: 16px 32px;
+  background: var(--button-primary-bg);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  margin: var(--spacing-lg) auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(51, 65, 85, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-family: var(--font-sans);
+}
+
+.start-learning-btn:hover {
+  background: var(--button-primary-hover);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(51, 65, 85, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.start-learning-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Toggle explanation button */
+.toggle-explanation {
+  background: none;
+  border: none;
+  color: var(--accent-amber);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  margin-top: var(--spacing-md);
+  font-family: var(--font-sans);
+}
+
+.toggle-explanation:hover {
+  background: rgba(217, 119, 6, 0.05);
+  color: var(--accent-orange);
+}
+
+/* Explanation content */
+.explanation-content {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.03), rgba(234, 88, 12, 0.02));
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(217, 119, 6, 0.15);
+  text-align: left;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.explanation-content h3 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.explanation-content h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--accent-amber);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.explanation-content p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-sm);
+}
+
+.explanation-content p.bold {
+  font-weight: 600;
+  color: var(--accent-amber);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: rgba(217, 119, 6, 0.05);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .intro-section {
+    padding: var(--spacing-md);
+  }
+
+  .start-learning-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 14px 24px;
+  }
+
+  .return-button {
+    font-size: 0.875rem;
+    padding: 8px 16px;
+  }
+
+  .context {
+    font-size: 1rem;
+    padding: var(--spacing-sm);
+  }
+
+  .explanation-content {
+    padding: var(--spacing-md);
+  }
+
+  .explanation-content h3 {
+    font-size: 1.25rem;
+  }
+
+  .explanation-content h4 {
+    font-size: 1.0625rem;
+  }
+
+  .explanation-content p {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Focus states for accessibility */
+.return-button:focus-visible,
+.start-learning-btn:focus-visible,
+.toggle-explanation:focus-visible {
+  outline: 3px solid var(--accent-amber);
+  outline-offset: 3px;
+}
