@@ -1,6 +1,11 @@
+"use client"
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import React from "react";
+import { ChevronDown, Menu, X, ArrowLeft } from "lucide-react";
+import { useAuth } from "../../../src/auth/context/AuthContext";
+import logo from "../../../src/oil-lamp.png";
 import "./style.css";
 
 interface Props {
@@ -12,67 +17,250 @@ interface Props {
 
 const IntroSection = ({ cite, verse, context, onNext }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    navigate("/login");
+    setDrawerOpen(false);
+  };
+
+  const handleStartClick = () => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    } else {
+      navigate("/register");
+    }
+    setDrawerOpen(false);
+  };
 
   return (
-    <main className="main-container1">
-      <div className="intro-section">
-        {/* Botón de regreso mejorado */}
-        <div className="header">
-          <button className="return-button" onClick={() => navigate(-1)}>
-            Return
+    <>
+      {/* Navbar */}
+      <nav className="intro-navbar">
+        <div className="intro-navbar-container">
+          <div className="intro-navbar-content">
+            <button
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              className="intro-navbar-button"
+            >
+              <Menu className="h-5 w-5" />
+              <span>Lamp to My Feet</span>
+              <img src={logo} alt="Lamp Icon" className="intro-navbar-logo" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Drawer overlay */}
+      <div
+        className={`intro-drawer-overlay ${drawerOpen ? "intro-drawer-overlay-open" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+      ></div>
+
+      {/* Drawer sidebar */}
+      <aside className={`intro-drawer ${drawerOpen ? "intro-drawer-open" : ""}`}>
+        <div className="intro-drawer-header">
+          <div className="intro-drawer-header-content" onClick={() => handleNavClick("/")}>
+            <span className="intro-drawer-title">Lamp to My Feet</span>
+            <img src={logo} alt="Lamp Icon" className="intro-drawer-logo" />
+          </div>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="intro-drawer-close"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Información principal */}
-        <h2 className="cite">You have selected {cite}</h2>
-        <div className="verse-container">
-          <p className="verse">"{verse}"</p>
-        </div>
-        <p className="context">{context}</p>
+        <nav className="intro-drawer-nav">
+          <button
+            onClick={() => handleNavClick("/")}
+            className="intro-drawer-link"
+          >
+            Home
+          </button>
+          <button
+            onClick={() => handleNavClick("/bible-search")}
+            className="intro-drawer-link"
+          >
+            Bible Search
+          </button>
+          <button
+            onClick={() => handleNavClick("/about")}
+            className="intro-drawer-link"
+          >
+            About
+          </button>
+          <button
+            onClick={() => handleNavClick("/support")}
+            className="intro-drawer-link"
+          >
+            Support Us
+          </button>
+          {isAuthenticated && (
+            <button
+              onClick={() => handleNavClick("/dashboard")}
+              className="intro-drawer-link"
+            >
+              Dashboard
+            </button>
+          )}
 
-        {/* Botón para comenzar el aprendizaje mejorado */}
-        <button className="start-learning-btn" onClick={onNext}>
-          Start Learning
-        </button>
-
-        {/* Toggle para mostrar la explicación mejorado */}
-        <button className="toggle-explanation" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? "Hide Explanation ▲" : "Why does this method work? ▼"}
-        </button>
-
-        {/* Contenido de la explicación con animación */}
-        {isOpen && (
-          <div className="explanation-content">
-            <h3>🚀 The Science Behind This Method</h3>
-            <p>
-              Memory experts and neuroscientists agree: the best way to retain information is to engage multiple cognitive processes.
-              This method is based on three scientifically proven learning techniques:
-            </p>
-
-            <h4>🧠 1. Active Recall</h4>
-            <p>
-              Studies show that retrieving information from memory strengthens neural pathways.
-              Instead of passively reading, this system forces you to recall verses, improving retention.
-            </p>
-
-            <h4>🔁 2. Spaced Repetition</h4>
-            <p>
-              The forgetting curve (Ebbinghaus, 1885) proves that revisiting information at spaced intervals 
-              helps move knowledge from short-term to long-term memory.
-            </p>
-
-            <h4>🔍 3. Chunking & Progressive Learning</h4>
-            <p>
-              Research shows that breaking down large amounts of text into smaller, meaningful chunks 
-              (like splitting a verse into fragments) improves recall and understanding.
-            </p>
-
-            <p className="bold">✨ This is why our approach helps you memorize faster and more effectively!</p>
+          <div className="intro-drawer-divider">
+            {!isAuthenticated ? (
+              <>
+                <button
+                  onClick={handleLoginClick}
+                  className="intro-drawer-link"
+                >
+                  Log In
+                </button>
+                <div className="intro-drawer-cta">
+                  <button
+                    onClick={handleStartClick}
+                    className="intro-drawer-cta-button"
+                  >
+                    Start for Free
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="intro-drawer-cta">
+                <button
+                  onClick={() => handleNavClick("/dashboard")}
+                  className="intro-drawer-cta-button"
+                >
+                  Dashboard
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </nav>
+      </aside>
+
+      <main className="intro-main-container">
+      {/* Decorative background orbs */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-20 left-10 w-40 h-40 bg-[#FFD700] rounded-full blur-3xl animate-pulse"></div>
+        <div
+          className="absolute bottom-20 right-10 w-48 h-48 bg-[#E8B86D] rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        ></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/30 to-amber-100/30 rounded-full blur-2xl"></div>
+      </div>
+
+      {/* Decorative book icon */}
+      <div className="absolute top-1/4 right-1/5 opacity-15">
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          className="animate-pulse"
+          style={{ animationDelay: "0.5s" }}
+        >
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#D97706" strokeWidth="1.5" />
+          <path
+            d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+            stroke="#D97706"
+            strokeWidth="1.5"
+          />
+          <path d="M8 7h8M8 11h6" stroke="#D97706" strokeWidth="1" />
+        </svg>
+      </div>
+
+      <div className="intro-content-wrapper">
+        <div className="intro-card">
+          {/* Return button */}
+          <div className="intro-header">
+            <button
+              onClick={() => navigate(-1)}
+              className="intro-return-button"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" />
+              <span className="hidden sm:inline">Return to Home</span>
+              <span className="sm:hidden">Home</span>
+            </button>
+          </div>
+
+          {/* Title with icon */}
+          <div className="intro-title-section">
+            <div className="intro-icon-badge">
+              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+            </div>
+            <h2 className="intro-title">
+              You have selected <span className="intro-title-highlight">{cite}</span>
+            </h2>
+          </div>
+
+          {/* Verse display box */}
+          <div className="intro-verse-box">
+            <div className="intro-verse-quote-mark">"</div>
+            <blockquote className="intro-verse-text">
+              "{verse}"
+            </blockquote>
+          </div>
+
+          {/* Context */}
+          {context && (
+            <p className="intro-context-text">
+              {context}
+            </p>
+          )}
+
+          {/* Primary CTA - Start Learning */}
+          <button className="intro-start-button" onClick={onNext}>
+            Start Learning
+          </button>
+
+          {/* Toggle explanation */}
+          <div className="intro-explanation-section">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="intro-toggle-button"
+            >
+              Why does this method work?
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {/* Explanation content with smooth animation */}
+            <div
+              className={`intro-explanation-content ${isOpen ? "intro-explanation-open" : ""}`}
+            >
+              {isOpen && (
+                <div className="intro-explanation-inner">
+                  <h3 className="intro-explanation-title">The Science Behind The Method</h3>
+                  <p className="intro-explanation-text">
+                    Our method combines three scientifically-proven learning techniques:{" "}
+                    <span className="intro-explanation-highlight">spaced repetition</span>,{" "}
+                    <span className="intro-explanation-highlight">active recall</span>, and{" "}
+                    <span className="intro-explanation-highlight">multi-sensory engagement</span>.
+                  </p>
+                  <p className="intro-explanation-text">
+                    By breaking verses into manageable chunks and engaging both visual and auditory pathways,
+                    we help your brain form strong, lasting neural connections. The fill-in-the-blank exercise
+                    forces active recall, which is proven to be 50% more effective than passive re-reading.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
+    </>
   );
 };
 
