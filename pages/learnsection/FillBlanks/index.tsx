@@ -277,11 +277,11 @@ const FillInTheBlanksSection = ({
             </div>
 
             {/* Title */}
-            <h1 className="fillblanks-title">Fill in the Blanks</h1>
+            <h1 className="fillblanks-title">Time to Prove It — Fill the Blanks</h1>
 
             {/* Instruction */}
             <p className="fillblanks-instruction">
-              Complete the missing words from the verse.
+              Complete the missing words. You know this. Trust your memory.
             </p>
 
             {/* Verse display with blanks */}
@@ -319,8 +319,7 @@ const FillInTheBlanksSection = ({
               <div className="fillblanks-hint">
                 <Lightbulb className="fillblanks-hint-icon" />
                 <p className="fillblanks-hint-text">
-                  <strong>Hint:</strong> Hidden words may include punctuation and capitalization,
-                  but your answer will be accepted regardless of these details.
+                  <strong>Tip:</strong> Don't worry about punctuation or capitalization—just get the words right.
                 </p>
               </div>
             )}
@@ -336,7 +335,7 @@ const FillInTheBlanksSection = ({
                 onClick={onNext}
                 disabled={!allCorrect}
               >
-                Continue to Write
+                Perfect — Final Challenge
               </button>
 
               <div className="fillblanks-action-buttons">

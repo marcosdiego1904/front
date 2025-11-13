@@ -271,17 +271,18 @@ const FinalScreen = ({ onRestart, prevStep, verse, currentStep, totalSteps, step
 
             {/* Congratulations header */}
             <div className="final-celebration">
-              <span className="final-celebration-icon">🎉</span>
-              <h1 className="final-title">Congratulations!</h1>
-              <span className="final-celebration-icon">🎉</span>
+              <span className="final-celebration-icon">🏆</span>
+              <h1 className="final-title">You Just Did What 90% of People Can't</h1>
+              <span className="final-celebration-icon">🏆</span>
             </div>
 
             <p className="final-description">
-              You have successfully completed the memorization process.
+              You didn't just read {verse?.verse_reference || "this verse"}—you <strong>mastered it</strong>.
+              This verse is now locked in your memory. You'll remember this for years.
             </p>
 
             <p className="final-tip">
-              Keep practicing to strengthen your memory!
+              <strong>That feeling you have right now?</strong> That's what real progress feels like.
             </p>
 
             {/* Verse saving status for logged-in users */}
@@ -299,22 +300,43 @@ const FinalScreen = ({ onRestart, prevStep, verse, currentStep, totalSteps, step
                     <span>{saveStatus.message}</span>
                   </div>
                 ) : (
-                  <p>{saveStatus.message}</p>
+                  <div>
+                    <p>{saveStatus.message}</p>
+                    {saveStatus.success && (
+                      <p className="final-achievement-text">
+                        <strong>🔥 Keep going.</strong> The more verses you memorize, the easier it gets. Your brain is building momentum.
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
             )}
 
-            {/* Not logged in message */}
+            {/* Not logged in message - HIGH CONVERSION MOMENT */}
             {!isAuthenticated && verse && (
               <div className="final-login-prompt">
-                <p className="final-login-text">
-                  Sign in to save your memorized verses and track your progress!
-                </p>
+                <div className="final-urgent-message">
+                  <p className="final-login-text">
+                    <strong>⚠️ You're about to lose this progress.</strong>
+                  </p>
+                  <p className="final-login-subtext">
+                    You just memorized {verse.verse_reference}. But without an account, you won't be able to track it, review it, or build on this win.
+                  </p>
+                  <p className="final-login-subtext">
+                    <strong>Create a free account now</strong> and never lose a verse again.
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate("/register")}
+                  className="final-signup-button-primary"
+                >
+                  Save My Progress — Free Forever
+                </button>
                 <button
                   onClick={() => navigate("/login")}
-                  className="final-login-button"
+                  className="final-login-button-secondary"
                 >
-                  Sign in
+                  I already have an account
                 </button>
               </div>
             )}

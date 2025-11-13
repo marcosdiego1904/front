@@ -229,11 +229,11 @@ const WriteFromMemorySection = ({
             </div>
 
             {/* Title */}
-            <h1 className="write-title">Write the Verse from Memory</h1>
+            <h1 className="write-title">Final Test — Write It From Memory</h1>
 
             {/* Instruction */}
             <p className="write-instruction">
-              Try to write the verse from memory. The system will check for mistakes automatically.
+              Write the entire verse below. From memory. No peeking. You've got this.
             </p>
 
             {/* Verse citation */}
@@ -253,7 +253,7 @@ const WriteFromMemorySection = ({
                 onClick={onNext}
                 disabled={!allCorrect}
               >
-                Finish Learning 🎉
+                I've Mastered This 🏆
               </button>
 
               <div className="write-action-buttons">
@@ -301,7 +301,7 @@ const WriteFromMemorySection = ({
             {!allCorrect && (
               <div className="write-hint">
                 <p className="write-hint-text">
-                  Keep trying! Make sure every word matches exactly.
+                  Almost there! Double-check the highlighted words above.
                 </p>
               </div>
             )}

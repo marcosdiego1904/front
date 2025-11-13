@@ -2,6 +2,16 @@
    LEARNING INTERFACE DESIGN SYSTEM
    Aligned with Homepage Brand Identity
    Mobile-First Approach
+
+   ⚠️ CANONICAL COLOR SYSTEM - USE THESE VARIABLES EVERYWHERE
+
+   Primary Accent: #d97706 (Amber) and #ea580c (Orange)
+   Text Colors: #2C3E50 (primary), #64748b (secondary), #94a3b8 (muted)
+   Success: #10b981 (Emerald)
+   Error: #ef4444 (Red)
+
+   This file defines the SINGLE SOURCE OF TRUTH for all learning section colors.
+   Do NOT create custom color values in individual component CSS files.
    ======================================== */
 
 /* Import beautiful fonts */
