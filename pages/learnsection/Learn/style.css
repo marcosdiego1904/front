@@ -3,12 +3,13 @@
    No navbar, no progress bar, no blue background
    ======================================== */
 
-/* Main container - clean and minimal */
+/* Main container - clean and minimal with warm background */
 .learn-main-container {
   position: relative;
   min-height: 100vh;
   padding: 0;
   margin: 0;
+  background: linear-gradient(to bottom, #FEFCF8 0%, #FEF7EE 100%);
 }
 
 /* Container for the content sections */
@@ -16,6 +17,7 @@
   width: 100%;
   margin: 0 auto;
   padding: 0;
+  background: transparent;
 }
 
 /* Reset any global margins */

@@ -1,21 +1,69 @@
-import { useState } from "react";
+"use client"
 
-//import "./style.css";
+import { useState } from "react";
+import React from "react";
+import { Menu, X, RotateCcw, SkipForward, Check, Edit3 } from "lucide-react";
+import { useAuth } from "../../../src/auth/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import logo from "../../../src/oil-lamp.png";
+import "./style.css";
+
+interface Step {
+  id: number;
+  label: string;
+  shortLabel: string;
+}
 
 interface Props {
   verse: string;
   cite: string;
   onNext: () => void;
   prevStep: () => void;
+  currentStep: number;
+  totalSteps: number;
+  steps: Step[];
+  onReset: () => void;
+  onSkip: () => void;
 }
 
 // Helper function to clean text (removes punctuation, trims spaces, ignores case & quotes)
-const cleanText = (text: string) => 
+const cleanText = (text: string) =>
   text.replace(/[.,;:!?"""'`]/g, "").trim().toLowerCase();
 
-
-const WriteFromMemorySection = ({ verse, cite, onNext, prevStep }: Props) => {
+const WriteFromMemorySection = ({
+  verse,
+  cite,
+  onNext,
+  prevStep,
+  currentStep,
+  totalSteps,
+  steps,
+  onReset,
+  onSkip
+}: Props) => {
   const [userInput, setUserInput] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    navigate("/login");
+    setDrawerOpen(false);
+  };
+
+  const handleStartClick = () => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    } else {
+      navigate("/register");
+    }
+    setDrawerOpen(false);
+  };
 
   // Normalize and split the verse & user input into words
   const words = cleanText(verse).split(/\s+/);
@@ -28,46 +76,239 @@ const WriteFromMemorySection = ({ verse, cite, onNext, prevStep }: Props) => {
   const allCorrect = words.length === userWords.length && words.every((_, i) => isCorrect(i));
 
   return (
-    <main className="main-container3">
-      <div className="intro-section write-from-memory-section">
-        {/* Título */}
-        <h1 className="title">Write the Verse from Memory</h1>
-        <p className="instruction">
-          Try to write the verse from memory. The system will check for mistakes automatically.
-        </p>
+    <>
+      {/* Navbar */}
+      <nav className="write-navbar">
+        <div className="write-navbar-container">
+          <div className="write-navbar-content">
+            <button
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              className="write-navbar-button"
+            >
+              <Menu className="h-5 w-5" />
+              <span>Lamp to My Feet</span>
+              <img src={logo} alt="Lamp Icon" className="write-navbar-logo" />
+            </button>
+          </div>
+        </div>
+      </nav>
 
-        {/* Display verse reference */}
-        <h2 className="verse-citation">{cite}</h2>
+      {/* Drawer overlay */}
+      <div
+        className={`write-drawer-overlay ${drawerOpen ? "write-drawer-overlay-open" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+      ></div>
 
-        {/* User input area */}
-        <textarea
-          className="memory-input"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Type the verse here..."
-        />
-
-        {/* Display words with color coding */}
-        <p className="verse">
-          {words.map((word, i) => (
-            <span key={i} className={isCorrect(i) ? "correct-word" : "incorrect-word"}>
-              {userWords[i] || "..."}{" "}
-            </span>
-          ))}
-        </p>
-
-        {/* Feedback message */}
-        {!allCorrect && <p className="hint">Keep trying! Make sure every word matches exactly.</p>}
-
-        {/* Buttons */}
-        <div className="button-group">
-          <button className="button back-button" onClick={prevStep}>← Back</button>
-          <button className="button continue-button" onClick={onNext} disabled={!allCorrect}>
-            Finish Learning 🎉
+      {/* Drawer sidebar */}
+      <aside className={`write-drawer ${drawerOpen ? "write-drawer-open" : ""}`}>
+        <div className="write-drawer-header">
+          <div className="write-drawer-header-content" onClick={() => handleNavClick("/")}>
+            <span className="write-drawer-title">Lamp to My Feet</span>
+            <img src={logo} alt="Lamp Icon" className="write-drawer-logo" />
+          </div>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="write-drawer-close"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
-      </div>
-    </main>
+
+        <nav className="write-drawer-nav">
+          <button onClick={() => handleNavClick("/")} className="write-drawer-link">
+            Home
+          </button>
+          <button onClick={() => handleNavClick("/bible-search")} className="write-drawer-link">
+            Bible Search
+          </button>
+          <button onClick={() => handleNavClick("/about")} className="write-drawer-link">
+            About
+          </button>
+          <button onClick={() => handleNavClick("/support")} className="write-drawer-link">
+            Support Us
+          </button>
+          {isAuthenticated && (
+            <button onClick={() => handleNavClick("/dashboard")} className="write-drawer-link">
+              Dashboard
+            </button>
+          )}
+
+          <div className="write-drawer-divider">
+            {!isAuthenticated ? (
+              <>
+                <button onClick={handleLoginClick} className="write-drawer-link">
+                  Log In
+                </button>
+                <div className="write-drawer-cta">
+                  <button onClick={handleStartClick} className="write-drawer-cta-button">
+                    Start for Free
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="write-drawer-cta">
+                <button onClick={() => handleNavClick("/dashboard")} className="write-drawer-cta-button">
+                  Dashboard
+                </button>
+              </div>
+            )}
+          </div>
+        </nav>
+      </aside>
+
+      <main className="write-main-container">
+        {/* Decorative background orbs */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-20 left-10 w-40 h-40 bg-[#FFD700] rounded-full blur-3xl animate-pulse"></div>
+          <div
+            className="absolute bottom-20 right-10 w-48 h-48 bg-[#E8B86D] rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/30 to-amber-100/30 rounded-full blur-2xl"></div>
+        </div>
+
+        {/* Decorative book icon */}
+        <div className="absolute top-1/4 right-1/5 opacity-15">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="animate-pulse"
+            style={{ animationDelay: "0.5s" }}
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#D97706" strokeWidth="1.5" />
+            <path
+              d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+              stroke="#D97706"
+              strokeWidth="1.5"
+            />
+            <path d="M8 7h8M8 11h6" stroke="#D97706" strokeWidth="1" />
+          </svg>
+        </div>
+
+        <div className="write-content-wrapper">
+          {/* First Container - Info, Instructions & Actions */}
+          <div className="write-card write-info-card">
+            {/* Progress Timeline */}
+            <div className="write-progress-section">
+              <div className="write-progress-bar-wrapper">
+                <div className="write-progress-steps">
+                  {steps.map((step, index) => (
+                    <React.Fragment key={step.id}>
+                      <div
+                        className={`write-progress-step ${
+                          index < currentStep
+                            ? "write-progress-step-completed"
+                            : index === currentStep
+                              ? "write-progress-step-active"
+                              : "write-progress-step-pending"
+                        }`}
+                      >
+                        {index < currentStep ? <Check className="w-4 h-4" /> : step.id}
+                      </div>
+                      {index < steps.length - 1 && (
+                        <div className="write-progress-connector">
+                          <div
+                            className={`write-progress-connector-fill ${
+                              index < currentStep ? "write-progress-connector-completed" : ""
+                            }`}
+                          ></div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+
+              <div className="write-progress-label">
+                <p className="write-progress-text">
+                  Step {currentStep + 1} of {totalSteps}: {steps[currentStep].label}
+                </p>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h1 className="write-title">Write the Verse from Memory</h1>
+
+            {/* Instruction */}
+            <p className="write-instruction">
+              Try to write the verse from memory. The system will check for mistakes automatically.
+            </p>
+
+            {/* Verse citation */}
+            <div className="write-citation-container">
+              <Edit3 className="write-citation-icon" />
+              <h2 className="write-citation">{cite}</h2>
+            </div>
+
+            {/* Action Bar */}
+            <div className="write-action-bar">
+              <button onClick={prevStep} className="write-back-button">
+                ← Back
+              </button>
+
+              <button
+                className="write-continue-button"
+                onClick={onNext}
+                disabled={!allCorrect}
+              >
+                Finish Learning 🎉
+              </button>
+
+              <div className="write-action-buttons">
+                <button onClick={onReset} className="write-reset-button" title="Reset">
+                  <RotateCcw className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-180" />
+                  <span className="hidden sm:inline">Reset</span>
+                </button>
+
+                {currentStep < totalSteps - 1 && (
+                  <button onClick={onSkip} className="write-skip-button" title="Skip to End">
+                    <span className="hidden sm:inline">Skip</span>
+                    <SkipForward className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Second Container - Input & Feedback Workspace */}
+          <div className="write-card write-workspace-card">
+            {/* User input area */}
+            <div className="write-input-container">
+              <textarea
+                className="write-memory-input"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder="Type the verse here..."
+                rows={6}
+              />
+            </div>
+
+            {/* Display words with color coding */}
+            <div className="write-feedback-container">
+              <p className="write-feedback-label">Your progress:</p>
+              <p className="write-verse-feedback">
+                {words.map((word, i) => (
+                  <span key={i} className={isCorrect(i) ? "write-correct-word" : "write-incorrect-word"}>
+                    {userWords[i] || "..."}{" "}
+                  </span>
+                ))}
+              </p>
+            </div>
+
+            {/* Feedback message */}
+            {!allCorrect && (
+              <div className="write-hint">
+                <p className="write-hint-text">
+                  Keep trying! Make sure every word matches exactly.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </>
   );
 };
 

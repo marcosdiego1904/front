@@ -76,12 +76,12 @@
 .intro-drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px); /* backdrop-blur-sm */
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
   z-index: 150;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease-out;
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .intro-drawer-overlay-open {
@@ -97,14 +97,14 @@
   height: 100%;
   width: 18rem;
   background: white;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   z-index: 200;
-  transform: translateX(-100%); /* -translate-x-full (oculto) */
-  transition: transform 300ms ease-out; /* duration-300 ease-out */
+  transform: translateX(-100%);
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .intro-drawer-open {
-  transform: translateX(0); /* translate-x-0 (visible) */
+  transform: translateX(0);
 }
 
 /* Drawer header */
@@ -273,15 +273,37 @@
   }
 }
 
-/* Header section with return button */
-.intro-header {
-  display: flex;
+/* Action Bar - 3 column layout */
+.intro-action-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-/* Return button */
+/* Mobile: stack vertically */
+@media (max-width: 640px) {
+  .intro-action-bar {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .intro-action-bar > *:nth-child(1) {
+    order: 3; /* Return to Home at bottom */
+  }
+
+  .intro-action-bar > *:nth-child(2) {
+    order: 1; /* Start Learning at top */
+  }
+
+  .intro-action-bar > *:nth-child(3) {
+    order: 2; /* Reset & Skip in middle */
+    justify-self: center;
+  }
+}
+
+/* Return button - left aligned */
 .intro-return-button {
   display: inline-flex;
   align-items: center;
@@ -294,11 +316,26 @@
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  justify-self: start;
 }
 
 .intro-return-button:hover {
   color: #E8B86D;
   background: rgba(254, 243, 199, 0.3);
+}
+
+/* Action buttons container (reset & skip) - right aligned */
+.intro-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: end;
+}
+
+@media (max-width: 640px) {
+  .intro-action-buttons {
+    justify-self: center;
+  }
 }
 
 /* Title section with icon */
@@ -440,9 +477,8 @@
   }
 }
 
-/* Start Learning button */
+/* Start Learning button - center aligned */
 .intro-start-button {
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -457,13 +493,19 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  justify-self: center;
+  white-space: nowrap;
 }
 
 @media (min-width: 640px) {
   .intro-start-button {
-    width: auto;
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .intro-start-button {
+    width: 100%;
   }
 }
 
@@ -588,6 +630,185 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ========================================
+   RESET & SKIP BUTTONS
+   ======================================== */
+
+/* Reset button */
+.intro-reset-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: rgba(44, 62, 80, 0.6);
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 200ms ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .intro-reset-button {
+    font-size: 0.875rem;
+  }
+}
+
+.intro-reset-button:hover {
+  color: #E8B86D;
+  background: rgba(254, 243, 199, 0.5);
+}
+
+/* Skip button */
+.intro-skip-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: rgba(44, 62, 80, 0.6);
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 200ms ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .intro-skip-button {
+    font-size: 0.875rem;
+  }
+}
+
+.intro-skip-button:hover {
+  color: #E8B86D;
+  background: rgba(254, 243, 199, 0.5);
+}
+
+/* ========================================
+   PROGRESS TIMELINE
+   ======================================== */
+
+/* Progress section wrapper */
+.intro-progress-section {
+  margin-bottom: 2.5rem;
+}
+
+/* Progress bar wrapper */
+.intro-progress-bar-wrapper {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+/* Progress steps container */
+.intro-progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Individual step circle */
+.intro-progress-step {
+  position: relative;
+  z-index: 10;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  transition: all 300ms ease;
+}
+
+@media (min-width: 640px) {
+  .intro-progress-step {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Completed step - golden */
+.intro-progress-step-completed {
+  background: #FFD700;
+  color: #2C3E50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.intro-progress-step-completed:hover {
+  transform: scale(1.1);
+}
+
+/* Active step - golden with ring */
+.intro-progress-step-active {
+  background: #FFD700;
+  color: #2C3E50;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  ring: 3px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Pending step - gray */
+.intro-progress-step-pending {
+  background: rgba(44, 62, 80, 0.1);
+  color: rgba(44, 62, 80, 0.4);
+  cursor: not-allowed;
+}
+
+/* Progress connector line */
+.intro-progress-connector {
+  flex: 1;
+  height: 0.25rem;
+  margin: 0 0.25rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgba(44, 62, 80, 0.1);
+}
+
+@media (min-width: 640px) {
+  .intro-progress-connector {
+    margin: 0 0.5rem;
+  }
+}
+
+/* Progress connector fill */
+.intro-progress-connector-fill {
+  height: 100%;
+  width: 0;
+  transition: width 500ms ease;
+  border-radius: 9999px;
+  background: transparent;
+}
+
+.intro-progress-connector-completed {
+  background: #FFD700;
+  width: 100%;
+}
+
+/* Progress label */
+.intro-progress-label {
+  text-align: center;
+}
+
+.intro-progress-text {
+  font-size: 0.875rem;
+  color: #2C3E50;
+  font-weight: 500;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .intro-progress-text {
+    font-size: 1rem;
   }
 }
 

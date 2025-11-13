@@ -1,21 +1,42 @@
 "use client"
 
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React from "react";
-import { ChevronDown, Menu, X, ArrowLeft } from "lucide-react";
+import { ChevronDown, Menu, X, ArrowLeft, RotateCcw, SkipForward, Check } from "lucide-react";
 import { useAuth } from "../../../src/auth/context/AuthContext";
 import logo from "../../../src/oil-lamp.png";
 import "./style.css";
+
+interface Step {
+  id: number;
+  label: string;
+  shortLabel: string;
+}
 
 interface Props {
   cite: string;
   verse: string;
   context: string;
   onNext: () => void;
+  currentStep: number;
+  totalSteps: number;
+  steps: Step[];
+  onReset: () => void;
+  onSkip: () => void;
 }
 
-const IntroSection = ({ cite, verse, context, onNext }: Props) => {
+const IntroSection = ({
+  cite,
+  verse,
+  context,
+  onNext,
+  currentStep,
+  totalSteps,
+  steps,
+  onReset,
+  onSkip
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
@@ -178,16 +199,44 @@ const IntroSection = ({ cite, verse, context, onNext }: Props) => {
 
       <div className="intro-content-wrapper">
         <div className="intro-card">
-          {/* Return button */}
-          <div className="intro-header">
-            <button
-              onClick={() => navigate(-1)}
-              className="intro-return-button"
-            >
-              <ArrowLeft className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" />
-              <span className="hidden sm:inline">Return to Home</span>
-              <span className="sm:hidden">Home</span>
-            </button>
+          {/* Progress Timeline */}
+          <div className="intro-progress-section">
+            {/* Progress bar container */}
+            <div className="intro-progress-bar-wrapper">
+              <div className="intro-progress-steps">
+                {steps.map((step, index) => (
+                  <React.Fragment key={step.id}>
+                    <div
+                      className={`intro-progress-step ${
+                        index < currentStep
+                          ? "intro-progress-step-completed"
+                          : index === currentStep
+                            ? "intro-progress-step-active"
+                            : "intro-progress-step-pending"
+                      }`}
+                    >
+                      {index < currentStep ? <Check className="w-4 h-4" /> : step.id}
+                    </div>
+                    {index < steps.length - 1 && (
+                      <div className="intro-progress-connector">
+                        <div
+                          className={`intro-progress-connector-fill ${
+                            index < currentStep ? "intro-progress-connector-completed" : ""
+                          }`}
+                        ></div>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+            {/* Current step label */}
+            <div className="intro-progress-label">
+              <p className="intro-progress-text">
+                Step {currentStep + 1} of {totalSteps}: {steps[currentStep].label}
+              </p>
+            </div>
           </div>
 
           {/* Title with icon */}
@@ -218,10 +267,46 @@ const IntroSection = ({ cite, verse, context, onNext }: Props) => {
             </p>
           )}
 
-          {/* Primary CTA - Start Learning */}
-          <button className="intro-start-button" onClick={onNext}>
-            Start Learning
-          </button>
+          {/* Action Bar: Return | Start Learning | Reset & Skip */}
+          <div className="intro-action-bar">
+            {/* Left: Return to Home */}
+            <button
+              onClick={() => navigate(-1)}
+              className="intro-return-button"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" />
+              <span className="hidden sm:inline">Return to Home</span>
+              <span className="sm:hidden">Home</span>
+            </button>
+
+            {/* Center: Start Learning (Primary CTA) */}
+            <button className="intro-start-button" onClick={onNext}>
+              Start Learning
+            </button>
+
+            {/* Right: Reset & Skip */}
+            <div className="intro-action-buttons">
+              <button
+                onClick={onReset}
+                className="intro-reset-button"
+                title="Reset"
+              >
+                <RotateCcw className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-180" />
+                <span className="hidden sm:inline">Reset</span>
+              </button>
+
+              {currentStep < totalSteps - 1 && (
+                <button
+                  onClick={onSkip}
+                  className="intro-skip-button"
+                  title="Skip to End"
+                >
+                  <span className="hidden sm:inline">Skip</span>
+                  <SkipForward className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                </button>
+              )}
+            </div>
+          </div>
 
           {/* Toggle explanation */}
           <div className="intro-explanation-section">

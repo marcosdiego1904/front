@@ -26,6 +26,15 @@ const LearnSection = () => {
 
   const [step, setStep] = useState(1);
 
+  const steps = [
+    { id: 1, label: "Introduction", shortLabel: "Intro" },
+    { id: 2, label: "Read Aloud", shortLabel: "Read" },
+    { id: 3, label: "Break Down", shortLabel: "Break" },
+    { id: 4, label: "Fill Blanks", shortLabel: "Fill" },
+    { id: 5, label: "Write", shortLabel: "Write" },
+    { id: 6, label: "Complete", shortLabel: "Done" },
+  ];
+
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
   if (!selectedVerse) {
     return <p>Loading...</p>;
@@ -34,6 +43,7 @@ const LearnSection = () => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
   const restartLesson = () => setStep(1);
+  const skipToWriteSection = () => setStep(5);
 
   return (
     <main className="learn-main-container">
@@ -44,6 +54,11 @@ const LearnSection = () => {
             cite={selectedVerse.verse_reference}
             verse={selectedVerse.text_nlt}
             context={selectedVerse.context_nlt}
+            currentStep={step - 1}
+            totalSteps={steps.length}
+            steps={steps}
+            onReset={restartLesson}
+            onSkip={skipToWriteSection}
           />
         )}
         {step === 2 && (
@@ -52,6 +67,11 @@ const LearnSection = () => {
             verse={selectedVerse.text_nlt}
             onNext={nextStep}
             prevStep={prevStep}
+            currentStep={step - 1}
+            totalSteps={steps.length}
+            steps={steps}
+            onReset={restartLesson}
+            onSkip={skipToWriteSection}
           />
         )}
         {step === 3 && (
@@ -59,6 +79,11 @@ const LearnSection = () => {
             verse={selectedVerse.text_nlt}
             onNext={nextStep}
             prevStep={prevStep}
+            currentStep={step - 1}
+            totalSteps={steps.length}
+            steps={steps}
+            onReset={restartLesson}
+            onSkip={skipToWriteSection}
           />
         )}
         {step === 4 && (
@@ -66,6 +91,11 @@ const LearnSection = () => {
             verse={selectedVerse.text_nlt}
             onNext={nextStep}
             prevStep={prevStep}
+            currentStep={step - 1}
+            totalSteps={steps.length}
+            steps={steps}
+            onReset={restartLesson}
+            onSkip={skipToWriteSection}
           />
         )}
         {step === 5 && (
@@ -74,13 +104,22 @@ const LearnSection = () => {
             verse={selectedVerse.text_nlt}
             onNext={nextStep}
             prevStep={prevStep}
+            currentStep={step - 1}
+            totalSteps={steps.length}
+            steps={steps}
+            onReset={restartLesson}
+            onSkip={skipToWriteSection}
           />
         )}
         {step === 6 && (
           <FinalScreen
             onRestart={restartLesson}
             prevStep={prevStep}
-            verse={selectedVerse} // Pass the complete verse object to FinalScreen
+            verse={selectedVerse}
+            currentStep={step - 1}
+            totalSteps={steps.length}
+            steps={steps}
+            onReset={restartLesson}
           />
         )}
       </div>

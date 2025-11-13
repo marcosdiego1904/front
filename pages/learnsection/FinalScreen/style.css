@@ -1,370 +1,644 @@
 /* ========================================
-   FINAL SCREEN / COMPLETION
-   Import shared design system & add celebration styles
+   FINAL SCREEN - NEW DESIGN
    ======================================== */
-@import '../shared-learning-styles.css';
 
-/* Main container aligned with new design */
-.memorization-final-container {
-  position: relative;
-  background: var(--card-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-xl);
-  box-shadow: var(--card-shadow),
-              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  border: 1px solid var(--card-border);
-  max-width: 700px;
-  margin: 50px auto;
-  text-align: center;
-  overflow: hidden;
-  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* ========================================
+   NAVBAR STYLES
+   ======================================== */
+.final-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
-/* Subtle animated gradient overlay */
-.memorization-final-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(217, 119, 6, 0.03) 0%, transparent 70%);
-  animation: rotate 30s linear infinite;
+.final-navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .final-navbar-container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .final-navbar-container {
+    padding: 0 2rem;
+  }
+}
+
+.final-navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+
+.final-navbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2C3E50;
+  transition: all 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .final-navbar-button {
+    font-size: 1.125rem;
+  }
+}
+
+.final-navbar-button:hover {
+  color: #E8B86D;
+}
+
+.final-navbar-logo {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* ========================================
+   DRAWER STYLES
+   ======================================== */
+.final-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 60;
+  opacity: 0;
   pointer-events: none;
-  z-index: 0;
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(2px);
 }
 
-/* Ensure content is above background */
-.memorization-final-container > * {
+.final-drawer-overlay-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.final-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 18rem;
+  background: white;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 200;
+  transform: translateX(-100%);
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.final-drawer-open {
+  transform: translateX(0);
+}
+
+.final-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+}
+
+.final-drawer-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.final-drawer-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #78350f;
+}
+
+.final-drawer-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.final-drawer-close {
+  background: transparent;
+  border: none;
+  color: #78350f;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.final-drawer-close:hover {
+  color: #D97706;
+}
+
+.final-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.final-drawer-link {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #78350f;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.final-drawer-link:hover {
+  background-color: rgba(255, 215, 0, 0.08);
+  color: #D97706;
+}
+
+.final-drawer-divider {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(217, 119, 6, 0.1);
+}
+
+.final-drawer-cta {
+  padding: 0.75rem 1.5rem;
+}
+
+.final-drawer-cta-button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #FFD700 0%, #E8B86D 100%);
+  color: #78350f;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.final-drawer-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+.final-main-container {
+  min-height: 100vh;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(to bottom right, #FEFCF8, #FEF7EE, #FEFCF8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.final-content-wrapper {
+  max-width: 1536px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+  padding: 0.5rem 1rem;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
-/* Header with gradient text */
-.memorization-header {
-  margin-bottom: var(--spacing-lg);
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ========================================
+   CARD
+   ======================================== */
+.final-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+  border: 1px solid rgba(232, 184, 109, 0.3);
+  max-width: 1152px;
+  margin: 0 auto;
+  animation: fadeInUp 1s ease-out forwards;
 }
 
-/* Confetti icons animation */
-.memorization-confetti-icon {
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 640px) {
+  .final-card {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .final-card {
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .final-main-container {
+    padding: 4.5rem 1rem 1.5rem;
+  }
+}
+
+/* ========================================
+   PROGRESS TIMELINE
+   ======================================== */
+.final-progress-section {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+}
+
+.final-progress-bar-wrapper {
+  margin-bottom: 0.75rem;
+}
+
+.final-progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.final-progress-step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.final-progress-step-completed {
+  background: linear-gradient(135deg, #FFD700 0%, #E8B86D 100%);
+  color: #78350f;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.final-progress-connector {
+  flex: 1;
+  height: 2px;
+  background: rgba(217, 119, 6, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.final-progress-connector-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #FFD700 0%, #E8B86D 100%);
+  transition: width 0.4s ease;
+}
+
+.final-progress-connector-completed {
+  width: 100%;
+}
+
+.final-progress-label {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+.final-progress-text {
+  font-size: 0.875rem;
+  color: #78350f;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .final-progress-step {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+  .final-progress-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* ========================================
+   CELEBRATION
+   ======================================== */
+.final-celebration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0 0.75rem;
+}
+
+.final-celebration-icon {
   font-size: 2.5rem;
-  margin: 0 12px;
-  display: inline-block;
   animation: bounce 1s ease infinite alternate;
 }
 
 @keyframes bounce {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-12px) rotate(5deg); }
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-12px) rotate(5deg);
+  }
 }
 
-/* Description text */
-.memorization-description {
+.final-title {
+  font-family: 'Lora', serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #2C3E50;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.final-description {
   font-size: 1.125rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: var(--spacing-sm);
+  color: #2C3E50;
+  text-align: center;
+  line-height: 1.625;
+  margin: 0.75rem 0;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
-.memorization-tip {
+.final-tip {
   font-size: 1rem;
-  color: var(--text-muted);
+  color: #E8B86D;
   font-style: italic;
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-sm);
-  background: rgba(217, 119, 6, 0.03);
-  border-radius: var(--radius-sm);
+  text-align: center;
+  margin: 0.75rem 0 1.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 215, 0, 0.08);
+  border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+  .final-celebration-icon {
+    font-size: 2rem;
+  }
+  .final-title {
+    font-size: 1.875rem;
+  }
+  .final-description {
+    font-size: 1rem;
+  }
 }
 
 /* ========================================
    STATUS MESSAGES
    ======================================== */
-.memorization-status-message {
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  margin: var(--spacing-md) 0;
-  font-size: 1rem;
+.final-status-message {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-base);
-  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
 }
 
-.memorization-success-message {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-  border-left: 4px solid var(--color-success);
+.final-status-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+  border-left: 4px solid #22c55e;
   color: #047857;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
 }
 
-.memorization-error-message {
+.final-status-error {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
-  border-left: 4px solid var(--color-error);
+  border-left: 4px solid #ef4444;
   color: #b91c1c;
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
-/* Loading indicator */
-.memorization-loading-indicator {
+.final-status-loading {
+  background: rgba(255, 215, 0, 0.08);
+  border-left: 4px solid #FFD700;
+  color: #78350f;
+}
+
+.final-loading-indicator {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   justify-content: center;
 }
 
-.memorization-spinner {
+.final-spinner {
   width: 24px;
   height: 24px;
   border: 3px solid rgba(217, 119, 6, 0.2);
-  border-top-color: var(--accent-amber);
+  border-top-color: #D97706;
   border-radius: 50%;
-  animation: memorization-spin 0.8s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
-@keyframes memorization-spin {
-  to { transform: rotate(360deg); }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ========================================
    LOGIN PROMPT
    ======================================== */
-.memorization-login-container {
+.final-login-prompt {
   background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), rgba(234, 88, 12, 0.05));
-  border-left: 4px solid var(--accent-amber);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  margin: var(--spacing-md) 0;
-  color: #92400e;
-  backdrop-filter: blur(8px);
+  border-left: 4px solid #D97706;
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  text-align: center;
 }
 
-.memorization-login-button {
-  display: inline-block;
-  background: var(--button-primary-bg);
-  color: white;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  margin-top: 12px;
-  transition: all var(--transition-base);
+.final-login-text {
+  color: #2C3E50;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-family: 'Nunito Sans', sans-serif;
+  line-height: 1.625;
+}
+
+.final-login-button {
+  background: linear-gradient(135deg, #FFD700 0%, #E8B86D 100%);
+  color: #78350f;
+  padding: 0.75rem 1.5rem;
   border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
 }
 
-.memorization-login-button:hover {
-  background: var(--button-primary-hover);
+.final-login-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(51, 65, 85, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
 }
 
 /* ========================================
-   BUTTONS
+   ACTION BUTTONS
    ======================================== */
-.memorization-buttons-container {
+.final-actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-xl);
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.memorization-button {
-  padding: 14px 24px;
-  border-radius: 14px;
+.final-action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
   font-weight: 600;
-  transition: all var(--transition-base);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
   border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  min-width: 160px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: var(--font-sans);
+  white-space: nowrap;
 }
 
-/* Home button - secondary style */
-.memorization-home-button {
-  background: var(--button-secondary-bg);
-  color: var(--text-secondary);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.memorization-home-button:hover {
-  background: var(--button-secondary-hover);
-  color: var(--text-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Restart button - amber accent */
-.memorization-restart-button {
-  background: var(--accent-gradient);
+.final-home-button {
+  background: linear-gradient(to right, rgb(30, 41, 59), rgb(51, 65, 85));
   color: white;
-  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.3);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
 }
 
-.memorization-restart-button:hover {
-  background: linear-gradient(135deg, #ea580c, #c2410c);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+.final-home-button:hover {
+  background: linear-gradient(to right, rgb(51, 65, 85), rgb(71, 85, 105));
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
 }
 
-/* Profile button - slate like continue */
-.memorization-profile-button {
-  background: var(--button-primary-bg);
-  color: white;
-  box-shadow: 0 4px 16px rgba(51, 65, 85, 0.3);
+.final-restart-button {
+  background: transparent;
+  color: #D97706;
+  border: 2px solid rgba(217, 119, 6, 0.3);
+  box-shadow: none;
 }
 
-.memorization-profile-button:hover {
-  background: var(--button-primary-hover);
+.final-restart-button:hover {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: #D97706;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(51, 65, 85, 0.4);
 }
 
-/* Back button */
-.memorization-navigation-container {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--spacing-lg);
+.final-profile-button {
+  background: transparent;
+  color: #D97706;
+  border: 2px solid rgba(217, 119, 6, 0.3);
+  box-shadow: none;
 }
 
-.memorization-back-button {
-  background: var(--button-secondary-bg);
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  transition: all var(--transition-base);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-  min-width: 140px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.memorization-back-button:hover {
-  background: var(--button-secondary-hover);
-  color: var(--text-primary);
+.final-profile-button:hover {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: #D97706;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* ========================================
-   BACKGROUND DECORATIONS
-   ======================================== */
-.memorization-decoration {
-  position: absolute;
-  opacity: 0.05;
-  z-index: 0;
-  border-radius: 50%;
-  filter: blur(40px);
-}
-
-.memorization-decoration-1 {
-  top: -30px;
-  right: -30px;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, var(--accent-amber), transparent);
-}
-
-.memorization-decoration-2 {
-  bottom: -40px;
-  left: -40px;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, var(--color-success), transparent);
-}
-
-/* ========================================
-   RESPONSIVE - MOBILE FIRST
-   ======================================== */
 @media (max-width: 640px) {
-  .memorization-final-container {
-    padding: var(--spacing-md);
-    margin: var(--spacing-md);
-    max-width: 100%;
-  }
-
-  .memorization-header {
-    font-size: 1.875rem;
-    margin-bottom: var(--spacing-md);
-  }
-
-  .memorization-confetti-icon {
-    font-size: 2rem;
-    margin: 0 8px;
-  }
-
-  .memorization-description {
-    font-size: 1rem;
-  }
-
-  .memorization-buttons-container {
+  .final-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--spacing-sm);
   }
-
-  .memorization-button {
+  .final-action-button {
     width: 100%;
-    min-width: unset;
-  }
-
-  .memorization-back-button {
-    width: 100%;
+    justify-content: center;
   }
 }
 
-@media (min-width: 641px) and (max-width: 1024px) {
-  .memorization-final-container {
-    padding: var(--spacing-lg);
-    max-width: 650px;
-  }
+/* ========================================
+   BACK BUTTON
+   ======================================== */
+.final-back-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(217, 119, 6, 0.1);
+}
 
-  .memorization-buttons-container {
-    gap: var(--spacing-md);
+.final-back-button {
+  background: transparent;
+  border: 2px solid rgba(217, 119, 6, 0.25);
+  color: #D97706;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.final-back-button:hover {
+  background: rgba(217, 119, 6, 0.1);
+  border-color: #D97706;
+  transform: translateX(-4px);
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .final-back-button {
+    width: 100%;
+    padding: 0.625rem 1rem;
   }
 }
 
 /* ========================================
    ACCESSIBILITY
    ======================================== */
-.memorization-button:focus-visible,
-.memorization-login-button:focus-visible,
-.memorization-back-button:focus-visible {
-  outline: 3px solid var(--accent-amber);
-  outline-offset: 3px;
-}
-
-/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
-  .memorization-confetti-icon,
-  .memorization-spinner,
-  .memorization-final-container::before {
+  .final-celebration-icon,
+  .final-spinner {
     animation: none;
   }
 
-  .memorization-button:hover,
-  .memorization-login-button:hover,
-  .memorization-back-button:hover {
+  .final-action-button:hover,
+  .final-login-button:hover,
+  .final-back-button:hover {
     transform: none;
   }
 }
