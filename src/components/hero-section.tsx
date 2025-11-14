@@ -150,16 +150,16 @@ export default function HeroSection() {
           <h1
             className={`text-4xl sm:text-5xl lg:text-7xl font-bold text-[#2C3E50] leading-tight transition-all duration-700 delay-100 ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
-            Strengthen Your{" "}
-            <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Faith</span>,
+            Memorize Any Bible Verse in{" "}
+            <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">10 Minutes</span>
             <br />
-            One Verse at a Time
+            — Remember It Forever
           </h1>
 
           <p
             className={`text-lg sm:text-xl text-[#2C3E50]/80 max-w-3xl mx-auto transition-all duration-700 delay-200 ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
-            Search any Bible verse instantly and master it through 4 proven learning methods. Start in under 2 minutes.
+            Most Christians can't recall a single verse when they need it most. <strong>Change that today.</strong>
           </p>
 
           <div
@@ -198,7 +198,7 @@ export default function HeroSection() {
                 <button
                   onClick={handleSearch}
                   disabled={isLoading || !searchValue.trim()}
-                  className="relative overflow-hidden px-8 sm:px-10 py-4 sm:py-[1.125rem] bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white text-base sm:text-lg font-bold transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed border-t-2 sm:border-t-0 sm:border-l-2 border-slate-600/30"
+                  className="relative overflow-hidden px-8 sm:px-10 py-4 sm:py-[1.125rem] bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-base sm:text-lg font-bold transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed border-t-2 sm:border-t-0 sm:border-l-2 border-emerald-500/30"
                 >
                   <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
                     {isLoading ? (

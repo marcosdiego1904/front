@@ -107,7 +107,7 @@ export default function TurningPointSection() {
           >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-relaxed" style={{ color: "#2C3E50" }}>
               From Text on a Page to{" "}
-              <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Power</span>
+              <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Weapon</span>
               <br />
               in Your Life
             </h2>
@@ -250,7 +250,7 @@ export default function TurningPointSection() {
                           size="lg"
                           className="mx-auto bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600 text-white font-nunito-sans font-semibold text-lg px-8 py-4 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
                         >
-                          Reveal My Spiritual Weapon
+                          Show Me The Verse I Need
                         </Button>
                       </div>
                     ) : (
@@ -310,9 +310,9 @@ export default function TurningPointSection() {
                           <Button
                             size="lg"
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="bg-gradient-to-r from-slate-800 to-slate-700 hover:from-slate-700 hover:to-slate-600 text-white font-nunito-sans font-semibold text-base px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-slate-600/20"
+                            className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-nunito-sans font-semibold text-base px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-emerald-500/20"
                           >
-                            Learn Your First Life-Changing Verse
+                            Learn Your First Life-Changing Verse — Free
                           </Button>
 
                           <div className="mt-3">
