@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '../auth/context/AuthContext';
 import {
-  getStripeConfig,
   createCheckoutSession,
   getSubscriptionStatus,
   cancelSubscription,
@@ -112,14 +110,6 @@ const Subscriptions = () => {
       setLoading(true);
       setError(null);
 
-      // Get Stripe config
-      const config = await getStripeConfig();
-      const stripe = await loadStripe(config.publishableKey);
-
-      if (!stripe) {
-        throw new Error('Failed to load Stripe');
-      }
-
       // Create checkout session
       const session = await createCheckoutSession(
         priceId,
@@ -128,14 +118,8 @@ const Subscriptions = () => {
         token
       );
 
-      // Redirect to Stripe Checkout
-      const { error: stripeError } = await stripe.redirectToCheckout({
-        sessionId: session.sessionId,
-      });
-
-      if (stripeError) {
-        throw stripeError;
-      }
+      // Redirect to Stripe Checkout using the session URL
+      window.location.href = session.url;
     } catch (err: any) {
       console.error('Error creating checkout session:', err);
       setError(err.message || 'Failed to start checkout process');
