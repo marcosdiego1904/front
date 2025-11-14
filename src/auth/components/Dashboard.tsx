@@ -283,14 +283,14 @@ const Dashboard: React.FC = () => {
       <div className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="lamp-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8,4 C8,2.895 8.895,2 10,2 L14,2 C15.105,2 16,2.895 16,4 L16,5 L8,5 L8,4 Z" fill="#14b8a6"/>
-              <path d="M9,5 L15,5 L15,10 C15,12.761 12.761,16 10,16 L9,5 Z" fill="#14b8a6"/>
-              <path d="M10,16 L14,16 C12.5,18.5 11.5,18.5 10,16 Z" fill="#14b8a6"/>
-              <path d="M11.5,16 L11.5,20" stroke="#14b8a6" strokeWidth="2"/>
-              <path d="M9,20 L14,20" stroke="#14b8a6" strokeWidth="2"/>
-              <path d="M8,5 C7,7 7,15 10,16" stroke="#14b8a6" strokeWidth="0.5" strokeDasharray="1,1"/>
-              <path d="M16,5 C17,7 17,15 14,16" stroke="#14b8a6" strokeWidth="0.5" strokeDasharray="1,1"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8,4 C8,2.895 8.895,2 10,2 L14,2 C15.105,2 16,2.895 16,4 L16,5 L8,5 L8,4 Z" fill="#ffc107"/>
+              <path d="M9,5 L15,5 L15,10 C15,12.761 12.761,16 10,16 L9,5 Z" fill="#ffc107"/>
+              <path d="M10,16 L14,16 C12.5,18.5 11.5,18.5 10,16 Z" fill="#ffc107"/>
+              <path d="M11.5,16 L11.5,20" stroke="#ffc107" strokeWidth="2"/>
+              <path d="M9,20 L14,20" stroke="#ffc107" strokeWidth="2"/>
+              <path d="M8,5 C7,7 7,15 10,16" stroke="#ffc107" strokeWidth="0.5" strokeDasharray="1,1"/>
+              <path d="M16,5 C17,7 17,15 14,16" stroke="#ffc107" strokeWidth="0.5" strokeDasharray="1,1"/>
             </svg>
           </div>
           <h1 className="sidebar-title">Lamp to my feet</h1>
