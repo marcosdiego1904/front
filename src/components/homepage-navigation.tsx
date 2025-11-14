@@ -122,10 +122,10 @@ export default function HomepageNavigation() {
                 </button>
                 <button
                   onClick={handleStartClick}
-                  className="relative px-6 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-gray-800 hover:to-gray-700 transform hover:scale-[1.02] transition-all duration-200 overflow-hidden group no-underline"
+                  className="relative px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-emerald-500 hover:to-emerald-400 transform hover:scale-[1.02] transition-all duration-200 overflow-hidden group no-underline"
                 >
                   <span className="relative z-10">Start for Free</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
                 </button>
               </>
             ) : (
@@ -212,7 +212,7 @@ export default function HomepageNavigation() {
                 <div className="px-4 py-2">
                   <button
                     onClick={handleStartClick}
-                    className="w-full px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white text-base font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-gray-800 hover:to-gray-700 transition-all duration-200 no-underline"
+                    className="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-base font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-emerald-500 hover:to-emerald-400 transition-all duration-200 no-underline"
                   >
                     Start for Free
                   </button>

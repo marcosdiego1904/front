@@ -31,7 +31,7 @@ export default function GettingStartedSection() {
     {
       emoji: "📱",
       title: "Sign Up",
-      description: "Choose your first life situation (anxiety, decisions, or strength)",
+      description: "Pick your biggest struggle right now",
       time: "Takes 30 seconds",
     },
     {
@@ -125,9 +125,9 @@ export default function GettingStartedSection() {
             <span className="text-amber-600 font-bold">24 hours</span>
           </p>
 
-          <button className="group relative px-10 py-4 bg-gradient-to-r from-slate-800 to-slate-900 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:from-slate-700 hover:to-slate-800 hover:scale-105 hover:shadow-2xl">
-            <span className="relative z-10">Get Your First Verse Now - Free</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <button className="group relative px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:from-emerald-500 hover:to-emerald-400 hover:scale-105 hover:shadow-2xl">
+            <span className="relative z-10">Get Armed — Free Forever</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-emerald-300/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
       </div>

@@ -169,6 +169,9 @@ export default function TransformationSection() {
                 "When anxiety overwhelms me, Philippians 4:6-7 instantly brings peace. It's like having God's calm wash
                 over me."
               </p>
+              <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
+                — Sarah M., Denver
+              </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-amber-600 font-semibold">Anxiety → Peace</span>
                 <div className="flex text-amber-400">{"★".repeat(5)}</div>
@@ -185,6 +188,9 @@ export default function TransformationSection() {
               <p className="text-[#2C3E50] font-medium mb-3 italic">
                 "Proverbs 3:5-6 guides every major decision. I trust His path instead of my own understanding, and
                 clarity always comes."
+              </p>
+              <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
+                — Michael R., Atlanta
               </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-amber-600 font-semibold">Confusion → Clarity</span>
@@ -203,6 +209,9 @@ export default function TransformationSection() {
                 "Isaiah 41:10 transforms my fear into courage. When challenges seem impossible, God's strength becomes
                 my strength."
               </p>
+              <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
+                — Jennifer K., Austin
+              </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-amber-600 font-semibold">Fear → Courage</span>
                 <div className="flex text-amber-400">{"★".repeat(5)}</div>
@@ -217,8 +226,11 @@ export default function TransformationSection() {
             animateElements.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <button className="bg-gradient-to-r from-slate-800 to-slate-900 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-slate-700 hover:to-slate-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-            Experience Your First Mental Click
+          <p className="text-xl text-[#2C3E50]/80 mb-8 font-medium">
+            Join <span className="text-emerald-600 font-bold">12,847 Christians</span> who've armed themselves with Scripture
+          </p>
+          <button className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-emerald-500 hover:to-emerald-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+            Experience Your First Victory — Free
           </button>
         </div>
       </div>

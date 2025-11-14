@@ -34,19 +34,19 @@ export default function MethodSection() {
   const features = [
     {
       icon: <div className="text-6xl transition-transform duration-300 group-hover:scale-110">📖</div>,
-      title: "1. Absorb & Understand",
+      title: "1. Absorb & Lock It In",
       description:
         "First, we break the verse into simple pieces and you read it aloud. This combination of deconstruction and auditory learning makes it easy to grasp and remember.",
     },
     {
       icon: <div className="text-6xl transition-transform duration-300 group-hover:scale-110">🎮</div>,
-      title: "2. Practice Through Play",
+      title: "2. Practice Until It Sticks",
       description:
         'Fun, interactive exercises like "Fill in the Blanks" challenge you to recall what you\'ve learned, turning practice into a rewarding game.',
     },
     {
       icon: <div className="text-6xl transition-transform duration-300 group-hover:scale-110">🏆</div>,
-      title: "3. Master for Life",
+      title: "3. Master It For Life",
       description:
         "The final step: write the verse from memory. This powerful act of recall solidifies your knowledge, locking it in for good.",
     },
@@ -123,9 +123,9 @@ export default function MethodSection() {
             transitionDelay: isVisible ? "1400ms" : "0ms",
           }}
         >
-          <button className="bg-gradient-to-r from-[#2C3E50] to-[#34495E] text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-[#34495E] hover:to-[#2C3E50] hover:shadow-2xl hover:-translate-y-1 hover:scale-105 relative overflow-hidden group">
-            <span className="relative z-10">See The Method in Action</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#E8B86D]/20 to-[#FFD700]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <button className="bg-gradient-to-r from-orange-600 to-orange-500 text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-orange-500 hover:to-orange-400 hover:shadow-2xl hover:-translate-y-1 hover:scale-105 relative overflow-hidden group">
+            <span className="relative z-10">See It Work — Start Now</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-amber-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
       </div>
