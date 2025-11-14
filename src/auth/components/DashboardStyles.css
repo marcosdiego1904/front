@@ -32,9 +32,10 @@
 .dashboard-container {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(to bottom right, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+  background: linear-gradient(to bottom right, #FEFCF8, #FEF7EE, #FEFCF8);
   color: var(--primary-text);
   position: relative;
+  width: 100%;
 }
 
 /* Sidebar styles */
@@ -160,10 +161,11 @@
 /* Main content area */
 .dashboard-main {
   flex: 1;
-  margin-left: 260px;
-  padding: 2rem;
+  margin-left: 0; /* Removed sidebar space */
+  padding: 6rem 2rem 2rem 2rem; /* Added top padding for navbar */
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 /* Decorative background orbs */
