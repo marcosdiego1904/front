@@ -214,12 +214,12 @@ const ReadAloudSection = ({
             </div>
 
             {/* Title */}
-            <h1 className="read-title">Boost Your Memory with the Power of Speech!</h1>
+            <h1 className="read-title">Read This Out Loud Right Now</h1>
 
             {/* Instructions */}
             <div className="read-instructions">
               <p className="read-instruction">
-                Read the verse <strong className="read-highlight">out loud <span className="read-accent">3</span> to <span className="read-accent">5</span> times</strong>, focusing on its meaning.
+                Read the verse below <strong className="read-highlight">OUT LOUD at least <span className="read-accent">3 times</span></strong>. Don't skip this step—your memory depends on it.
               </p>
             </div>
 
@@ -236,7 +236,7 @@ const ReadAloudSection = ({
               </button>
 
               <button className="read-continue-button" onClick={onNext}>
-                Continue to Break Down
+                I've Read It — Next Step
               </button>
 
               <div className="read-action-buttons">
@@ -257,7 +257,7 @@ const ReadAloudSection = ({
             {/* How does this work section - after buttons */}
             <div className="read-explanation-section">
               <button className="read-info-btn" onClick={() => setShowInfo(!showInfo)}>
-                {showInfo ? "Hide explanation" : "How does this technique work?"}
+                {showInfo ? "Got it" : "Why read it out loud?"}
                 <ChevronDown
                   className={`w-4 h-4 transition-transform duration-300 ${showInfo ? "rotate-180" : ""}`}
                 />
@@ -268,7 +268,7 @@ const ReadAloudSection = ({
                 {showInfo && (
                   <div className="read-explanation-inner">
                     <p className="read-explanation-text">
-                      Speaking aloud engages both your <strong className="read-highlight">visual and auditory memory</strong>, reinforcing what you learn. Studies show that <strong className="read-highlight">reading out loud improves retention by up to 50%</strong> compared to silent reading.
+                      Reading aloud activates both <strong className="read-highlight">visual and auditory pathways</strong> in your brain. You'll remember this 2X better than if you just read it silently. That's it. Simple, but it works.
                     </p>
                   </div>
                 )}

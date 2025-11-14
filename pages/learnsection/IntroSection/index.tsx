@@ -248,7 +248,7 @@ const IntroSection = ({
               </svg>
             </div>
             <h2 className="intro-title">
-              You have selected <span className="intro-title-highlight">{cite}</span>
+              You're About to Master <span className="intro-title-highlight">{cite}</span>
             </h2>
           </div>
 
@@ -281,7 +281,7 @@ const IntroSection = ({
 
             {/* Center: Start Learning (Primary CTA) */}
             <button className="intro-start-button" onClick={onNext}>
-              Start Learning
+              Let's Memorize This
             </button>
 
             {/* Right: Reset & Skip */}
@@ -314,7 +314,7 @@ const IntroSection = ({
               onClick={() => setIsOpen(!isOpen)}
               className="intro-toggle-button"
             >
-              Why does this method work?
+              How you'll remember this forever
               <ChevronDown
                 className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
               />
@@ -326,17 +326,13 @@ const IntroSection = ({
             >
               {isOpen && (
                 <div className="intro-explanation-inner">
-                  <h3 className="intro-explanation-title">The Science Behind The Method</h3>
+                  <h3 className="intro-explanation-title">What Happens Next</h3>
                   <p className="intro-explanation-text">
-                    Our method combines three scientifically-proven learning techniques:{" "}
-                    <span className="intro-explanation-highlight">spaced repetition</span>,{" "}
-                    <span className="intro-explanation-highlight">active recall</span>, and{" "}
-                    <span className="intro-explanation-highlight">multi-sensory engagement</span>.
+                    You'll read this verse aloud to <span className="intro-explanation-highlight">lock it into your memory</span>.
+                    Then we'll break it down into pieces you can actually remember. Finally, you'll write it from memory—and be amazed at what you can do.
                   </p>
                   <p className="intro-explanation-text">
-                    By breaking verses into manageable chunks and engaging both visual and auditory pathways,
-                    we help your brain form strong, lasting neural connections. The fill-in-the-blank exercise
-                    forces active recall, which is proven to be 50% more effective than passive re-reading.
+                    <strong>In 5 minutes, you'll have memorized this verse so deeply you'll remember it years from now.</strong> Let's go.
                   </p>
                 </div>
               )}

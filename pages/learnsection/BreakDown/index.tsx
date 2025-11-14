@@ -232,11 +232,11 @@ const VerseBreakdownSection = ({
             </div>
 
             {/* Title */}
-            <h1 className="breakdown-title">Breaking it Down: Memorizing Step by Step</h1>
+            <h1 className="breakdown-title">Now We're Locking It In — Piece by Piece</h1>
 
             {/* Instruction */}
             <p className="breakdown-instruction">
-              Let's make it easier! Read each fragment out loud and focus on its meaning.
+              Read each fragment below. Focus on what it means. This is how your brain remembers forever.
             </p>
 
             {/* Fragment container */}
@@ -274,10 +274,10 @@ const VerseBreakdownSection = ({
                   onClick={currentIndex < verseParts.length - 1 ? nextFragment : onNext}
                 >
                   <span className="hidden sm:inline">
-                    {currentIndex < verseParts.length - 1 ? "Next Fragment" : "Continue to Fill Blanks"}
+                    {currentIndex < verseParts.length - 1 ? "Next Fragment →" : "Ready to Test Yourself"}
                   </span>
                   <span className="sm:hidden">
-                    {currentIndex < verseParts.length - 1 ? "Next" : "Continue"}
+                    {currentIndex < verseParts.length - 1 ? "Next" : "Test"}
                   </span>
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -291,7 +291,7 @@ const VerseBreakdownSection = ({
               </button>
 
               <button className="breakdown-continue-button" onClick={onNext}>
-                Continue to Fill Blanks
+                I've Got This — Let's Test It
               </button>
 
               <div className="breakdown-action-buttons">

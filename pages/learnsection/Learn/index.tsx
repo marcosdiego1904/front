@@ -27,12 +27,12 @@ const LearnSection = () => {
   const [step, setStep] = useState(1);
 
   const steps = [
-    { id: 1, label: "Introduction", shortLabel: "Intro" },
-    { id: 2, label: "Read Aloud", shortLabel: "Read" },
-    { id: 3, label: "Break Down", shortLabel: "Break" },
-    { id: 4, label: "Fill Blanks", shortLabel: "Fill" },
-    { id: 5, label: "Write", shortLabel: "Write" },
-    { id: 6, label: "Complete", shortLabel: "Done" },
+    { id: 1, label: "Get Ready", shortLabel: "Start" },
+    { id: 2, label: "Read & Lock In", shortLabel: "Read" },
+    { id: 3, label: "Break It Down", shortLabel: "Break" },
+    { id: 4, label: "Prove It", shortLabel: "Test" },
+    { id: 5, label: "Master It", shortLabel: "Write" },
+    { id: 6, label: "Completed!", shortLabel: "Done" },
   ];
 
   // 🔹 Si no hay versículo seleccionado, mostramos un mensaje de carga
