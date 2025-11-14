@@ -402,6 +402,10 @@ const Dashboard: React.FC = () => {
         {/* Dashboard Content */}
         <div className="dashboard-content">
           <div className="welcome-section">
+            <div className="welcome-badge">
+              <span className="badge-icon">🕊️</span>
+              <span className="badge-text">Your Biblical Journey</span>
+            </div>
             <h2>Welcome back, {user?.username || 'User'}!</h2>
             <p>Here's what's happening with your account today.</p>
           </div>
