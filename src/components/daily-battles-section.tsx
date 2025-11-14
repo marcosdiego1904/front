@@ -1,124 +1,157 @@
-import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import { motion } from "framer-motion"
+import {
+  staggerContainer,
+  fadeInUp,
+  scaleInSpring,
+  defaultViewport,
+  buttonHover,
+  buttonTap,
+  slideInLeft,
+  slideInRight,
+} from "@/lib/animations"
 
 export default function DailyBattlesSection() {
-  const [isVisible, setIsVisible] = useState(false)
-  const [animateElements, setAnimateElements] = useState({
-    headline: false,
-    problem: false,
-    stats: false,
-    comparison: false,
-    scripture: false,
-    cta: false,
-  })
-  const sectionRef = useRef<HTMLElement>(null)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          // Sequential animations
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, headline: true })), 200)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, problem: true })), 400)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, stats: true })), 600)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, comparison: true })), 800)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, scripture: true })), 1000)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, cta: true })), 1200)
-        }
-      },
-      { threshold: 0.2 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
 
   const handleStartClick = () => {
     navigate("/register")
   }
 
   return (
-    <section
-      ref={sectionRef}
+    <motion.section
       className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden font-inter"
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
+      variants={staggerContainer}
     >
-      {/* Background decorative elements */}
+      {/* Animated background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-full blur-3xl"></div>
+        <motion.div
+          className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-full blur-3xl"
+          animate={{
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main headline */}
-        <div className="text-center mb-16">
-          <h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 transition-all duration-700 ${
-              animateElements.headline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+        <motion.div className="text-center mb-16" variants={fadeInUp}>
+          <motion.h2
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+            variants={fadeInUp}
           >
             You're in a Daily Battle.{" "}
             <span className="text-transparent bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text">
               And You're Fighting Unarmed.
             </span>
-          </h2>
-          <p
-            className={`text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-200 ${
-              animateElements.problem ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          </motion.h2>
+          <motion.p
+            className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            variants={fadeInUp}
           >
             Every day you face anxiety, fear, temptation, and tough decisions. Most Christians lose these battles
             because they can't recall Scripture when it matters most.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Statistics */}
-        <div
-          className={`grid md:grid-cols-2 gap-8 mb-20 max-w-4xl mx-auto transition-all duration-700 delay-400 ${
-            animateElements.stats ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="grid md:grid-cols-2 gap-8 mb-20 max-w-4xl mx-auto"
+          variants={staggerContainer}
         >
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300">
+          <motion.div
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300"
+            variants={slideInLeft}
+            whileHover={{ scale: 1.05, y: -5 }}
+          >
             <div className="flex items-center justify-center mb-4">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500/20 to-orange-500/20 flex items-center justify-center border-2 border-red-400/30">
+              <motion.div
+                className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500/20 to-orange-500/20 flex items-center justify-center border-2 border-red-400/30"
+                whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+                transition={{ duration: 0.5 }}
+              >
                 <span className="text-4xl font-bold text-red-400">87%</span>
-              </div>
+              </motion.div>
             </div>
             <p className="text-center text-gray-300 text-lg leading-relaxed">
               Of Christians <span className="font-bold text-white">can't recall a single verse</span> when facing
               real-life struggles
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-emerald-400/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+          <motion.div
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-emerald-400/20 shadow-xl hover:shadow-2xl transition-all duration-300"
+            variants={slideInRight}
+            whileHover={{ scale: 1.05, y: -5 }}
+          >
             <div className="flex items-center justify-center mb-4">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center border-2 border-emerald-400/40">
+              <motion.div
+                className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center border-2 border-emerald-400/40"
+                whileHover={{ rotate: [0, 5, -5, 5, 0] }}
+                transition={{ duration: 0.5 }}
+              >
                 <span className="text-4xl font-bold text-emerald-400">3x</span>
-              </div>
+              </motion.div>
             </div>
             <p className="text-center text-gray-300 text-lg leading-relaxed">
               Those who memorize Scripture report <span className="font-bold text-white">3x higher peace and clarity</span> in daily challenges
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Before/After Comparison */}
-        <div
-          className={`grid md:grid-cols-2 gap-8 mb-20 transition-all duration-700 delay-600 ${
-            animateElements.comparison ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="grid md:grid-cols-2 gap-8 mb-20"
+          variants={staggerContainer}
         >
           {/* Before - Unarmed */}
-          <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-600/30 shadow-lg relative">
+          <motion.div
+            className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-600/30 shadow-lg relative"
+            variants={fadeInUp}
+            whileHover={{ y: -5, borderColor: "rgb(107, 114, 128)" }}
+          >
             <div className="absolute top-4 right-4">
-              <div className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm font-semibold border border-red-400/30">
+              <motion.div
+                className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm font-semibold border border-red-400/30"
+                initial={{ rotate: -5 }}
+                animate={{ rotate: [0, -5, 5, -5, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
                 Unarmed
-              </div>
+              </motion.div>
             </div>
             <div className="text-center mb-6">
               <div className="w-16 h-16 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center">
@@ -156,18 +189,31 @@ export default function DailyBattlesSection() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
 
           {/* After - Armed */}
-          <div className="bg-gradient-to-br from-amber-900/40 via-orange-900/30 to-slate-800/80 backdrop-blur-sm rounded-2xl p-8 border-2 border-amber-400/30 shadow-2xl relative overflow-hidden">
+          <motion.div
+            className="bg-gradient-to-br from-amber-900/40 via-orange-900/30 to-slate-800/80 backdrop-blur-sm rounded-2xl p-8 border-2 border-amber-400/30 shadow-2xl relative overflow-hidden"
+            variants={fadeInUp}
+            whileHover={{ y: -5, borderColor: "rgb(251, 191, 36)", boxShadow: "0 25px 50px -12px rgba(251, 191, 36, 0.4)" }}
+          >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-2xl"></div>
             <div className="absolute top-4 right-4">
-              <div className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-400/40">
+              <motion.div
+                className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-400/40"
+                initial={{ scale: 1 }}
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
                 Armed
-              </div>
+              </motion.div>
             </div>
             <div className="relative text-center mb-6">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+              <motion.div
+                className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              >
                 <svg
                   width="32"
                   height="32"
@@ -181,7 +227,7 @@ export default function DailyBattlesSection() {
                   <path d="M2 17l10 5 10-5" />
                   <path d="M2 12l10 5 10-5" />
                 </svg>
-              </div>
+              </motion.div>
               <h3 className="text-2xl font-bold text-white mb-4">With Scripture in Your Heart</h3>
               <ul className="text-left text-gray-200 space-y-3">
                 <li className="flex items-start">
@@ -202,26 +248,32 @@ export default function DailyBattlesSection() {
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Biblical Foundation */}
-        <div
-          className={`max-w-4xl mx-auto mb-16 transition-all duration-700 delay-800 ${
-            animateElements.scripture ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="max-w-4xl mx-auto mb-16"
+          variants={fadeInUp}
         >
-          <div className="bg-gradient-to-br from-amber-900/30 via-orange-900/20 to-slate-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 border-2 border-amber-400/30 shadow-2xl relative overflow-hidden">
+          <motion.div
+            className="bg-gradient-to-br from-amber-900/30 via-orange-900/20 to-slate-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 border-2 border-amber-400/30 shadow-2xl relative overflow-hidden"
+            whileHover={{ scale: 1.02, borderColor: "rgb(251, 191, 36)" }}
+          >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5"></div>
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-orange-500"></div>
 
             <div className="relative">
               <div className="text-center mb-6">
-                <div className="inline-block p-3 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-full mb-4">
+                <motion.div
+                  className="inline-block p-3 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-full mb-4"
+                  whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                  transition={{ duration: 0.5 }}
+                >
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" className="text-amber-400">
                     <path d="M4 4h16v2H4V4zm0 4h16v2H4V8zm0 4h16v2H4v-2zm0 4h10v2H4v-2z" />
                   </svg>
-                </div>
+                </motion.div>
                 <p className="text-amber-400 font-semibold text-sm uppercase tracking-wide mb-4">
                   God's Command
                 </p>
@@ -240,32 +292,43 @@ export default function DailyBattlesSection() {
                 Wednesday's temptation, and Friday's tough decision. But you can't use what you can't remember.
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* CTA */}
-        <div
-          className={`text-center transition-all duration-700 delay-1000 ${
-            animateElements.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="text-center"
+          variants={fadeInUp}
         >
-          <p className="text-xl text-gray-300 mb-8 font-medium">
+          <motion.p
+            className="text-xl text-gray-300 mb-8 font-medium"
+            variants={fadeInUp}
+          >
             Join <span className="text-emerald-400 font-bold">12,847 Christians</span> who've armed themselves with Scripture
-          </p>
+          </motion.p>
 
-          <button
+          <motion.button
             onClick={handleStartClick}
-            className="group relative px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:from-emerald-500 hover:to-emerald-400 hover:scale-105 hover:shadow-2xl shadow-lg"
+            className="group relative px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:from-emerald-500 hover:to-emerald-400 shadow-lg"
+            whileHover={buttonHover}
+            whileTap={buttonTap}
           >
             <span className="relative z-10">Arm Yourself With Your First Verse — Free</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-xl opacity-0"
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.button>
 
-          <p className="text-gray-400 text-sm mt-4">
+          <motion.p
+            className="text-gray-400 text-sm mt-4"
+            variants={fadeInUp}
+          >
             Takes 10 minutes. Remember it forever.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   )
 }

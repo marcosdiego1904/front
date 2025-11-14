@@ -1,6 +1,16 @@
 
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import {
+  staggerContainer,
+  fadeInUp,
+  scaleInSpring,
+  defaultViewport,
+  cardHover,
+  buttonHover,
+  buttonTap,
+} from "@/lib/animations"
 
 interface Struggle {
   id: string
@@ -42,23 +52,6 @@ const struggles: Struggle[] = [
 export default function TurningPointSection() {
   const [selectedStruggle, setSelectedStruggle] = useState<string | null>(null)
   const [isRevealed, setIsRevealed] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.2 },
-    )
-
-    const section = document.getElementById("turning-point-section")
-    if (section) observer.observe(section)
-
-    return () => observer.disconnect()
-  }, [])
 
   const handleStruggleSelect = (struggleId: string) => {
     setSelectedStruggle(struggleId)
@@ -85,63 +78,100 @@ export default function TurningPointSection() {
   const selectedStruggleData = struggles.find((s) => s.id === selectedStruggle)
 
   return (
-    <section
+    <motion.section
       id="turning-point-section"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white"
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
+      variants={staggerContainer}
     >
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-100/30 via-transparent to-gray-50/20"></div>
 
       {/* Dynamic Background Shift */}
-      <div
-        className={`absolute inset-0 transition-all duration-1000 ${
-          isRevealed ? "bg-gradient-to-br from-amber-50/60 via-yellow-50/30 to-orange-50/40 opacity-100" : "opacity-0"
-        }`}
-      ></div>
+      <AnimatePresence>
+        {isRevealed && (
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-br from-amber-50/60 via-yellow-50/30 to-orange-50/40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          />
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 w-full">
         {/* Header */}
-        {!selectedStruggle && (
-          <div
-            className={`text-center mb-12 sm:mb-16 transition-all duration-800 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-relaxed" style={{ color: "#2C3E50" }}>
-              From Text on a Page to{" "}
-              <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Weapon</span>
-              <br />
-              in Your Life
-            </h2>
-            <p
-              className="text-xl max-w-3xl mx-auto leading-relaxed font-medium"
-              style={{ color: "#2C3E50", opacity: 0.8 }}
+        <AnimatePresence>
+          {!selectedStruggle && (
+            <motion.div
+              className="text-center mb-12 sm:mb-16"
+              variants={fadeInUp}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
             >
-              The Bible isn't a distant textbook; it's a practical guide for your daily life.
-              <br />
-              <strong>Choose a real-life situation below to experience the shift.</strong>
-            </p>
-          </div>
-        )}
+              <motion.h2
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-relaxed"
+                style={{ color: "#2C3E50" }}
+                variants={fadeInUp}
+              >
+                From Text on a Page to{" "}
+                <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Weapon</span>
+                <br />
+                in Your Life
+              </motion.h2>
+              <motion.p
+                className="text-xl max-w-3xl mx-auto leading-relaxed font-medium"
+                style={{ color: "#2C3E50", opacity: 0.8 }}
+                variants={fadeInUp}
+              >
+                The Bible isn't a distant textbook; it's a practical guide for your daily life.
+                <br />
+                <strong>Choose a real-life situation below to experience the shift.</strong>
+              </motion.p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Interactive Experience */}
         <div className="max-w-4xl mx-auto">
-          {!selectedStruggle ? (
-            /* Initial State - Three Cards */
-            <div
-              className={`grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 transition-all duration-800 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            >
-              {struggles.map((struggle, index) => (
-                <div
-                  key={struggle.id}
-                  onClick={() => handleStruggleSelect(struggle.id)}
-                  className="group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:-translate-y-2"
-                  style={{ animationDelay: `${index * 200}ms` }}
-                >
-                  <div
-                    className="bg-slate-800 backdrop-blur-sm rounded-2xl p-8 sm:p-10 text-center shadow-xl hover:shadow-2xl border border-slate-700/50 transition-all duration-300 group-hover:border-amber-400 group-hover:bg-slate-700 group-hover:shadow-amber-500/30 h-[240px] flex flex-col justify-center"
-                    style={{
-                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
+          <AnimatePresence mode="wait">
+            {!selectedStruggle ? (
+              /* Initial State - Three Cards */
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8"
+                variants={staggerContainer}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                {struggles.map((struggle, index) => (
+                  <motion.div
+                    key={struggle.id}
+                    onClick={() => handleStruggleSelect(struggle.id)}
+                    className="cursor-pointer"
+                    variants={scaleInSpring}
+                    whileHover={{
+                      scale: 1.05,
+                      y: -8,
+                      transition: { type: "spring", stiffness: 300, damping: 20 }
                     }}
+                    whileTap={{ scale: 0.98 }}
                   >
+                    <motion.div
+                      className="bg-slate-800 backdrop-blur-sm rounded-2xl p-8 sm:p-10 text-center shadow-xl border border-slate-700/50 group h-[240px] flex flex-col justify-center"
+                      style={{
+                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
+                      }}
+                      whileHover={{
+                        borderColor: "rgb(251, 191, 36)",
+                        backgroundColor: "rgb(51, 65, 85)",
+                        boxShadow: "0 12px 48px rgba(251, 191, 36, 0.3)",
+                      }}
+                    >
                     {/* Struggle Icon */}
                     <div className="mb-6 flex justify-center">
                       <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:bg-amber-500/20 transition-all duration-300 group-hover:shadow-lg">
@@ -196,71 +226,104 @@ export default function TurningPointSection() {
                     <h3 className="font-nunito-sans text-xl sm:text-2xl font-semibold group-hover:text-amber-400 transition-colors duration-300 text-white">
                       {struggle.question}
                     </h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            ) : (
             /* Selected State - Focused Card */
-            <div className="max-w-2xl mx-auto">
+            <motion.div
+              className="max-w-2xl mx-auto"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="relative">
                 {/* Card Container */}
-                <div
-                  className={`relative transition-all duration-700 ${
-                    selectedStruggle ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                  }`}
+                <motion.div
+                  className="relative"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div
-                    className={`bg-white rounded-3xl shadow-2xl overflow-hidden transition-all duration-700 ${
-                      isRevealed ? "transform-gpu" : ""
-                    }`}
+                    className="bg-white rounded-3xl shadow-2xl overflow-hidden"
                     style={{
                       minHeight: "400px",
-                      perspective: "1000px",
-                      transformStyle: "preserve-3d",
                     }}
                   >
-                    {!isRevealed ? (
-                      /* Front of Card - Problem State */
-                      <div className="p-10 sm:p-12 text-center flex flex-col justify-center min-h-[400px]">
-                        <div className="mb-8">
-                          <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center mb-6">
-                            <svg
-                              className="w-8 h-8 text-slate-600"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13M0 12a9 9 0 1118 0 9 9 0 01-18 0z"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-
-                        <h3 className="font-lora text-2xl sm:text-3xl mb-6" style={{ color: "#2C3E50" }}>
-                          The Bible isn't silent on this. It offers a direct strategy.
-                        </h3>
-
-                        <Button
-                          onClick={handleReveal}
-                          size="lg"
-                          className="mx-auto bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600 text-white font-nunito-sans font-semibold text-lg px-8 py-4 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                    <AnimatePresence mode="wait">
+                      {!isRevealed ? (
+                        /* Front of Card - Problem State */
+                        <motion.div
+                          key="front"
+                          className="p-10 sm:p-12 text-center flex flex-col justify-center min-h-[400px]"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
                         >
-                          Show Me The Verse I Need
-                        </Button>
-                      </div>
-                    ) : (
-                      /* Back of Card - Solution State */
-                      <div
-                        className="p-6 sm:p-8 text-center flex flex-col justify-center min-h-[350px] animate-fade-in relative overflow-hidden"
-                        style={{
-                          background: "linear-gradient(135deg, #FEFEFE 0%, #FAF8F5 50%, #F5F3EF 100%)",
-                        }}
-                      >
+                          <motion.div
+                            className="mb-8"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+                          >
+                            <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center mb-6">
+                              <svg
+                                className="w-8 h-8 text-slate-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={1.5}
+                                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13M0 12a9 9 0 1118 0 9 9 0 01-18 0z"
+                                />
+                              </svg>
+                            </div>
+                          </motion.div>
+
+                          <motion.h3
+                            className="font-lora text-2xl sm:text-3xl mb-6"
+                            style={{ color: "#2C3E50" }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                          >
+                            The Bible isn't silent on this. It offers a direct strategy.
+                          </motion.h3>
+
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                          >
+                            <Button
+                              onClick={handleReveal}
+                              size="lg"
+                              className="mx-auto bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600 text-white font-nunito-sans font-semibold text-lg px-8 py-4 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                            >
+                              Show Me The Verse I Need
+                            </Button>
+                          </motion.div>
+                        </motion.div>
+                      ) : (
+                        /* Back of Card - Solution State */
+                        <motion.div
+                          key="back"
+                          className="p-6 sm:p-8 text-center flex flex-col justify-center min-h-[350px] relative overflow-hidden"
+                          style={{
+                            background: "linear-gradient(135deg, #FEFEFE 0%, #FAF8F5 50%, #F5F3EF 100%)",
+                          }}
+                          initial={{ opacity: 0, rotateY: -90 }}
+                          animate={{ opacity: 1, rotateY: 0 }}
+                          exit={{ opacity: 0, rotateY: 90 }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        >
                         {/* Subtle Accent Border */}
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-orange-500"></div>
                         {/* Light Ray Effect */}
@@ -307,32 +370,47 @@ export default function TurningPointSection() {
                             </p>
                           </div>
 
-                          <Button
-                            size="lg"
-                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-nunito-sans font-semibold text-base px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-emerald-500/20"
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
                           >
-                            Learn Your First Life-Changing Verse — Free
-                          </Button>
+                            <Button
+                              size="lg"
+                              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                              className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-nunito-sans font-semibold text-base px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-emerald-500/20"
+                            >
+                              Learn Your First Life-Changing Verse — Free
+                            </Button>
+                          </motion.div>
 
-                          <div className="mt-3">
-                            <button
+                          <motion.div
+                            className="mt-3"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                          >
+                            <motion.button
                               onClick={handleReset}
                               className="font-nunito-sans text-base text-slate-700 hover:text-slate-900 transition-colors duration-200 underline hover:no-underline font-medium"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
                             >
                               Try another situation
-                            </button>
-                          </div>
+                            </motion.button>
+                          </motion.div>
                         </div>
-                      </div>
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
-          )}
+            </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }
