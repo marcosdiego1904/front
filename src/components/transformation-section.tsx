@@ -1,102 +1,113 @@
-
-import { useState, useEffect, useRef } from "react"
+import { motion } from "framer-motion"
+import {
+  staggerContainer,
+  fadeInUp,
+  slideInLeft,
+  slideInRight,
+  scaleInSpring,
+  defaultViewport,
+  buttonHover,
+  buttonTap,
+} from "@/lib/animations"
 
 export default function TransformationSection() {
-  const [isVisible, setIsVisible] = useState(false)
-  const [animateElements, setAnimateElements] = useState({
-    headline: false,
-    subtitle: false,
-    beforeAfter: false,
-    scenarios: false,
-    cta: false,
-  })
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          // Sequential animations
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, headline: true })), 200)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, subtitle: true })), 400)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, beforeAfter: true })), 600)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, scenarios: true })), 800)
-          setTimeout(() => setAnimateElements((prev) => ({ ...prev, cta: true })), 1000)
-        }
-      },
-      { threshold: 0.2 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
-
   return (
-    <section
-      ref={sectionRef}
+    <motion.section
       className="relative py-20 md:py-32 bg-gradient-to-br from-gray-50 via-gray-100/50 to-gray-50 overflow-hidden font-inter"
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
+      variants={staggerContainer}
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-200/20 to-orange-200/20 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-yellow-200/20 to-amber-200/20 rounded-full blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/10 to-amber-100/10 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5">
-          <svg width="200" height="100" viewBox="0 0 200 100" className="text-amber-400">
-            <path
-              d="M20 50 Q100 20 180 50"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              strokeDasharray="5,5"
-              className="animate-pulse"
-            />
-            <polygon points="175,45 185,50 175,55" fill="currentColor" />
-          </svg>
-        </div>
+        <motion.div
+          className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-200/20 to-orange-200/20 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-yellow-200/20 to-amber-200/20 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/10 to-amber-100/10 rounded-full blur-2xl"
+          animate={{
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main headline */}
-        <div className="text-center mb-16">
-          <h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-[#2C3E50] mb-6 transition-all duration-700 ${
-              animateElements.headline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+        <motion.div className="text-center mb-16" variants={fadeInUp}>
+          <motion.h2
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2C3E50] mb-6"
+            variants={fadeInUp}
           >
             The Moment Everything{" "}
             <span className="text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">Changes</span>
-          </h2>
-          <p
-            className={`text-lg md:text-xl text-[#2C3E50]/80 max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-200 ${
-              animateElements.subtitle ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          </motion.h2>
+          <motion.p
+            className="text-lg md:text-xl text-[#2C3E50]/80 max-w-3xl mx-auto leading-relaxed"
+            variants={fadeInUp}
           >
             That life-changing "mental click" when you realize:{" "}
             <span className="font-bold text-amber-600">"God is real. This works. I want more."</span>
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Before/After transformation showcase */}
-        <div
-          className={`relative grid md:grid-cols-2 gap-8 mb-20 transition-all duration-700 delay-400 ${
-            animateElements.beforeAfter ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="relative grid md:grid-cols-2 gap-8 mb-20"
+          variants={staggerContainer}
         >
+          {/* Arrow in center on desktop */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block">
-            <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full p-3 shadow-lg animate-pulse">
+            <motion.div
+              className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full p-3 shadow-lg"
+              animate={{
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-            </div>
+            </motion.div>
           </div>
 
           {/* Before State */}
-          <div className="bg-gradient-to-br from-gray-100/80 to-gray-200/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-300/50 shadow-lg hover:shadow-xl transition-all duration-300 relative">
+          <motion.div
+            className="bg-gradient-to-br from-gray-100/80 to-gray-200/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-300/50 shadow-lg hover:shadow-xl transition-all duration-300 relative"
+            variants={slideInLeft}
+            whileHover={{ y: -5 }}
+          >
             <div className="absolute top-4 right-4">
               <div className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-semibold">Before</div>
             </div>
@@ -122,16 +133,24 @@ export default function TransformationSection() {
                 real problems.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* After State */}
-          <div className="bg-gradient-to-br from-amber-50/90 to-orange-50/90 backdrop-blur-sm rounded-2xl p-8 border-2 border-amber-200/70 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+          <motion.div
+            className="bg-gradient-to-br from-amber-50/90 to-orange-50/90 backdrop-blur-sm rounded-2xl p-8 border-2 border-amber-200/70 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+            variants={slideInRight}
+            whileHover={{ y: -5, borderColor: "rgb(251, 191, 36)" }}
+          >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-100/30 to-orange-100/30 rounded-2xl"></div>
             <div className="absolute top-4 right-4">
               <div className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-semibold">After</div>
             </div>
             <div className="relative text-center mb-6">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+              <motion.div
+                className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg"
+                whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+              >
                 <svg
                   width="32"
                   height="32"
@@ -143,97 +162,92 @@ export default function TransformationSection() {
                 >
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
-              </div>
+              </motion.div>
               <h3 className="text-2xl font-bold text-[#2C3E50] mb-4">Scripture Becomes Your Secret Weapon</h3>
               <p className="text-[#2C3E50]/70 leading-relaxed">
                 When anxiety hits, you instantly recall the perfect verse. When facing decisions, God's wisdom flows
                 naturally. The Bible transforms from textbook to trusted ally.
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Real-life scenario examples */}
-        <div
-          className={`grid md:grid-cols-3 gap-6 mb-16 transition-all duration-700 delay-600 ${
-            animateElements.scenarios ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="grid md:grid-cols-3 gap-6 mb-16"
+          variants={staggerContainer}
         >
-          {/* Anxiety Scenario */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200/50 shadow-lg hover:shadow-xl transition-all duration-300 relative">
-            <div className="absolute -top-3 left-6">
-              <div className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-lg">😌</div>
-            </div>
-            <div className="pt-4">
-              <p className="text-[#2C3E50] font-medium mb-3 italic">
-                "When anxiety overwhelms me, Philippians 4:6-7 instantly brings peace. It's like having God's calm wash
-                over me."
-              </p>
-              <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
-                — Sarah M., Denver
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-amber-600 font-semibold">Anxiety → Peace</span>
-                <div className="flex text-amber-400">{"★".repeat(5)}</div>
+          {[
+            {
+              emoji: "😌",
+              quote: "When anxiety overwhelms me, Philippians 4:6-7 instantly brings peace. It's like having God's calm wash over me.",
+              author: "Sarah M., Denver",
+              transformation: "Anxiety → Peace"
+            },
+            {
+              emoji: "💡",
+              quote: "Proverbs 3:5-6 guides every major decision. I trust His path instead of my own understanding, and clarity always comes.",
+              author: "Michael R., Atlanta",
+              transformation: "Confusion → Clarity"
+            },
+            {
+              emoji: "💪",
+              quote: "Isaiah 41:10 transforms my fear into courage. When challenges seem impossible, God's strength becomes my strength.",
+              author: "Jennifer K., Austin",
+              transformation: "Fear → Courage"
+            }
+          ].map((testimonial, index) => (
+            <motion.div
+              key={index}
+              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200/50 shadow-lg text-left relative"
+              variants={scaleInSpring}
+              whileHover={{ y: -8, boxShadow: "0 20px 40px -12px rgba(217, 119, 6, 0.3)" }}
+            >
+              <div className="absolute -top-3 left-6">
+                <motion.div
+                  className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-lg"
+                  whileHover={{ scale: 1.2, rotate: [0, -10, 10, -10, 0] }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {testimonial.emoji}
+                </motion.div>
               </div>
-            </div>
-          </div>
-
-          {/* Decision Scenario */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200/50 shadow-lg hover:shadow-xl transition-all duration-300 relative">
-            <div className="absolute -top-3 left-6">
-              <div className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-lg">💡</div>
-            </div>
-            <div className="pt-4">
-              <p className="text-[#2C3E50] font-medium mb-3 italic">
-                "Proverbs 3:5-6 guides every major decision. I trust His path instead of my own understanding, and
-                clarity always comes."
-              </p>
-              <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
-                — Michael R., Atlanta
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-amber-600 font-semibold">Confusion → Clarity</span>
-                <div className="flex text-amber-400">{"★".repeat(5)}</div>
+              <div className="pt-4">
+                <p className="text-[#2C3E50] font-medium mb-3 italic">
+                  "{testimonial.quote}"
+                </p>
+                <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
+                  — {testimonial.author}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-amber-600 font-semibold">{testimonial.transformation}</span>
+                  <div className="flex text-amber-400">{"★".repeat(5)}</div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Challenge Scenario */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200/50 shadow-lg hover:shadow-xl transition-all duration-300 relative">
-            <div className="absolute -top-3 left-6">
-              <div className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-lg">💪</div>
-            </div>
-            <div className="pt-4">
-              <p className="text-[#2C3E50] font-medium mb-3 italic">
-                "Isaiah 41:10 transforms my fear into courage. When challenges seem impossible, God's strength becomes
-                my strength."
-              </p>
-              <p className="text-[#2C3E50]/70 text-sm mb-3 font-semibold">
-                — Jennifer K., Austin
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-amber-600 font-semibold">Fear → Courage</span>
-                <div className="flex text-amber-400">{"★".repeat(5)}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* CTA */}
-        <div
-          className={`text-center transition-all duration-700 delay-800 ${
-            animateElements.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="text-center"
+          variants={fadeInUp}
         >
-          <p className="text-xl text-[#2C3E50]/80 mb-8 font-medium">
+          <motion.p
+            className="text-xl text-[#2C3E50]/80 mb-8 font-medium"
+            variants={fadeInUp}
+          >
             Join <span className="text-emerald-600 font-bold">12,847 Christians</span> who've armed themselves with Scripture
-          </p>
-          <button className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-emerald-500 hover:to-emerald-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+          </motion.p>
+          <motion.button
+            className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-emerald-500 hover:to-emerald-400 transition-all duration-300 shadow-lg"
+            whileHover={buttonHover}
+            whileTap={buttonTap}
+          >
             Experience Your First Victory — Free
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   )
 }
