@@ -138,6 +138,12 @@ const Navbar = () => {
                   Support Us
                 </NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink to="/subscriptions" className="nav-link">
+                  <i className="bi bi-credit-card me-2"></i>
+                  Subscriptions
+                </NavLink>
+              </li>
 
               {/* Show Dashboard link only when authenticated */}
               {isAuthenticated && (

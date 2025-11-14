@@ -99,6 +99,12 @@ export default function HomepageNavigation() {
               >
                 Support Us
               </button>
+              <button
+                onClick={() => handleNavClick("/subscriptions")}
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+              >
+                Subscriptions
+              </button>
               {isAuthenticated && (
                 <button
                   onClick={() => handleNavClick("/dashboard")}
@@ -190,6 +196,12 @@ export default function HomepageNavigation() {
             className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
           >
             Support Us
+          </button>
+          <button
+            onClick={() => handleNavClick("/subscriptions")}
+            className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+          >
+            Subscriptions
           </button>
           {isAuthenticated && (
             <button
