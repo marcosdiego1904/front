@@ -1,56 +1,578 @@
-/* IconFixesOverride.css - Use !important to override any conflicting styles */
+/* ========================================
+   AUTH PAGES - MATCHING LEARNING SECTION DESIGN
+   ======================================== */
 
-/* The container for the input field and icon */
+/* ========================================
+   NAVBAR WITH DRAWER
+   ======================================== */
+
+/* Navbar - minimal top bar */
+.intro-navbar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  background: transparent !important;
+}
+
+.intro-navbar-container {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 0 1rem !important;
+  background: transparent !important;
+}
+
+@media (min-width: 640px) {
+  .intro-navbar-container {
+    padding: 0 1.5rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .intro-navbar-container {
+    padding: 0 2rem !important;
+  }
+}
+
+.intro-navbar-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 4rem !important;
+  background: transparent !important;
+}
+
+.intro-navbar-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  font-family: 'Lora', serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #2C3E50 !important;
+  transition: all 0.2s ease !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  border-radius: 0.5rem !important;
+}
+
+@media (min-width: 640px) {
+  .intro-navbar-button {
+    font-size: 1.125rem !important;
+  }
+}
+
+.intro-navbar-button:hover {
+  color: #E8B86D !important;
+}
+
+.intro-navbar-logo {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+/* Drawer overlay - backdrop con fade */
+.intro-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.intro-drawer-overlay-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer sidebar - slide-in desde la izquierda */
+.intro-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 18rem;
+  background: white;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 200;
+  transform: translateX(-100%);
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.intro-drawer-open {
+  transform: translateX(0);
+}
+
+/* Drawer header */
+.intro-drawer-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.intro-drawer-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.intro-drawer-title {
+  font-family: 'Lora', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.intro-drawer-title:hover {
+  color: #E8B86D;
+}
+
+.intro-drawer-logo {
+  width: 2rem;
+  height: 2rem;
+}
+
+.intro-drawer-close {
+  padding: 0.5rem;
+  color: #374151;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: all 200ms ease;
+}
+
+.intro-drawer-close:hover {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.05);
+  transform: rotate(90deg);
+}
+
+/* Drawer navigation */
+.intro-drawer-nav {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.intro-drawer-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 200ms ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.intro-drawer-link:hover {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.intro-drawer-divider {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(229, 231, 235, 0.5);
+  margin-top: 1rem;
+}
+
+.intro-drawer-cta {
+  margin-top: 0.5rem;
+}
+
+.intro-drawer-cta-button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(to right, #111827, #1f2937);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 200ms ease;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.intro-drawer-cta-button:hover {
+  background: linear-gradient(to right, #1f2937, #374151);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+}
+
+/* Main container - warm gradient background like learning sections */
+.auth-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(to bottom right, #FEFCF8, #FEF7EE, #FEFCF8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+
+/* Alert styling */
+.bible-auth-alert {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 650px;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.bible-alert-content {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(232, 184, 109, 0.12) 100%);
+  border: 2px solid rgba(255, 215, 0, 0.25);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #2C3E50;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.close-bible-alert {
+  background: none;
+  border: none;
+  color: #2C3E50;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.close-bible-alert:hover {
+  opacity: 1;
+}
+
+/* Form wrapper - white card with backdrop blur */
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(232, 184, 109, 0.3);
+  margin: 5rem 1rem 2rem;
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-form-wrapper {
+    padding: 2rem 1.5rem;
+    margin: 5rem 1rem 1.5rem;
+  }
+}
+
+/* Logo container */
+.auth-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.lamp-icon {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom right, #FFD700, #E8B86D);
+  border-radius: 50%;
+  padding: 0.5rem;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.lamp-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Typography */
+.auth-title {
+  font-family: 'Lora', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2C3E50;
+  text-align: center;
+  margin: 0;
+}
+
+.auth-subtitle {
+  font-family: 'Lora', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2C3E50;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+/* Error messages */
+.auth-error-message {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  border-left: 4px solid #ef4444;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  color: #b91c1c;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+}
+
+/* Auth notification (for registration) */
+.auth-notification {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(232, 184, 109, 0.12) 100%);
+  border: 2px solid rgba(255, 215, 0, 0.25);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: #E8B86D;
+}
+
+.notification-content span {
+  color: #2C3E50;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+/* Form */
+.auth-form {
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2C3E50 !important;
+  margin-bottom: 0.5rem;
+}
+
+/* Input container and icon */
 .ltmf-input-container {
   position: relative !important;
   width: 100% !important;
   display: block !important;
 }
 
-/* The icon styling with positioning that ensures it's visible */
 .ltmf-icon {
   position: absolute !important;
-  left: 12px !important;
+  left: 1rem !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  z-index: 5 !important; /* Higher z-index to ensure icon appears above input */
+  z-index: 5 !important;
   pointer-events: none !important;
   width: 20px !important;
   height: 20px !important;
-  color: var(--text-muted, #b0b6be) !important;
+  color: #E8B86D !important;
 }
 
-/* Input styling with proper padding */
+/* Input field */
 .ltmf-input {
   width: 100% !important;
-  padding: 0.9rem 1rem 0.9rem 3rem !important; /* Left padding creates space for the icon */
-  background-color: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 6px !important;
-  color: var(--text-light, #f8f9fa) !important;
+  padding: 0.875rem 1rem 0.875rem 3rem !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid rgba(217, 119, 6, 0.2) !important;
+  border-radius: 12px !important;
+  color: #2C3E50 !important;
   font-size: 1rem !important;
-  transition: all 0.2s ease !important;
+  font-family: 'Nunito Sans', sans-serif !important;
+  transition: all 0.3s ease !important;
   position: relative !important;
-  z-index: 1 !important; /* Lower z-index than the icon */
+  z-index: 1 !important;
 }
 
 .ltmf-input:focus {
   outline: none !important;
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  border-color: var(--accent-gold, #ffc107) !important;
-  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+  background-color: white !important;
+  border-color: #FFD700 !important;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2) !important;
 }
 
 .ltmf-input::placeholder {
-  color: var(--text-muted, #b0b6be) !important;
-  opacity: 1 !important; /* Ensures placeholder is visible */
+  color: rgba(217, 119, 6, 0.4) !important;
+  opacity: 1 !important;
 }
 
 .ltmf-input.error {
-  border-color: var(--error-color, #ff4136) !important;
+  border-color: #ef4444 !important;
 }
 
-/* Fix for loading buttons */
+/* Error text */
+.error-text {
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-family: 'Nunito Sans', sans-serif;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Form options (remember me, forgot password) */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.875rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.remember-me label {
+  color: #2C3E50 !important;
+  font-family: 'Nunito Sans', sans-serif !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+  margin: 0 !important;
+}
+
+.forgot-link {
+  color: #E8B86D;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgot-link:hover {
+  color: #FFD700;
+  text-decoration: underline;
+}
+
+/* Submit button */
+.auth-button {
+  width: 100%;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(to right, rgb(30, 41, 59), rgb(51, 65, 85));
+  color: white;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.auth-button:hover:not(:disabled) {
+  background: linear-gradient(to right, rgb(51, 65, 85), rgb(71, 85, 105));
+  transform: scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.auth-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-button.loading {
+  opacity: 0.8;
+}
+
+/* Loading spinner */
 .ltmf-spinner {
   margin-right: 0.5rem !important;
   display: inline-flex !important;
@@ -72,69 +594,30 @@
     transform: rotate(360deg);
   }
 }
-label{
-  color: white !important;
-}
-/* Estilos para la notificación en la página de registro */
-.auth-notification {
-  background-color: #fff8e1;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  border-left: 4px solid #ffc107;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  animation: fadeIn 0.5s ease-in-out;
+
+/* Footer */
+.auth-footer {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(232, 184, 109, 0.2);
+  text-align: center;
 }
 
-.notification-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.auth-footer p {
+  color: #2C3E50;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.875rem;
+  margin: 0;
 }
 
-.notification-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
+.auth-link {
+  color: #E8B86D;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-.notification-content span {
-  color: #5a4500;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* Estilos para mejorar la integración de la alerta en las páginas de autenticación */
-.auth-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem 1rem;
-}
-
-.bible-auth-alert {
-  width: 95%;
-  max-width: 650px;
-  margin: 0 auto 20px auto;
-}
-
-.auth-form-wrapper {
-  width: 100%;
-  max-width: 480px;
-  background-color: #16223d;
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+.auth-link:hover {
+  color: #FFD700;
+  text-decoration: underline;
 }

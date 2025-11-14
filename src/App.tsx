@@ -87,8 +87,8 @@ const Layout = () => {
   // Pages that should use HomepageNavigation
   const usesHomepageNav = ['/', '/bible-search', '/about', '/support'].includes(location.pathname);
 
-  // Pages that should have NO navbar at all
-  const noNavbar = ['/learn'].includes(location.pathname);
+  // Pages that should have NO navbar at all (they have their own navbar)
+  const noNavbar = ['/learn', '/login', '/register', '/forgot-password', '/dashboard'].includes(location.pathname);
 
   return (
     <>

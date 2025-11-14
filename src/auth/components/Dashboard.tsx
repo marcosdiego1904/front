@@ -1,9 +1,13 @@
 // src/auth/components/Dashboard.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import axios from 'axios';
 import API_BASE_URL from '../../config/api';
+import logo from '../../oil-lamp.png';
 import './DashboardStyles.css';
+import './registratrion/IconFixesStyles.css';
 import '../../components/RankingStyles.css';
 import RankCard from '../../components/RankCard';
 import LevelUpNotification from '../../components/LevelUpNotification';
@@ -27,7 +31,9 @@ interface UserRank {
 
 const Dashboard: React.FC = () => {
   const { user, logout, getAuthHeader, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [memorizedVerses, setMemorizedVerses] = useState<MemorizedVerse[]>([]);
   const [userRank, setUserRank] = useState<UserRank>({
     rank: "Beginner",
@@ -248,15 +254,15 @@ const Dashboard: React.FC = () => {
   
   const handleCloseNotification = () => {
     setShowLevelUp(false);
-    
+
     // Recalculate rank after level up
     const versesCount = memorizedVerses.length;
     const calculatedRank = calculateUserRank(versesCount);
     setBiblicalUserRank(calculatedRank);
-    
+
     // Find next rank
     if (calculatedRank.currentRank.nextLevel) {
-      const nextRankIndex = biblicalRanks.findIndex(rank => 
+      const nextRankIndex = biblicalRanks.findIndex(rank =>
         rank.level === calculatedRank.currentRank.nextLevel
       );
       if (nextRankIndex !== -1) {
@@ -268,124 +274,121 @@ const Dashboard: React.FC = () => {
       setNextRank(null);
     }
   };
-  
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login');
+    setDrawerOpen(false);
+  };
+
+  const handleStartClick = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/register');
+    }
+    setDrawerOpen(false);
+  };
+
   return (
-    <div className="dashboard-container">
-      {/* Level Up Notification */}
-      <LevelUpNotification 
-        show={showLevelUp}
-        onClose={handleCloseNotification}
-        currentRank={biblicalUserRank.currentRank}
-        nextRank={nextRank}
-      />
-      
-      {/* Sidebar */}
-      <div className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <div className="lamp-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffc107" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8,4 C8,2.895 8.895,2 10,2 L14,2 C15.105,2 16,2.895 16,4 L16,5 L8,5 L8,4 Z" fill="#ffc107"/>
-              <path d="M9,5 L15,5 L15,10 C15,12.761 12.761,16 10,16 L9,5 Z" fill="#ffc107"/>
-              <path d="M10,16 L14,16 C12.5,18.5 11.5,18.5 10,16 Z" fill="#ffc107"/>
-              <path d="M11.5,16 L11.5,20" stroke="#ffc107" strokeWidth="2"/>
-              <path d="M9,20 L14,20" stroke="#ffc107" strokeWidth="2"/>
-              <path d="M8,5 C7,7 7,15 10,16" stroke="#ffc107" strokeWidth="0.5" strokeDasharray="1,1"/>
-              <path d="M16,5 C17,7 17,15 14,16" stroke="#ffc107" strokeWidth="0.5" strokeDasharray="1,1"/>
-            </svg>
+    <>
+      {/* Navbar */}
+      <nav className="intro-navbar">
+        <div className="intro-navbar-container">
+          <div className="intro-navbar-content">
+            <button
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              className="intro-navbar-button"
+            >
+              <Menu className="h-5 w-5" />
+              <span>Lamp to My Feet</span>
+              <img src={logo} alt="Lamp Icon" className="intro-navbar-logo" />
+            </button>
           </div>
-          <h1 className="sidebar-title">Lamp to my feet</h1>
         </div>
-        
-        <nav className="sidebar-nav">
-          <ul>
-            <li className="active">
-              <a href="#dashboard" onClick={(e) => { 
-                e.preventDefault(); 
-                scrollToSection(dashboardRef); 
-              }}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="9"></rect>
-                  <rect x="14" y="3" width="7" height="5"></rect>
-                  <rect x="14" y="12" width="7" height="9"></rect>
-                  <rect x="3" y="16" width="7" height="5"></rect>
-                </svg>
-                Dashboard
-              </a>
-            </li>
-            {/**<li>
-              <a href="/profile">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                Profile
-              </a>
-            </li> 
-            
-            <li>
-              <a href="#settings">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-                Settings
-              </a>
-            </li>
-            */}
-            
-            <li>
-              <a href="#userRank" onClick={(e) => { 
-                e.preventDefault(); 
-                scrollToSection(userRankRef); 
-              }}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="8" r="7"></circle>
-                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                </svg>
-                Biblical Journey
-              </a>
-            </li>
-            
-            <li>
-              <a href="#memorizedVerses" onClick={(e) => { 
-                e.preventDefault(); 
-                scrollToSection(memorizedVersesRef); 
-              }}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                </svg>
-                Memorized Verses
-              </a>
-            </li>
-            
-          </ul>
-        </nav>
-        
-        <div className="sidebar-footer">
-          <button onClick={handleLogout} className="logout-button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            Logout
+      </nav>
+
+      {/* Drawer overlay */}
+      <div
+        className={`intro-drawer-overlay ${drawerOpen ? "intro-drawer-overlay-open" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+      ></div>
+
+      {/* Drawer sidebar */}
+      <aside className={`intro-drawer ${drawerOpen ? "intro-drawer-open" : ""}`}>
+        <div className="intro-drawer-header">
+          <div className="intro-drawer-header-content" onClick={() => handleNavClick("/")}>
+            <span className="intro-drawer-title">Lamp to My Feet</span>
+            <img src={logo} alt="Lamp Icon" className="intro-drawer-logo" />
+          </div>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="intro-drawer-close"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
-      </div>
-      
-      {/* Main Content */}
-      <div className="dashboard-main">
-        {/* Mobile Menu Toggle */}
-        <div className="mobile-menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </div>
-        
-        {/* Header - add ref for dashboard section */}
+
+        <nav className="intro-drawer-nav">
+          <button onClick={() => handleNavClick("/")} className="intro-drawer-link">
+            Home
+          </button>
+          <button onClick={() => handleNavClick("/bible-search")} className="intro-drawer-link">
+            Bible Search
+          </button>
+          <button onClick={() => handleNavClick("/about")} className="intro-drawer-link">
+            About
+          </button>
+          <button onClick={() => handleNavClick("/support")} className="intro-drawer-link">
+            Support Us
+          </button>
+          {isAuthenticated && (
+            <button onClick={() => handleNavClick("/dashboard")} className="intro-drawer-link">
+              Dashboard
+            </button>
+          )}
+
+          <div className="intro-drawer-divider">
+            {!isAuthenticated ? (
+              <>
+                <button onClick={handleLoginClick} className="intro-drawer-link">
+                  Log In
+                </button>
+                <div className="intro-drawer-cta">
+                  <button onClick={handleStartClick} className="intro-drawer-cta-button">
+                    Start for Free
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="intro-drawer-cta">
+                <button onClick={handleLogout} className="intro-drawer-cta-button">
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </nav>
+      </aside>
+
+      <div className="dashboard-container">
+        {/* Level Up Notification */}
+        <LevelUpNotification
+          show={showLevelUp}
+          onClose={handleCloseNotification}
+          currentRank={biblicalUserRank.currentRank}
+          nextRank={nextRank}
+        />
+
+        {/* Old Sidebar Removed - now using navbar with drawer above */}
+
+        {/* Main Content */}
+        <div className="dashboard-main">
+          {/* Header - add ref for dashboard section */}
         <header ref={dashboardRef} id="dashboard" className="dashboard-header">
           <h1>Dashboard</h1>
           <div className="user-profile">
@@ -484,8 +487,9 @@ const Dashboard: React.FC = () => {
             )}
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

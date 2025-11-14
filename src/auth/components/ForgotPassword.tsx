@@ -1,13 +1,40 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Menu, X } from 'lucide-react';
+import logo from '../../oil-lamp.png';
 import '../context/AuthStyles.css';
+import './registratrion/IconFixesStyles.css';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [formError, setFormError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
-  
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login');
+    setDrawerOpen(false);
+  };
+
+  const handleStartClick = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/register');
+    }
+    setDrawerOpen(false);
+  };
+
   const validateForm = (): boolean => {
     if (!email.trim()) {
       setFormError('Email is required');
@@ -40,7 +67,87 @@ const ForgotPassword: React.FC = () => {
   };
   
   return (
-    <div className="auth-container">
+    <>
+      {/* Navbar */}
+      <nav className="intro-navbar">
+        <div className="intro-navbar-container">
+          <div className="intro-navbar-content">
+            <button
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              className="intro-navbar-button"
+            >
+              <Menu className="h-5 w-5" />
+              <span>Lamp to My Feet</span>
+              <img src={logo} alt="Lamp Icon" className="intro-navbar-logo" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Drawer overlay */}
+      <div
+        className={`intro-drawer-overlay ${drawerOpen ? "intro-drawer-overlay-open" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+      ></div>
+
+      {/* Drawer sidebar */}
+      <aside className={`intro-drawer ${drawerOpen ? "intro-drawer-open" : ""}`}>
+        <div className="intro-drawer-header">
+          <div className="intro-drawer-header-content" onClick={() => handleNavClick("/")}>
+            <span className="intro-drawer-title">Lamp to My Feet</span>
+            <img src={logo} alt="Lamp Icon" className="intro-drawer-logo" />
+          </div>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="intro-drawer-close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <nav className="intro-drawer-nav">
+          <button onClick={() => handleNavClick("/")} className="intro-drawer-link">
+            Home
+          </button>
+          <button onClick={() => handleNavClick("/bible-search")} className="intro-drawer-link">
+            Bible Search
+          </button>
+          <button onClick={() => handleNavClick("/about")} className="intro-drawer-link">
+            About
+          </button>
+          <button onClick={() => handleNavClick("/support")} className="intro-drawer-link">
+            Support Us
+          </button>
+          {isAuthenticated && (
+            <button onClick={() => handleNavClick("/dashboard")} className="intro-drawer-link">
+              Dashboard
+            </button>
+          )}
+
+          <div className="intro-drawer-divider">
+            {!isAuthenticated ? (
+              <>
+                <button onClick={handleLoginClick} className="intro-drawer-link">
+                  Log In
+                </button>
+                <div className="intro-drawer-cta">
+                  <button onClick={handleStartClick} className="intro-drawer-cta-button">
+                    Start for Free
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="intro-drawer-cta">
+                <button onClick={() => handleNavClick("/dashboard")} className="intro-drawer-cta-button">
+                  Dashboard
+                </button>
+              </div>
+            )}
+          </div>
+        </nav>
+      </aside>
+
+      <div className="auth-container">
       <div className="auth-form-wrapper">
         <div className="auth-logo-container">
           <div className="lamp-icon">
@@ -131,7 +238,8 @@ const ForgotPassword: React.FC = () => {
           <p>Remember your password? <Link to="/login" className="auth-link">Sign in</Link></p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
