@@ -49,31 +49,37 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 // Routes component that uses useRoutes
 const AppRoutes = () => {
   return useRoutes([
+    // Protected route - Dashboard as homepage
+    {
+      path: "/",
+      element: <ProtectedRoute><Dashboard /></ProtectedRoute>
+    },
+
     // Public routes
-    { path: "/", element: <Home /> },
+    { path: "/landing", element: <Home /> },
     { path: "/learn", element: <LearnSection /> },
     { path: "/bible-search", element: <BibleSearch /> }, // ← NUEVA RUTA
-    
+
     // About and Support routes
     { path: "/about", element: <AboutPage /> },
     { path: "/support", element: <SupportPage /> },
-    
+
     // New Terms and Privacy routes
     { path: "/terms", element: <TermsOfService /> },
     { path: "/privacy", element: <PrivacyPolicy /> },
-    
+
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/forgot-password", element: <ForgotPassword /> },
-    
+
     // Protected routes
-    { 
-      path: "/dashboard", 
-      element: <ProtectedRoute><Dashboard /></ProtectedRoute> 
+    {
+      path: "/dashboard",
+      element: <ProtectedRoute><Dashboard /></ProtectedRoute>
     },
-    { 
-      path: "/profile", 
-      element: <ProtectedRoute><UserProfile /></ProtectedRoute> 
+    {
+      path: "/profile",
+      element: <ProtectedRoute><UserProfile /></ProtectedRoute>
     },
     // Add more routes as needed
   ]);
@@ -82,13 +88,12 @@ const AppRoutes = () => {
 // Layout component that conditionally renders Navbar
 const Layout = () => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
 
   // Pages that should use HomepageNavigation
-  const usesHomepageNav = ['/', '/bible-search', '/about', '/support'].includes(location.pathname);
+  const usesHomepageNav = ['/landing', '/bible-search', '/about', '/support'].includes(location.pathname);
 
-  // Pages that should have NO navbar at all
-  const noNavbar = ['/learn'].includes(location.pathname);
+  // Pages that should have NO navbar at all (dashboard has its own sidebar, learn has its own nav)
+  const noNavbar = ['/', '/dashboard', '/profile', '/learn'].includes(location.pathname);
 
   return (
     <>
