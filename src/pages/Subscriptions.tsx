@@ -11,46 +11,20 @@ import {
 } from '../services/stripeApi';
 
 // Subscription pricing plans
-// TODO: Replace these Price IDs with your actual Stripe Price IDs from the Stripe Dashboard
 const PRICING_PLANS = [
   {
-    id: 'price_basic', // Replace with actual Stripe Price ID
+    id: 'price_1STlSpBlnxS6RUbet4usuAH3', // Live Stripe Price ID
     name: 'Basic Plan',
     price: 9.99,
     interval: 'month',
     features: [
       'Access to all Bible verses',
-      'Basic memorization tools',
+      'Interactive memorization tools',
       'Progress tracking',
-      'Mobile app access',
+      'Personalized learning journey',
+      'Mobile-friendly experience',
     ],
-  },
-  {
-    id: 'price_pro', // Replace with actual Stripe Price ID
-    name: 'Pro Plan',
-    price: 19.99,
-    interval: 'month',
-    features: [
-      'Everything in Basic',
-      'Advanced learning techniques',
-      'Custom verse collections',
-      'Priority support',
-      'Ad-free experience',
-    ],
-    popular: true,
-  },
-  {
-    id: 'price_premium', // Replace with actual Stripe Price ID
-    name: 'Premium Plan',
-    price: 29.99,
-    interval: 'month',
-    features: [
-      'Everything in Pro',
-      'Personal coaching sessions',
-      'Exclusive content',
-      'Early access to new features',
-      'Lifetime updates',
-    ],
+    popular: true, // Highlight this as the only plan
   },
 ];
 

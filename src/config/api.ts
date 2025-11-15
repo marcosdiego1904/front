@@ -4,7 +4,7 @@
 const API_BASE_URL = "https://api.lamptomyfeet.co/api";
 
 // For development/local testing
-const DEV_API_URL = "http://localhost:3001/api";
+const DEV_API_URL = "http://localhost:5000/api";
 
 // Use the appropriate URL based on environment
 const isProduction = import.meta.env.PROD;

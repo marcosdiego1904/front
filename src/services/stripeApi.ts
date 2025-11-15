@@ -3,7 +3,7 @@ import axios from 'axios';
 // Use the same API base URL as the rest of the app
 const API_BASE_URL = import.meta.env.PROD
   ? 'https://api.lamptomyfeet.co'
-  : 'http://localhost:3001';
+  : 'http://localhost:5000';
 
 const stripeApi = axios.create({
   baseURL: `${API_BASE_URL}/api/stripe`,
