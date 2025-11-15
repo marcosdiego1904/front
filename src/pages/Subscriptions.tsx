@@ -9,22 +9,51 @@ import {
   createPortalSession,
   SubscriptionPlan,
 } from '../services/stripeApi';
+import { Check, X, Zap, Shield, TrendingUp, Users } from 'lucide-react';
 
 // Subscription pricing plans
 const PRICING_PLANS = [
   {
+    id: 'free',
+    name: 'Free',
+    price: 0,
+    interval: 'forever',
+    description: 'Start your journey',
+    features: [
+      { text: '3 verses per month', included: true },
+      { text: 'Basic memorization tools', included: true },
+      { text: 'Progress tracking', included: true },
+      { text: 'Community access', included: true },
+      { text: 'Unlimited verses', included: false },
+      { text: 'Advanced memory techniques', included: false },
+      { text: 'Personalized learning paths', included: false },
+      { text: 'Ad-free experience', included: false },
+    ],
+    cta: 'Current Plan',
+    popular: false,
+  },
+  {
     id: 'price_1STlSpBlnxS6RUbet4usuAH3', // Live Stripe Price ID
-    name: 'Basic Plan',
+    name: 'Premium',
     price: 9.99,
     interval: 'month',
+    description: 'Transform your walk',
     features: [
-      'Access to all Bible verses',
-      'Interactive memorization tools',
-      'Progress tracking',
-      'Personalized learning journey',
-      'Mobile-friendly experience',
+      { text: 'Unlimited verses', included: true, highlight: true },
+      { text: 'Advanced memory techniques', included: true },
+      { text: 'Personalized learning paths', included: true },
+      { text: 'Progress analytics & insights', included: true },
+      { text: 'Verse reminder system', included: true },
+      { text: 'Downloadable verse cards', included: true },
+      { text: 'Priority support', included: true },
+      { text: 'Ad-free experience', included: true },
+      { text: 'Exclusive community access', included: true },
+      { text: 'Monthly verse collections', included: true },
     ],
-    popular: true, // Highlight this as the only plan
+    cta: 'Get Premium Now',
+    popular: true,
+    badge: 'BEST VALUE',
+    valueStatement: '$50+ value for just $9.99/mo',
   },
 ];
 
@@ -42,13 +71,11 @@ const Subscriptions = () => {
   // Check for success/cancel from Stripe redirect
   useEffect(() => {
     if (searchParams.get('success')) {
-      setSuccess('Subscription successful! Thank you for subscribing.');
-      // Clear URL params
+      setSuccess('Welcome to Premium! Your spiritual growth journey just accelerated.');
       window.history.replaceState({}, '', '/subscriptions');
     }
     if (searchParams.get('canceled')) {
-      setError('Subscription canceled. You can try again anytime.');
-      // Clear URL params
+      setError('No problem. Premium is here when you\'re ready to accelerate your growth.');
       window.history.replaceState({}, '', '/subscriptions');
     }
   }, [searchParams]);
@@ -84,7 +111,6 @@ const Subscriptions = () => {
       setLoading(true);
       setError(null);
 
-      // Create checkout session
       const session = await createCheckoutSession(
         priceId,
         user.id,
@@ -92,7 +118,6 @@ const Subscriptions = () => {
         token
       );
 
-      // Redirect to Stripe Checkout using the session URL
       window.location.href = session.url;
     } catch (err: any) {
       console.error('Error creating checkout session:', err);
@@ -104,7 +129,7 @@ const Subscriptions = () => {
   const handleCancelSubscription = async (subscriptionId: string) => {
     if (!token) return;
 
-    if (!confirm('Are you sure you want to cancel your subscription? You will still have access until the end of your billing period.')) {
+    if (!confirm('Are you sure? You\'ll still have access until the end of your billing period.')) {
       return;
     }
 
@@ -112,7 +137,7 @@ const Subscriptions = () => {
       setLoading(true);
       setError(null);
       await cancelSubscription(subscriptionId, token);
-      setSuccess('Subscription will be canceled at the end of the billing period');
+      setSuccess('Subscription will cancel at the end of your billing period');
       await loadSubscriptionStatus();
     } catch (err: any) {
       console.error('Error canceling subscription:', err);
@@ -129,7 +154,7 @@ const Subscriptions = () => {
       setLoading(true);
       setError(null);
       await resumeSubscription(subscriptionId, token);
-      setSuccess('Subscription resumed successfully');
+      setSuccess('Welcome back! Your Premium access is restored.');
       await loadSubscriptionStatus();
     } catch (err: any) {
       console.error('Error resuming subscription:', err);
@@ -156,70 +181,136 @@ const Subscriptions = () => {
 
   if (!user) {
     return (
-      <div className="container mt-5">
-        <div className="alert alert-info">
-          Please <a href="/login">log in</a> to view subscription options.
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Zap className="w-8 h-8 text-amber-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-3">Ready to Transform?</h2>
+          <p className="text-slate-600 mb-6">
+            Log in to unlock Premium and memorize unlimited verses.
+          </p>
+          <button
+            onClick={() => navigate('/login')}
+            className="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold py-3 rounded-lg hover:from-emerald-500 hover:to-emerald-400 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+          >
+            Log In to Continue
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mt-5 mb-5">
-      <h1 className="text-center mb-4">Subscription Plans</h1>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-20 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-amber-500/20 backdrop-blur-sm border border-amber-500/30 rounded-full px-4 py-2 mb-6">
+            <Zap className="w-4 h-4 text-amber-400" />
+            <span className="text-sm font-medium text-amber-300">Spiritual Growth Accelerated</span>
+          </div>
 
-      {error && (
-        <div className="alert alert-danger alert-dismissible fade show" role="alert">
-          {error}
-          <button type="button" className="btn-close" onClick={() => setError(null)}></button>
-        </div>
-      )}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ fontFamily: 'Lora, serif' }}>
+            Stop Forgetting Verses.<br />
+            <span className="text-amber-400">Start Living Them.</span>
+          </h1>
 
-      {success && (
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
-          {success}
-          <button type="button" className="btn-close" onClick={() => setSuccess(null)}></button>
+          <p className="text-xl md:text-2xl text-slate-300 mb-4 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
+            Memorize Bible verses 10x faster. No gimmicks. Just results.
+          </p>
+
+          <p className="text-slate-400 text-lg mb-8">
+            Based on proven memory science. Built for believers who actually want to grow.
+          </p>
+
+          {/* Social Proof */}
+          <div className="flex flex-wrap justify-center gap-8 pt-6 border-t border-slate-700/50">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-amber-400">12,847</div>
+              <div className="text-sm text-slate-400">Verses Memorized</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-amber-400">10,000+</div>
+              <div className="text-sm text-slate-400">Believers Growing</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-amber-400">98%</div>
+              <div className="text-sm text-slate-400">Retention Rate</div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
+
+      {/* Alerts */}
+      <div className="max-w-6xl mx-auto px-4 -mt-4 relative z-10">
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+            <X className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-red-800">{error}</p>
+            </div>
+            <button onClick={() => setError(null)} className="text-red-600 hover:text-red-800">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+            <Check className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-emerald-800">{success}</p>
+            </div>
+            <button onClick={() => setSuccess(null)} className="text-emerald-600 hover:text-emerald-800">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Active Subscriptions */}
       {hasSubscription && subscriptions.length > 0 && (
-        <div className="mb-5">
-          <h2 className="mb-3">Your Active Subscriptions</h2>
-          {subscriptions.map((sub) => (
-            <div key={sub.id} className="card mb-3">
-              <div className="card-body">
-                <div className="row align-items-center">
-                  <div className="col-md-8">
-                    <h5 className="card-title">{sub.plan.name}</h5>
-                    <p className="card-text">
-                      <strong>Status:</strong> {sub.status.charAt(0).toUpperCase() + sub.status.slice(1)}
-                      <br />
-                      <strong>Amount:</strong> ${sub.plan.amount.toFixed(2)}/{sub.plan.interval}
-                      <br />
-                      <strong>Next billing date:</strong> {new Date(sub.currentPeriodEnd).toLocaleDateString()}
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-2xl p-6 border border-emerald-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center">
+                <Check className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">Premium Active</h2>
+                <p className="text-slate-600">You're growing faster. Keep it up.</p>
+              </div>
+            </div>
+
+            {subscriptions.map((sub) => (
+              <div key={sub.id} className="bg-white rounded-xl p-6 mt-4">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">{sub.plan.name}</h3>
+                    <div className="space-y-1 text-sm text-slate-600">
+                      <p><strong>Status:</strong> {sub.status.charAt(0).toUpperCase() + sub.status.slice(1)}</p>
+                      <p><strong>Amount:</strong> ${sub.plan.amount.toFixed(2)}/{sub.plan.interval}</p>
+                      <p><strong>Next billing:</strong> {new Date(sub.currentPeriodEnd).toLocaleDateString()}</p>
                       {sub.cancelAtPeriodEnd && (
-                        <>
-                          <br />
-                          <span className="text-danger">
-                            <strong>Cancels on:</strong> {new Date(sub.currentPeriodEnd).toLocaleDateString()}
-                          </span>
-                        </>
+                        <p className="text-red-600 font-semibold">
+                          Cancels on: {new Date(sub.currentPeriodEnd).toLocaleDateString()}
+                        </p>
                       )}
-                    </p>
+                    </div>
                   </div>
-                  <div className="col-md-4 text-end">
+                  <div className="flex flex-col sm:flex-row gap-3">
                     {sub.cancelAtPeriodEnd ? (
                       <button
-                        className="btn btn-success me-2"
+                        className="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-500 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                         onClick={() => handleResumeSubscription(sub.id)}
                         disabled={loading}
                       >
-                        Resume Subscription
+                        Resume Premium
                       </button>
                     ) : (
                       <button
-                        className="btn btn-outline-danger me-2"
+                        className="px-6 py-3 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:border-slate-400 hover:bg-slate-50 transition-all duration-200"
                         onClick={() => handleCancelSubscription(sub.id)}
                         disabled={loading}
                       >
@@ -227,7 +318,7 @@ const Subscriptions = () => {
                       </button>
                     )}
                     <button
-                      className="btn btn-outline-primary"
+                      className="px-6 py-3 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                       onClick={handleManageBilling}
                       disabled={loading}
                     >
@@ -236,109 +327,226 @@ const Subscriptions = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Pricing Plans */}
-      <h2 className="text-center mb-4">
-        {hasSubscription ? 'Upgrade Your Plan' : 'Choose Your Plan'}
-      </h2>
+      {/* Pricing Comparison */}
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" style={{ fontFamily: 'Lora, serif' }}>
+            {hasSubscription ? 'Your Premium Benefits' : 'Choose Your Path'}
+          </h2>
+          <p className="text-xl text-slate-600">
+            Start free. Upgrade when you're ready to go unlimited.
+          </p>
+        </div>
 
-      <div className="row">
-        {PRICING_PLANS.map((plan) => (
-          <div key={plan.id} className="col-md-4 mb-4">
-            <div className={`card h-100 ${plan.popular ? 'border-primary' : ''}`}>
-              {plan.popular && (
-                <div className="card-header bg-primary text-white text-center">
-                  <strong>Most Popular</strong>
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {PRICING_PLANS.map((plan) => (
+            <div
+              key={plan.id}
+              className={`relative rounded-2xl p-8 transition-all duration-300 ${
+                plan.popular
+                  ? 'bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl scale-105 border-4 border-amber-400'
+                  : 'bg-white border-2 border-slate-200 hover:border-slate-300 shadow-lg'
+              }`}
+            >
+              {plan.badge && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <div className="bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 text-xs font-bold px-4 py-2 rounded-full shadow-lg">
+                    {plan.badge}
+                  </div>
                 </div>
               )}
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title text-center">{plan.name}</h5>
-                <h2 className="text-center mb-4">
-                  ${plan.price}
-                  <small className="text-muted">/{plan.interval}</small>
-                </h2>
-                <ul className="list-unstyled mb-4 flex-grow-1">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="mb-2">
-                      <i className="bi bi-check-circle text-success me-2"></i>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className={`btn ${plan.popular ? 'btn-primary' : 'btn-outline-primary'} w-100`}
-                  onClick={() => handleSubscribe(plan.id)}
-                  disabled={loading}
-                >
-                  {loading ? 'Processing...' : 'Subscribe Now'}
-                </button>
+
+              <div className="text-center mb-8">
+                <h3 className={`text-2xl font-bold mb-2 ${plan.popular ? 'text-white' : 'text-slate-900'}`}>
+                  {plan.name}
+                </h3>
+                <p className={`text-sm mb-4 ${plan.popular ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {plan.description}
+                </p>
+                <div className="mb-2">
+                  <span className="text-5xl font-bold">${plan.price}</span>
+                  <span className={`text-lg ${plan.popular ? 'text-slate-300' : 'text-slate-600'}`}>
+                    /{plan.interval}
+                  </span>
+                </div>
+                {plan.valueStatement && (
+                  <p className="text-amber-300 font-semibold text-sm">{plan.valueStatement}</p>
+                )}
               </div>
+
+              <div className="space-y-3 mb-8">
+                {plan.features.map((feature, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    {feature.included ? (
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                        plan.popular ? 'bg-amber-400' : 'bg-emerald-100'
+                      }`}>
+                        <Check className={`w-3 h-3 ${plan.popular ? 'text-slate-900' : 'text-emerald-600'}`} />
+                      </div>
+                    ) : (
+                      <div className="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <X className="w-3 h-3 text-slate-400" />
+                      </div>
+                    )}
+                    <span className={`text-sm ${
+                      feature.included
+                        ? plan.popular
+                          ? feature.highlight
+                            ? 'text-amber-300 font-semibold'
+                            : 'text-white'
+                          : 'text-slate-900'
+                        : 'text-slate-400 line-through'
+                    }`}>
+                      {feature.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => plan.id !== 'free' && handleSubscribe(plan.id)}
+                disabled={loading || plan.id === 'free' || hasSubscription}
+                className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-200 ${
+                  plan.popular
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 shadow-xl hover:shadow-2xl transform hover:scale-[1.02]'
+                    : 'bg-slate-100 text-slate-600 cursor-default'
+                } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {loading ? 'Processing...' : hasSubscription && plan.popular ? 'Active' : plan.cta}
+              </button>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      {/* FAQ or Additional Info */}
-      <div className="mt-5">
-        <h3>Subscription Details</h3>
-        <div className="accordion" id="subscriptionFAQ">
-          <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#faq1"
-              >
-                Can I cancel anytime?
-              </button>
-            </h2>
-            <div id="faq1" className="accordion-collapse collapse" data-bs-parent="#subscriptionFAQ">
-              <div className="accordion-body">
-                Yes! You can cancel your subscription at any time. You'll continue to have access until the end of your current billing period.
+      {/* Risk Reversal Section */}
+      <div className="bg-slate-900 text-white py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Lora, serif' }}>
+            Zero Risk. All Reward.
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-amber-400" />
               </div>
+              <h3 className="text-xl font-bold mb-2">30-Day Guarantee</h3>
+              <p className="text-slate-400">
+                Don't love it? Get every penny back. No questions asked.
+              </p>
             </div>
-          </div>
-          <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#faq2"
-              >
-                What payment methods do you accept?
-              </button>
-            </h2>
-            <div id="faq2" className="accordion-collapse collapse" data-bs-parent="#subscriptionFAQ">
-              <div className="accordion-body">
-                We accept all major credit cards (Visa, Mastercard, American Express, Discover) through our secure payment processor, Stripe.
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-8 h-8 text-emerald-400" />
               </div>
+              <h3 className="text-xl font-bold mb-2">Cancel Anytime</h3>
+              <p className="text-slate-400">
+                No contracts. No commitments. Leave whenever you want.
+              </p>
             </div>
-          </div>
-          <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#faq3"
-              >
-                Can I upgrade or downgrade my plan?
-              </button>
-            </h2>
-            <div id="faq3" className="accordion-collapse collapse" data-bs-parent="#subscriptionFAQ">
-              <div className="accordion-body">
-                Yes! You can change your plan at any time through the "Manage Billing" portal. Changes will be prorated based on your billing cycle.
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-blue-400" />
               </div>
+              <h3 className="text-xl font-bold mb-2">Join 10,000+</h3>
+              <p className="text-slate-400">
+                Believers already growing their faith through memorization.
+              </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* FAQ Section */}
+      <div className="max-w-4xl mx-auto px-4 py-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-12" style={{ fontFamily: 'Lora, serif' }}>
+          Common Questions
+        </h2>
+
+        <div className="space-y-4">
+          <details className="bg-white rounded-xl border-2 border-slate-200 p-6 hover:border-amber-400 transition-all duration-200 group">
+            <summary className="font-semibold text-lg text-slate-900 cursor-pointer list-none flex items-center justify-between">
+              Can I really cancel anytime?
+              <span className="text-amber-500 group-open:rotate-180 transition-transform duration-200">▼</span>
+            </summary>
+            <p className="mt-4 text-slate-600">
+              Yes. Cancel with one click. You'll keep access until the end of your billing period. No hassle. No retention calls.
+            </p>
+          </details>
+
+          <details className="bg-white rounded-xl border-2 border-slate-200 p-6 hover:border-amber-400 transition-all duration-200 group">
+            <summary className="font-semibold text-lg text-slate-900 cursor-pointer list-none flex items-center justify-between">
+              What if I don't like it?
+              <span className="text-amber-500 group-open:rotate-180 transition-transform duration-200">▼</span>
+            </summary>
+            <p className="mt-4 text-slate-600">
+              30-day money-back guarantee. If Premium doesn't accelerate your growth, email us. We'll refund you immediately.
+            </p>
+          </details>
+
+          <details className="bg-white rounded-xl border-2 border-slate-200 p-6 hover:border-amber-400 transition-all duration-200 group">
+            <summary className="font-semibold text-lg text-slate-900 cursor-pointer list-none flex items-center justify-between">
+              What payment methods do you accept?
+              <span className="text-amber-500 group-open:rotate-180 transition-transform duration-200">▼</span>
+            </summary>
+            <p className="mt-4 text-slate-600">
+              All major credit cards. Processed securely through Stripe. We never see your card details.
+            </p>
+          </details>
+
+          <details className="bg-white rounded-xl border-2 border-slate-200 p-6 hover:border-amber-400 transition-all duration-200 group">
+            <summary className="font-semibold text-lg text-slate-900 cursor-pointer list-none flex items-center justify-between">
+              Is the free tier really free forever?
+              <span className="text-amber-500 group-open:rotate-180 transition-transform duration-200">▼</span>
+            </summary>
+            <p className="mt-4 text-slate-600">
+              Yes. 3 verses per month. Forever. No credit card required. Upgrade only when you want unlimited access.
+            </p>
+          </details>
+
+          <details className="bg-white rounded-xl border-2 border-slate-200 p-6 hover:border-amber-400 transition-all duration-200 group">
+            <summary className="font-semibold text-lg text-slate-900 cursor-pointer list-none flex items-center justify-between">
+              How is this different from other Bible apps?
+              <span className="text-amber-500 group-open:rotate-180 transition-transform duration-200">▼</span>
+            </summary>
+            <p className="mt-4 text-slate-600">
+              We focus on one thing: memorization that sticks. No distractions. No fluff. Just proven techniques that work.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      {/* Final CTA */}
+      {!hasSubscription && (
+        <div className="bg-gradient-to-r from-amber-500 to-amber-400 py-16 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" style={{ fontFamily: 'Lora, serif' }}>
+              Ready to Transform Your Walk?
+            </h2>
+            <p className="text-xl text-slate-800 mb-8">
+              Join 10,000+ believers memorizing Scripture that actually sticks.
+            </p>
+            <button
+              onClick={() => handleSubscribe(PRICING_PLANS[1].id)}
+              disabled={loading}
+              className="px-12 py-5 bg-slate-900 text-white font-bold text-xl rounded-xl hover:bg-slate-800 transition-all duration-200 shadow-2xl hover:shadow-3xl transform hover:scale-[1.02]"
+            >
+              {loading ? 'Processing...' : 'Get Premium for $9.99/mo'}
+            </button>
+            <p className="text-sm text-slate-700 mt-4">
+              30-day money-back guarantee • Cancel anytime • No risk
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

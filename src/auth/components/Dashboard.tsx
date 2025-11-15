@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Zap, Lock, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 import API_BASE_URL from '../../config/api';
 import logo from '../../oil-lamp.png';
@@ -12,6 +12,7 @@ import '../../components/RankingStyles.css';
 import RankCard from '../../components/RankCard';
 import LevelUpNotification from '../../components/LevelUpNotification';
 import { calculateUserRank, canLevelUp, biblicalRanks, BiblicalRank } from '../../utils/RankingSystem';
+import { getSubscriptionStatus } from '../../services/stripeApi';
 
 interface MemorizedVerse {
   id: number;
@@ -55,6 +56,9 @@ const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAllVerses, setShowAllVerses] = useState(false);
+  const [hasSubscription, setHasSubscription] = useState(false);
+  const [versesThisMonth, setVersesThisMonth] = useState(0);
+  const FREE_TIER_LIMIT = 3;
   
   // Create refs for the sections we want to scroll to
   const dashboardRef = useRef<HTMLElement>(null);
@@ -118,11 +122,29 @@ const Dashboard: React.FC = () => {
         }));
         
         setMemorizedVerses(formattedVerses);
-        
+
         // Calculate biblical rank based on verses count
         const versesCount = formattedVerses.length;
         const calculatedRank = calculateUserRank(versesCount);
         setBiblicalUserRank(calculatedRank);
+
+        // Calculate verses learned this month
+        const now = new Date();
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const versesThisMonthCount = formattedVerses.filter((verse: MemorizedVerse) => {
+          const verseDate = new Date(verse.memorized_date);
+          return verseDate >= firstDayOfMonth;
+        }).length;
+        setVersesThisMonth(versesThisMonthCount);
+
+        // Check subscription status
+        try {
+          const subStatus = await getSubscriptionStatus(token);
+          setHasSubscription(subStatus.hasSubscription);
+        } catch (subError) {
+          console.error('Error checking subscription:', subError);
+          setHasSubscription(false);
+        }
         
         // Find next rank
         if (calculatedRank.currentRank.nextLevel) {
@@ -346,6 +368,23 @@ const Dashboard: React.FC = () => {
           <button onClick={() => handleNavClick("/support")} className="intro-drawer-link">
             Support Us
           </button>
+          <button
+            onClick={() => handleNavClick("/subscriptions")}
+            style={{
+              background: 'linear-gradient(to right, #f59e0b, #f97316)',
+              color: '#0f172a',
+              fontWeight: '600',
+              padding: '0.75rem 1rem',
+              borderRadius: '0.5rem',
+              border: 'none',
+              cursor: 'pointer',
+              margin: '0.5rem 1rem',
+              boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+              fontSize: '0.9375rem'
+            }}
+          >
+            Go Premium
+          </button>
           {isAuthenticated && (
             <button onClick={() => handleNavClick("/dashboard")} className="intro-drawer-link">
               Dashboard
@@ -413,6 +452,159 @@ const Dashboard: React.FC = () => {
             <p>Here's what's happening with your account today.</p>
           </div>
           
+          {/* Premium Upgrade CTA - Only show if user doesn't have subscription */}
+          {!hasSubscription && (
+            <div style={{
+              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+              borderRadius: '1rem',
+              padding: '2rem',
+              marginBottom: '2rem',
+              border: '3px solid #f59e0b',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Decorative background pattern */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '200px',
+                height: '200px',
+                background: 'radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%)',
+                borderRadius: '50%',
+                transform: 'translate(30%, -30%)'
+              }} />
+
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                {/* Badge */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'rgba(245, 158, 11, 0.2)',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  borderRadius: '9999px',
+                  padding: '0.5rem 1rem',
+                  marginBottom: '1rem'
+                }}>
+                  <Zap style={{ width: '1rem', height: '1rem', color: '#fbbf24' }} />
+                  <span style={{ color: '#fbbf24', fontSize: '0.875rem', fontWeight: '600' }}>
+                    {versesThisMonth >= FREE_TIER_LIMIT ? 'Limit Reached' : `${versesThisMonth}/${FREE_TIER_LIMIT} verses this month`}
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem', alignItems: 'center' }}>
+                  <div>
+                    <h3 style={{
+                      color: 'white',
+                      fontSize: '1.875rem',
+                      fontWeight: 'bold',
+                      marginBottom: '0.75rem',
+                      fontFamily: 'Lora, serif'
+                    }}>
+                      {versesThisMonth >= FREE_TIER_LIMIT ?
+                        "You've Hit Your Limit. Don't Stop Now." :
+                        "Ready to Go Unlimited?"}
+                    </h3>
+                    <p style={{ color: '#cbd5e1', fontSize: '1.125rem', marginBottom: '1rem' }}>
+                      {versesThisMonth >= FREE_TIER_LIMIT ?
+                        "Unlock unlimited verses and keep your spiritual momentum going." :
+                        "Memorize unlimited verses. No limits. No waiting. Just growth."}
+                    </p>
+
+                    {/* Value Props */}
+                    <div style={{ display: 'grid', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{
+                          width: '2rem',
+                          height: '2rem',
+                          background: 'rgba(52, 211, 153, 0.2)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <TrendingUp style={{ width: '1rem', height: '1rem', color: '#34d399' }} />
+                        </div>
+                        <span style={{ color: 'white', fontSize: '0.9375rem' }}>
+                          Unlimited verses every month
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{
+                          width: '2rem',
+                          height: '2rem',
+                          background: 'rgba(96, 165, 250, 0.2)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <Zap style={{ width: '1rem', height: '1rem', color: '#60a5fa' }} />
+                        </div>
+                        <span style={{ color: 'white', fontSize: '0.9375rem' }}>
+                          Advanced memory techniques that work
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{
+                          width: '2rem',
+                          height: '2rem',
+                          background: 'rgba(251, 191, 36, 0.2)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <Lock style={{ width: '1rem', height: '1rem', color: '#fbbf24' }} />
+                        </div>
+                        <span style={{ color: 'white', fontSize: '0.9375rem' }}>
+                          Only $9.99/mo • Cancel anytime
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => navigate('/subscriptions')}
+                      style={{
+                        width: '100%',
+                        background: 'linear-gradient(to right, #f59e0b, #f97316)',
+                        color: '#0f172a',
+                        fontWeight: 'bold',
+                        fontSize: '1.125rem',
+                        padding: '1rem 2rem',
+                        borderRadius: '0.75rem',
+                        border: 'none',
+                        cursor: 'pointer',
+                        boxShadow: '0 10px 25px rgba(245, 158, 11, 0.3)',
+                        transition: 'all 0.2s',
+                        fontFamily: 'Nunito Sans, sans-serif'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.02)';
+                        e.currentTarget.style.boxShadow = '0 15px 35px rgba(245, 158, 11, 0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.boxShadow = '0 10px 25px rgba(245, 158, 11, 0.3)';
+                      }}
+                    >
+                      Upgrade to Premium →
+                    </button>
+                    <p style={{
+                      color: '#94a3b8',
+                      fontSize: '0.875rem',
+                      marginTop: '0.75rem',
+                      textAlign: 'center'
+                    }}>
+                      30-day money-back guarantee • No questions asked
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Biblical User Rank Section - add ref */}
           <div ref={userRankRef} id="userRank" className="user-rank-section">
             <div className="section-header">
