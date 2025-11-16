@@ -3,7 +3,12 @@
     "allow": [
       "Bash(npm run dev:*)",
       "Bash(unzip:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Integrate Stripe subscriptions for production\n\n- Updated Subscriptions page with live Stripe Price ID\n- Configured API endpoints for production (port 5000)\n- Added complete backend Stripe routes implementation\n- Added quick setup guide for Stripe integration\n\nFeatures:\n- Single Basic Plan ($9.99/month) subscription\n- Stripe Checkout integration\n- Customer portal for subscription management\n- Cancel/resume subscription functionality\n- Webhook support for subscription events\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
