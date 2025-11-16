@@ -101,9 +101,9 @@ export default function HomepageNavigation() {
               </button>
               <button
                 onClick={() => handleNavClick("/subscriptions")}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+                className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 rounded-lg transition-all duration-200 no-underline font-semibold shadow-md hover:shadow-lg"
               >
-                Subscriptions
+                Go Premium
               </button>
               {isAuthenticated && (
                 <button
@@ -199,9 +199,9 @@ export default function HomepageNavigation() {
           </button>
           <button
             onClick={() => handleNavClick("/subscriptions")}
-            className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+            className="block w-full text-left px-4 py-3 text-base font-medium bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 rounded-lg transition-all duration-200 no-underline font-semibold shadow-md"
           >
-            Subscriptions
+            Go Premium
           </button>
           {isAuthenticated && (
             <button
