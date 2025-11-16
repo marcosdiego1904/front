@@ -190,7 +190,7 @@ const Subscriptions = () => {
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-3">Ready to Transform?</h2>
           <p className="text-slate-600 mb-6">
-            Log in to unlock Pro and memorize unlimited verses.
+            Log in to unlock unlimited verses and join the movement of believers who actually memorize Scripture.
           </p>
           <button
             onClick={() => navigate('/login')}
@@ -219,11 +219,11 @@ const Subscriptions = () => {
           </h1>
 
           <p className="text-xl md:text-2xl text-slate-300 mb-4 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
-            Memorize Bible verses 10x faster. No gimmicks. Just results.
+            Most Christians can't recall a single verse when anxiety hits. Change that in 10 minutes.
           </p>
 
           <p className="text-slate-400 text-lg mb-8">
-            Based on proven memory science. Built for believers who actually want to grow.
+            Proven 6-step method. Used by thousands. Built for believers who actually want to grow.
           </p>
 
           {/* Social Proof */}
@@ -458,9 +458,9 @@ const Subscriptions = () => {
               <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Join the Movement</h3>
+              <h3 className="text-xl font-bold mb-2">Join Thousands</h3>
               <p className="text-slate-400">
-                Believers transforming Bible reading into Bible living.
+                Christians transforming Bible reading into daily spiritual weapons.
               </p>
             </div>
           </div>
