@@ -144,16 +144,6 @@ const Navbar = () => {
                   Subscriptions
                 </NavLink>
               </li>
-
-              {/* Show Dashboard link only when authenticated */}
-              {isAuthenticated && (
-                <li className="nav-item">
-                  <NavLink to="/dashboard" className="nav-link">
-                    <i className="bi bi-grid me-2"></i>
-                    Dashboard
-                  </NavLink>
-                </li>
-              )}
             </ul>
 
             {/* Auth buttons/user info - right side */}
