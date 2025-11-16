@@ -4,11 +4,15 @@ import {
   fadeInUp,
   scaleInSpring,
   defaultViewport,
+  mobileViewport,
   buttonHover,
   buttonTap,
 } from "@/lib/animations"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export default function GettingStartedSection() {
+  const isMobile = useIsMobile()
+
   const steps = [
     {
       emoji: "📱",
@@ -32,53 +36,55 @@ export default function GettingStartedSection() {
 
   return (
     <motion.section
-      className="relative py-20 bg-white overflow-hidden"
+      className="relative py-16 md:py-20 bg-white overflow-hidden"
       initial="hidden"
       whileInView="visible"
-      viewport={defaultViewport}
+      viewport={isMobile ? mobileViewport : defaultViewport}
       variants={staggerContainer}
     >
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-30">
-        <motion.div
-          className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-200/40 to-orange-200/40 rounded-full blur-xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 20, 0],
-            y: [0, -10, 0],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-yellow-200/40 to-amber-200/40 rounded-full blur-xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, -20, 0],
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/30 to-amber-100/30 rounded-full blur-2xl"
-          animate={{
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      </div>
+      {/* Background decorative elements - disabled on mobile for performance */}
+      {!isMobile && (
+        <div className="absolute inset-0 opacity-30">
+          <motion.div
+            className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-200/40 to-orange-200/40 rounded-full blur-xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              x: [0, 20, 0],
+              y: [0, -10, 0],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-yellow-200/40 to-amber-200/40 rounded-full blur-xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              x: [0, -20, 0],
+              y: [0, 10, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-orange-100/30 to-amber-100/30 rounded-full blur-2xl"
+            animate={{
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: 30,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+        </div>
+      )}
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         {/* Header - Centered at top like method section */}

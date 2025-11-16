@@ -6,13 +6,16 @@ import {
   fadeInUp,
   scaleInSpring,
   defaultViewport,
+  mobileViewport,
   cardHover,
   buttonHover,
   buttonTap,
 } from "@/lib/animations"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export default function MethodSection() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const isMobile = useIsMobile()
 
   const features = [
     {
@@ -55,42 +58,44 @@ export default function MethodSection() {
 
   return (
     <motion.section
-      className="bg-white py-20 px-4 font-inter relative overflow-hidden"
+      className="bg-white py-16 md:py-20 px-4 font-inter relative overflow-hidden"
       initial="hidden"
       whileInView="visible"
-      viewport={defaultViewport}
+      viewport={isMobile ? mobileViewport : defaultViewport}
       variants={staggerContainer}
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-5">
-        <motion.div
-          className="absolute top-20 left-10 w-32 h-32 bg-[#FFD700] rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 20, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-40 h-40 bg-[#E8B86D] rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, -20, 0],
-            y: [0, 20, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-      </div>
+      {/* Animated background elements - disabled on mobile for performance */}
+      {!isMobile && (
+        <div className="absolute inset-0 opacity-5">
+          <motion.div
+            className="absolute top-20 left-10 w-32 h-32 bg-[#FFD700] rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              x: [0, 20, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-40 h-40 bg-[#E8B86D] rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              x: [0, -20, 0],
+              y: [0, 20, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+          />
+        </div>
+      )}
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         {/* Header */}
