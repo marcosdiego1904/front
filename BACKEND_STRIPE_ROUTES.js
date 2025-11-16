@@ -30,7 +30,7 @@ router.get('/config', (req, res) => {
 // ============================================================================
 router.post('/create-checkout-session', authenticateToken, async (req, res) => {
   try {
-    const { priceId, userId, userEmail } = req.body;
+    const { priceId, userId, userEmail, successUrl, cancelUrl } = req.body;
 
     // Validate required fields
     if (!priceId || !userId || !userEmail) {
@@ -57,6 +57,10 @@ router.post('/create-checkout-session', authenticateToken, async (req, res) => {
       });
     }
 
+    // Use URLs from frontend if provided, otherwise fallback to environment variable
+    const finalSuccessUrl = successUrl || `${process.env.FRONTEND_URL || 'http://localhost:5173'}/subscriptions?success=true&session_id={CHECKOUT_SESSION_ID}`;
+    const finalCancelUrl = cancelUrl || `${process.env.FRONTEND_URL || 'http://localhost:5173'}/subscriptions?canceled=true`;
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
@@ -68,8 +72,8 @@ router.post('/create-checkout-session', authenticateToken, async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/subscriptions?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/subscriptions?canceled=true`,
+      success_url: finalSuccessUrl,
+      cancel_url: finalCancelUrl,
       metadata: {
         userId: userId.toString()
       }
