@@ -1,12 +1,24 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import MemorizedVerses from '../../../pages/learnsection/memorizedVerses';
-import './user.css'; // We'll create this new stylesheet
+import { useNavigate } from 'react-router-dom';
+import { User, Mail, Calendar, Edit2, Save, X, Trash2 } from 'lucide-react';
+import axios from 'axios';
+import API_BASE_URL from '../../config/api';
+import './Profile.css';
+import { calculateUserRank } from '../../utils/RankingSystem';
 
-const UserProfile: React.FC = () => {
-  const { user, updateUserProfile, loading: authLoading } = useAuth();
+interface MemorizedVerse {
+  id: number;
+  verse_reference: string;
+  memorized_date: string;
+}
+
+const UserProfile = () => {
+  const { user, updateUserProfile, logout, getAuthHeader } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState('profile');
+  const [isSaving, setIsSaving] = useState(false);
+  const [memorizedVerses, setMemorizedVerses] = useState<MemorizedVerse[]>([]);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -14,7 +26,6 @@ const UserProfile: React.FC = () => {
     username: '',
     bio: ''
   });
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -26,9 +37,34 @@ const UserProfile: React.FC = () => {
         bio: user.bio || ''
       });
     }
-  }, [user]);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Fetch memorized verses for stats
+    const fetchVerses = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/user/memorized-verses`,
+          { headers: getAuthHeader() }
+        );
+
+        let processedVerses: MemorizedVerse[] = [];
+        if (response.data?.verses && Array.isArray(response.data.verses)) {
+          processedVerses = response.data.verses;
+        } else if (Array.isArray(response.data)) {
+          processedVerses = response.data;
+        } else if (response.data?.data && Array.isArray(response.data.data)) {
+          processedVerses = response.data.data;
+        }
+
+        setMemorizedVerses(processedVerses);
+      } catch (error) {
+        console.error('Error fetching verses:', error);
+      }
+    };
+
+    fetchVerses();
+  }, [user, getAuthHeader]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -36,27 +72,23 @@ const UserProfile: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    
+  const handleSave = async () => {
+    setIsSaving(true);
     try {
       await updateUserProfile({
         firstName: formData.firstName,
         lastName: formData.lastName,
         bio: formData.bio
       });
-      
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
   const handleCancel = () => {
-    // Reset form data to user data
     if (user) {
       setFormData({
         firstName: user.firstName || '',
@@ -69,17 +101,6 @@ const UserProfile: React.FC = () => {
     setIsEditing(false);
   };
 
-  if (authLoading || !user) {
-    return (
-      <div className="user-profile-container">
-        <div className="profile-loading">
-          <div className="profile-spinner"></div>
-          <p>Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
-
   const getInitials = () => {
     if (formData.firstName && formData.lastName) {
       return `${formData.firstName[0]}${formData.lastName[0]}`.toUpperCase();
@@ -89,178 +110,288 @@ const UserProfile: React.FC = () => {
     return 'U';
   };
 
+  const getMemberSince = () => {
+    if (user?.created_at) {
+      return new Date(user.created_at).toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+    return 'Unknown';
+  };
+
+  const versesCount = memorizedVerses.length;
+  const rankInfo = calculateUserRank(versesCount);
+
   return (
-    <div className="user-profile-container">
-      <div className="profile-header">
-        <div className="profile-avatar">{getInitials()}</div>
-        <div className="profile-title">
-          <h1>{formData.firstName ? `${formData.firstName} ${formData.lastName}` : formData.username}</h1>
-          <p>@{formData.username}</p>
-        </div>
-      </div>
+    <div className="profile-page">
+      <div className="profile-container-new">
 
-      <div className="profile-tabs">
-        <button 
-          className={`tab-button ${activeTab === 'profile' ? 'active' : ''}`}
-          onClick={() => setActiveTab('profile')}
-        >
-          Profile
-        </button>
-        <button 
-          className={`tab-button ${activeTab === 'verses' ? 'active' : ''}`}
-          onClick={() => setActiveTab('verses')}
-        >
-          Memorized Verses
-        </button>
-      </div>
+        {/* Profile Header */}
+        <section className="profile-hero">
+          <div className="profile-avatar-large">
+            {getInitials()}
+          </div>
+          <h1 className="profile-username">
+            {formData.firstName && formData.lastName
+              ? `${formData.firstName} ${formData.lastName}`
+              : formData.username}
+          </h1>
+          <p className="profile-subtitle">@{formData.username}</p>
+          <p className="profile-member-since">
+            Member since {getMemberSince()}
+          </p>
 
-      <div className="profile-content">
-        {activeTab === 'profile' && (
-          <div className="profile-tab-content">
-            {isEditing ? (
-              <form className="profile-form" onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
+          {/* Quick Stats */}
+          <div className="profile-quick-stats">
+            <div className="quick-stat">
+              <div className="quick-stat-value">{versesCount}</div>
+              <div className="quick-stat-label">Verses</div>
+            </div>
+            <div className="quick-stat">
+              <div className="quick-stat-value">{rankInfo.currentRank.level}</div>
+              <div className="quick-stat-label">Rank</div>
+            </div>
+            <div className="quick-stat">
+              <div className="quick-stat-value">{Math.round(rankInfo.progress)}%</div>
+              <div className="quick-stat-label">Progress</div>
+            </div>
+          </div>
+        </section>
 
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
+        {/* Account Information */}
+        <section className="profile-section">
+          <div className="section-header-with-action">
+            <h2 className="section-title-profile">Account Information</h2>
+            {!isEditing && (
+              <button
+                className="edit-button"
+                onClick={() => setIsEditing(true)}
+              >
+                <Edit2 className="icon-small" />
+                Edit Profile
+              </button>
+            )}
+          </div>
+
+          {isEditing ? (
+            <div className="profile-form-card">
+              <div className="form-grid">
+                <div className="form-field">
+                  <label className="form-label">First Name</label>
                   <input
                     type="text"
-                    id="username"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    placeholder="Enter your first name"
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    placeholder="Enter your last name"
+                  />
+                </div>
+
+                <div className="form-field full-width">
+                  <label className="form-label">Username</label>
+                  <input
+                    type="text"
                     name="username"
                     value={formData.username}
                     disabled
+                    className="form-input disabled"
                   />
-                  <span className="input-note">
-                    Username cannot be changed
-                  </span>
+                  <span className="field-note">Username cannot be changed</span>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="email">Email Address</label>
+                <div className="form-field full-width">
+                  <label className="form-label">Email Address</label>
                   <input
                     type="email"
-                    id="email"
                     name="email"
                     value={formData.email}
                     disabled
+                    className="form-input disabled"
                   />
-                  <span className="input-note">
-                    Email address cannot be changed
-                  </span>
+                  <span className="field-note">Email address cannot be changed</span>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="bio">Biography</label>
+                <div className="form-field full-width">
+                  <label className="form-label">Bio</label>
                   <textarea
-                    id="bio"
                     name="bio"
                     value={formData.bio}
                     onChange={handleInputChange}
+                    className="form-textarea"
                     placeholder="Tell us about yourself..."
+                    rows={4}
                   />
                 </div>
+              </div>
 
-                <div className="form-actions">
-                  <button
-                    type="button"
-                    className="cancel-button"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit" 
-                    className={`save-button ${loading ? 'loading' : ''}`}
-                    disabled={loading}
-                  >
-                    {loading && (
-                      <span className="button-spinner"></span>
-                    )}
-                    Save Changes
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="profile-details">
-                <div className="detail-group">
-                  <h3>Personal Information</h3>
-                  
-                  <div className="detail-item">
-                    <div className="detail-label">Name</div>
-                    <div className="detail-value">
-                      {formData.firstName ? `${formData.firstName} ${formData.lastName || ''}` : 'Not specified'}
-                    </div>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <div className="detail-label">Username</div>
-                    <div className="detail-value">@{formData.username}</div>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <div className="detail-label">Email</div>
-                    <div className="detail-value">{formData.email}</div>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <div className="detail-label">Member since</div>
-                    <div className="detail-value">
-                      {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Not available'}
-                    </div>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <div className="detail-label">Last login</div>
-                    <div className="detail-value">
-                      {user.last_login ? new Date(user.last_login).toLocaleDateString() : 'Not available'}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="detail-group">
-                  <h3>Biography</h3>
-                  <div className="detail-value bio-text">
-                    {formData.bio || 'No biography added yet.'}
-                  </div>
-                </div>
-                
-                <button 
-                  className="edit-profile-btn"
-                  onClick={() => setIsEditing(true)}
+              <div className="form-actions">
+                <button
+                  className="cancel-button-profile"
+                  onClick={handleCancel}
+                  disabled={isSaving}
                 >
-                  Edit Profile
+                  <X className="icon-small" />
+                  Cancel
+                </button>
+                <button
+                  className="save-button-profile"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <>
+                      <div className="button-spinner"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="icon-small" />
+                      Save Changes
+                    </>
+                  )}
                 </button>
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div className="profile-info-card">
+              <div className="info-grid">
+                <div className="info-item">
+                  <User className="info-icon" />
+                  <div className="info-content">
+                    <div className="info-label">Full Name</div>
+                    <div className="info-value">
+                      {formData.firstName && formData.lastName
+                        ? `${formData.firstName} ${formData.lastName}`
+                        : 'Not specified'}
+                    </div>
+                  </div>
+                </div>
 
-        {activeTab === 'verses' && (
-          <div className="verses-tab-content">
-            <MemorizedVerses />
+                <div className="info-item">
+                  <User className="info-icon" />
+                  <div className="info-content">
+                    <div className="info-label">Username</div>
+                    <div className="info-value">@{formData.username}</div>
+                  </div>
+                </div>
+
+                <div className="info-item">
+                  <Mail className="info-icon" />
+                  <div className="info-content">
+                    <div className="info-label">Email</div>
+                    <div className="info-value">{formData.email}</div>
+                  </div>
+                </div>
+
+                <div className="info-item">
+                  <Calendar className="info-icon" />
+                  <div className="info-content">
+                    <div className="info-label">Member Since</div>
+                    <div className="info-value">{getMemberSince()}</div>
+                  </div>
+                </div>
+              </div>
+
+              {formData.bio && (
+                <div className="bio-section">
+                  <div className="info-label">Biography</div>
+                  <p className="bio-text">{formData.bio}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* Quick Actions */}
+        <section className="profile-section">
+          <h2 className="section-title-profile">Quick Actions</h2>
+          <div className="quick-actions-grid">
+            <button
+              className="action-card"
+              onClick={() => navigate('/memorized-verses')}
+            >
+              <div className="action-icon">📚</div>
+              <div className="action-title">My Verses</div>
+              <div className="action-description">View your collection</div>
+            </button>
+
+            <button
+              className="action-card"
+              onClick={() => navigate('/ranks')}
+            >
+              <div className="action-icon">🏆</div>
+              <div className="action-title">View Journey</div>
+              <div className="action-description">Check your progress</div>
+            </button>
+
+            <button
+              className="action-card"
+              onClick={() => navigate('/bible-search')}
+            >
+              <div className="action-icon">🔍</div>
+              <div className="action-title">Browse Verses</div>
+              <div className="action-description">Learn something new</div>
+            </button>
           </div>
-        )}
+        </section>
+
+        {/* Danger Zone */}
+        <section className="profile-section danger-section">
+          <h2 className="section-title-profile danger-title">Danger Zone</h2>
+          <div className="danger-card">
+            <div className="danger-item">
+              <div className="danger-content">
+                <h3 className="danger-heading">Logout</h3>
+                <p className="danger-description">Sign out of your account</p>
+              </div>
+              <button
+                className="danger-button-logout"
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+              >
+                Logout
+              </button>
+            </div>
+
+            <div className="danger-divider"></div>
+
+            <div className="danger-item">
+              <div className="danger-content">
+                <h3 className="danger-heading">Delete Account</h3>
+                <p className="danger-description">Permanently delete your account and all data</p>
+              </div>
+              <button
+                className="danger-button-delete"
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    // Handle account deletion
+                    console.log('Account deletion requested');
+                  }
+                }}
+              >
+                <Trash2 className="icon-small" />
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   );
