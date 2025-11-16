@@ -2,13 +2,14 @@ import { useState, useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAuth } from "../auth/context/AuthContext"
 import logo from "../oil-lamp.png"
+import UserMenu from "./UserMenu"
 
 export default function HomepageNavigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const { isAuthenticated, user } = useAuth()
+  const { isAuthenticated, user, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -111,14 +112,6 @@ export default function HomepageNavigation() {
               >
                 Go Premium
               </button>
-              {isAuthenticated && (
-                <button
-                  onClick={() => handleNavClick("/dashboard")}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
-                >
-                  Dashboard
-                </button>
-              )}
             </div>
           </div>
 
@@ -141,13 +134,7 @@ export default function HomepageNavigation() {
                 </button>
               </>
             ) : (
-              <button
-                onClick={() => navigate("/dashboard")}
-                className="relative px-6 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-gray-800 hover:to-gray-700 transform hover:scale-[1.02] transition-all duration-200 overflow-hidden group no-underline"
-              >
-                <span className="relative z-10">Dashboard</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-              </button>
+              <UserMenu />
             )}
           </div>
 
@@ -215,14 +202,6 @@ export default function HomepageNavigation() {
           >
             Go Premium
           </button>
-          {isAuthenticated && (
-            <button
-              onClick={() => handleNavClick("/dashboard")}
-              className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
-            >
-              Dashboard
-            </button>
-          )}
 
           <div className="pt-3 border-t border-gray-200/50 mt-3">
             {!isAuthenticated ? (
@@ -243,17 +222,51 @@ export default function HomepageNavigation() {
                 </div>
               </>
             ) : (
-              <div className="px-4 py-2">
+              <>
+                <div className="px-2 py-2">
+                  <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg mb-2">
+                    <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-400 rounded-full flex-shrink-0">
+                      <span className="text-white text-sm font-semibold">
+                        {user?.username?.charAt(0).toUpperCase() || "U"}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 truncate">{user?.username || "User"}</p>
+                      <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
+                    </div>
+                  </div>
+                </div>
                 <button
-                  onClick={() => {
-                    navigate("/dashboard")
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white text-base font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-gray-800 hover:to-gray-700 transition-all duration-200 no-underline"
+                  onClick={() => handleNavClick("/dashboard")}
+                  className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
                 >
-                  Dashboard
+                  📊 Dashboard
                 </button>
-              </div>
+                <button
+                  onClick={() => handleNavClick("/memorized-verses")}
+                  className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+                >
+                  📚 My Collection
+                </button>
+                <button
+                  onClick={() => handleNavClick("/profile")}
+                  className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+                >
+                  ⚙️ Settings
+                </button>
+                <div className="px-4 py-2 mt-2">
+                  <button
+                    onClick={() => {
+                      logout()
+                      navigate("/")
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className="w-full px-6 py-3 bg-red-600 text-white text-base font-semibold rounded-lg shadow-lg hover:shadow-xl hover:bg-red-700 transition-all duration-200 no-underline"
+                  >
+                    🚪 Logout
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
