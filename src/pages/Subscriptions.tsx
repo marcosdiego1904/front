@@ -18,42 +18,44 @@ const PRICING_PLANS = [
     name: 'Free',
     price: 0,
     interval: 'forever',
-    description: 'Start your journey',
+    description: 'Perfect to get started',
     features: [
-      { text: '3 verses per month', included: true },
-      { text: 'Basic memorization tools', included: true },
+      { text: 'Up to 10 verses total', included: true },
+      { text: 'Proven 6-step learning method', included: true },
+      { text: 'Ranks 1-3 unlocked (Saul, Nicodemus, Thomas)', included: true },
+      { text: '5 topic categories (Faith, Hope, Love, Strength, Peace)', included: true },
       { text: 'Progress tracking', included: true },
-      { text: 'Community access', included: true },
       { text: 'Unlimited verses', included: false },
-      { text: 'Advanced memory techniques', included: false },
-      { text: 'Personalized learning paths', included: false },
-      { text: 'Ad-free experience', included: false },
+      { text: 'All 10 ranks (Saul → Solomon)', included: false },
+      { text: '50+ topic categories', included: false },
+      { text: 'Advanced analytics & insights', included: false },
+      { text: 'Tournament eligibility', included: false },
     ],
     cta: 'Current Plan',
     popular: false,
   },
   {
     id: 'price_1STlSpBlnxS6RUbet4usuAH3', // Live Stripe Price ID
-    name: 'Premium',
+    name: 'Pro',
     price: 9.99,
     interval: 'month',
-    description: 'Transform your walk',
+    description: 'Unlimited spiritual growth',
     features: [
-      { text: 'Unlimited verses', included: true, highlight: true },
-      { text: 'Advanced memory techniques', included: true },
-      { text: 'Personalized learning paths', included: true },
-      { text: 'Progress analytics & insights', included: true },
-      { text: 'Verse reminder system', included: true },
-      { text: 'Downloadable verse cards', included: true },
-      { text: 'Priority support', included: true },
+      { text: 'Unlimited verses (no limits)', included: true, highlight: true },
+      { text: 'All 10 ranks unlocked (Saul → Solomon Level)', included: true },
+      { text: 'All topic categories (Faith, Hope, Love, Strength, Peace +)', included: true },
+      { text: 'Advanced progress analytics', included: true },
+      { text: 'Multiple Bible translations', included: true },
+      { text: 'Tournament eligibility (launching January 2026)', included: true },
+      { text: 'Certification eligibility at 50 verses (launching Q1 2026)', included: true },
       { text: 'Ad-free experience', included: true },
-      { text: 'Exclusive community access', included: true },
-      { text: 'Monthly verse collections', included: true },
+      { text: 'Priority support', included: true },
+      { text: 'Early access to new features', included: true },
     ],
-    cta: 'Get Premium Now',
+    cta: 'Get Pro Now',
     popular: true,
-    badge: 'BEST VALUE',
-    valueStatement: '$50+ value for just $9.99/mo',
+    badge: 'MOST POPULAR',
+    valueStatement: 'Less than 2 coffees per month',
   },
 ];
 
@@ -188,7 +190,7 @@ const Subscriptions = () => {
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-3">Ready to Transform?</h2>
           <p className="text-slate-600 mb-6">
-            Log in to unlock Premium and memorize unlimited verses.
+            Log in to unlock unlimited verses and join the movement of believers who actually memorize Scripture.
           </p>
           <button
             onClick={() => navigate('/login')}
@@ -217,26 +219,26 @@ const Subscriptions = () => {
           </h1>
 
           <p className="text-xl md:text-2xl text-slate-300 mb-4 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
-            Memorize Bible verses 10x faster. No gimmicks. Just results.
+            Most Christians can't recall a single verse when anxiety hits. Change that in 10 minutes.
           </p>
 
           <p className="text-slate-400 text-lg mb-8">
-            Based on proven memory science. Built for believers who actually want to grow.
+            Proven 6-step method. Used by thousands. Built for believers who actually want to grow.
           </p>
 
           {/* Social Proof */}
           <div className="flex flex-wrap justify-center gap-8 pt-6 border-t border-slate-700/50">
             <div className="text-center">
-              <div className="text-3xl font-bold text-amber-400">12,847</div>
-              <div className="text-sm text-slate-400">Verses Memorized</div>
+              <div className="text-3xl font-bold text-amber-400">10 min</div>
+              <div className="text-sm text-slate-400">Average per verse</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-amber-400">10,000+</div>
-              <div className="text-sm text-slate-400">Believers Growing</div>
+              <div className="text-3xl font-bold text-amber-400">10 Ranks</div>
+              <div className="text-sm text-slate-400">Saul → Solomon</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-amber-400">98%</div>
-              <div className="text-sm text-slate-400">Retention Rate</div>
+              <div className="text-3xl font-bold text-amber-400">6 Steps</div>
+              <div className="text-sm text-slate-400">Proven method</div>
             </div>
           </div>
         </div>
@@ -278,7 +280,7 @@ const Subscriptions = () => {
                 <Check className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">Premium Active</h2>
+                <h2 className="text-2xl font-bold text-slate-900">Pro Active</h2>
                 <p className="text-slate-600">You're growing faster. Keep it up.</p>
               </div>
             </div>
@@ -306,7 +308,7 @@ const Subscriptions = () => {
                         onClick={() => handleResumeSubscription(sub.id)}
                         disabled={loading}
                       >
-                        Resume Premium
+                        Resume Pro
                       </button>
                     ) : (
                       <button
@@ -456,9 +458,9 @@ const Subscriptions = () => {
               <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Join 10,000+</h3>
+              <h3 className="text-xl font-bold mb-2">Join Thousands</h3>
               <p className="text-slate-400">
-                Believers already growing their faith through memorization.
+                Christians transforming Bible reading into daily spiritual weapons.
               </p>
             </div>
           </div>
@@ -508,7 +510,7 @@ const Subscriptions = () => {
               <span className="text-amber-500 group-open:rotate-180 transition-transform duration-200">▼</span>
             </summary>
             <p className="mt-4 text-slate-600">
-              Yes. 3 verses per month. Forever. No credit card required. Upgrade only when you want unlimited access.
+              Yes. 10 verses total. Forever. No credit card required. Upgrade only when you want unlimited access.
             </p>
           </details>
 
@@ -532,14 +534,14 @@ const Subscriptions = () => {
               Ready to Transform Your Walk?
             </h2>
             <p className="text-xl text-slate-800 mb-8">
-              Join 10,000+ believers memorizing Scripture that actually sticks.
+              Join believers memorizing Scripture that actually sticks.
             </p>
             <button
               onClick={() => handleSubscribe(PRICING_PLANS[1].id)}
               disabled={loading}
               className="px-12 py-5 bg-slate-900 text-white font-bold text-xl rounded-xl hover:bg-slate-800 transition-all duration-200 shadow-2xl hover:shadow-3xl transform hover:scale-[1.02]"
             >
-              {loading ? 'Processing...' : 'Get Premium for $9.99/mo'}
+              {loading ? 'Processing...' : 'Get Pro for $9.99/mo'}
             </button>
             <p className="text-sm text-slate-700 mt-4">
               30-day money-back guarantee • Cancel anytime • No risk

@@ -52,12 +52,17 @@ export const createCheckoutSession = async (
   userEmail: string,
   token: string
 ): Promise<CheckoutSessionResponse> => {
+  // Get current origin to build proper return URLs
+  const currentOrigin = window.location.origin;
+
   const response = await stripeApi.post<CheckoutSessionResponse>(
     '/create-checkout-session',
     {
       priceId,
       userId,
       userEmail,
+      successUrl: `${currentOrigin}/subscriptions?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${currentOrigin}/subscriptions?canceled=true`,
     },
     {
       headers: {

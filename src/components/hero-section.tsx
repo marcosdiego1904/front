@@ -8,10 +8,12 @@ import {
   fadeInUp,
   scaleInSpring,
   defaultViewport,
+  mobileViewport,
   buttonHover,
   buttonTap,
   cardHover
 } from "@/lib/animations"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export default function HeroSection() {
   const [searchValue, setSearchValue] = useState("")
@@ -22,6 +24,7 @@ export default function HeroSection() {
   const [activeTopicPopover, setActiveTopicPopover] = useState<string | null>(null)
   const popoverRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
 
   const availableTranslations = bibleApiService.getAvailableTranslations()
 
@@ -133,51 +136,53 @@ export default function HeroSection() {
 
   return (
     <motion.section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white"
+      className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white"
       initial="hidden"
       animate="visible"
       variants={staggerContainer}
     >
-      {/* Animated background blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-br from-gray-200/30 via-gray-300/20 to-transparent rounded-full blur-3xl"
-          animate={{
-            y: [0, -30, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-tl from-gray-300/25 via-gray-200/15 to-transparent rounded-full blur-3xl"
-          animate={{
-            y: [0, 30, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r from-amber-100/10 via-orange-100/10 to-transparent rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      </div>
+      {/* Animated background blobs - disabled on mobile for performance */}
+      {!isMobile && (
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-br from-gray-200/30 via-gray-300/20 to-transparent rounded-full blur-3xl"
+            animate={{
+              y: [0, -30, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-tl from-gray-300/25 via-gray-200/15 to-transparent rounded-full blur-3xl"
+            animate={{
+              y: [0, 30, 0],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r from-amber-100/10 via-orange-100/10 to-transparent rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+      )}
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full py-20 pb-64">
@@ -413,43 +418,44 @@ export default function HeroSection() {
               </div>
             ))}
           </motion.div>
-
-          <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-0"
-            variants={fadeInUp}
-          >
-            <motion.div
-              className="flex flex-col items-center gap-2 text-[#2C3E50]/50"
-              animate={{
-                y: [0, 10, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <span className="text-sm">Scroll to learn more</span>
-              <motion.svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                animate={{
-                  y: [0, 5, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </motion.svg>
-            </motion.div>
-          </motion.div>
         </motion.div>
       </div>
+
+      {/* Scroll indicator - positioned relative to full section for perfect centering */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        variants={fadeInUp}
+      >
+        <motion.div
+          className="flex flex-col items-center gap-2 text-[#2C3E50]/50"
+          animate={{
+            y: [0, 10, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <span className="text-sm">Scroll to learn more</span>
+          <motion.svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            animate={{
+              y: [0, 5, 0],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </motion.svg>
+        </motion.div>
+      </motion.div>
     </motion.section>
   )
 }
