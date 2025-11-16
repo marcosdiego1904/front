@@ -77,33 +77,60 @@ export default function RanksPage() {
           currentRankIndex
         })
 
-        // Fetch leaderboard (try, but don't fail if endpoint doesn't exist yet)
+        // Fetch leaderboard
         try {
           const leaderboardResponse = await axios.get(
             `${API_BASE_URL}/ranking`,
             { headers: getAuthHeader() }
           )
 
-          // Process leaderboard data
-          const leaderboard = leaderboardResponse.data?.rankings || leaderboardResponse.data || []
-          const processedLeaderboard: LeaderboardEntry[] = leaderboard.map((entry: any, index: number) => {
-            const entryRank = calculateUserRank(entry.versesCount || entry.verses_count || 0)
-            return {
-              userId: entry.userId || entry.user_id || entry.id,
-              username: entry.username || entry.name || `User ${index + 1}`,
-              versesCount: entry.versesCount || entry.verses_count || 0,
-              rank: entry.rank || index + 1,
-              rankLevel: entryRank.currentRank.level,
-              rankIcon: entryRank.currentRank.icon,
-              isCurrentUser: entry.userId === user?.id || entry.username === user?.username
-            }
-          })
+          console.log('Leaderboard API response:', leaderboardResponse.data)
 
-          setLeaderboardData(processedLeaderboard)
-        } catch (leaderboardError) {
-          console.log('Leaderboard endpoint not available yet:', leaderboardError)
-          // Generate mock leaderboard for display purposes
-          setLeaderboardData(generateMockLeaderboard(versesCount))
+          // Process leaderboard data - handle multiple possible response formats
+          let leaderboard = []
+
+          if (Array.isArray(leaderboardResponse.data)) {
+            leaderboard = leaderboardResponse.data
+          } else if (leaderboardResponse.data?.rankings && Array.isArray(leaderboardResponse.data.rankings)) {
+            leaderboard = leaderboardResponse.data.rankings
+          } else if (leaderboardResponse.data?.data && Array.isArray(leaderboardResponse.data.data)) {
+            leaderboard = leaderboardResponse.data.data
+          } else if (leaderboardResponse.data?.leaderboard && Array.isArray(leaderboardResponse.data.leaderboard)) {
+            leaderboard = leaderboardResponse.data.leaderboard
+          }
+
+          if (leaderboard.length === 0) {
+            console.warn('Leaderboard API returned empty data')
+            setLeaderboardData([])
+          } else {
+            const processedLeaderboard: LeaderboardEntry[] = leaderboard.map((entry: any, index: number) => {
+              const versesCount = entry.versesCount || entry.verses_count || entry.memorized_verses || 0
+              const entryRank = calculateUserRank(versesCount)
+              const userId = entry.userId || entry.user_id || entry.id || entry._id
+              const username = entry.username || entry.name || entry.displayName || 'Unknown User'
+
+              return {
+                userId: String(userId),
+                username,
+                versesCount,
+                rank: entry.rank || entry.position || index + 1,
+                rankLevel: entryRank.currentRank.level,
+                rankIcon: entryRank.currentRank.icon,
+                isCurrentUser: String(userId) === String(user?.id) || username === user?.username
+              }
+            })
+
+            setLeaderboardData(processedLeaderboard)
+          }
+        } catch (leaderboardError: any) {
+          console.error('Error fetching leaderboard:', leaderboardError)
+          console.error('Error details:', {
+            message: leaderboardError?.message,
+            response: leaderboardError?.response?.data,
+            status: leaderboardError?.response?.status
+          })
+          // Don't show mock data - show empty state instead
+          setLeaderboardData([])
         }
 
       } catch (error) {
@@ -115,30 +142,6 @@ export default function RanksPage() {
 
     fetchData()
   }, [isAuthenticated, getAuthHeader, user])
-
-  const generateMockLeaderboard = (userVerses: number): LeaderboardEntry[] => {
-    const mockData: LeaderboardEntry[] = []
-    const userRank = Math.floor(Math.random() * 50) + 350 // Random rank between 350-400
-
-    for (let i = 0; i < 10; i++) {
-      const isUser = i === 5
-      const verses = isUser ? userVerses : Math.floor(Math.random() * 100) + 1
-      const rank = isUser ? userRank : userRank + (i - 5)
-      const calculated = calculateUserRank(verses)
-
-      mockData.push({
-        userId: isUser ? (user?.id || 'current') : `user-${i}`,
-        username: isUser ? (user?.username || 'You') : `User${Math.floor(Math.random() * 9999)}`,
-        versesCount: verses,
-        rank,
-        rankLevel: calculated.currentRank.level,
-        rankIcon: calculated.currentRank.icon,
-        isCurrentUser: isUser
-      })
-    }
-
-    return mockData.sort((a, b) => a.rank - b.rank)
-  }
 
   const getRankIcon = (rankLevel: string) => {
     const rank = biblicalRanks.find(r => r.level === rankLevel)
@@ -407,7 +410,10 @@ export default function RanksPage() {
               ))
             ) : (
               <div className="leaderboard-empty">
-                <p>Leaderboard coming soon!</p>
+                <p>No leaderboard data available yet.</p>
+                <p style={{ fontSize: '0.9em', marginTop: '8px', opacity: 0.8 }}>
+                  Start memorizing verses to appear on the leaderboard!
+                </p>
               </div>
             )}
           </div>
