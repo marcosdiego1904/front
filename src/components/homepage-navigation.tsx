@@ -88,6 +88,12 @@ export default function HomepageNavigation() {
                 Bible Search
               </button>
               <button
+                onClick={() => handleNavClick("/ranks")}
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+              >
+                Ranks
+              </button>
+              <button
                 onClick={() => handleNavClick("/about")}
                 className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
               >
@@ -176,6 +182,12 @@ export default function HomepageNavigation() {
             className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
           >
             Bible Search
+          </button>
+          <button
+            onClick={() => handleNavClick("/ranks")}
+            className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
+          >
+            Ranks
           </button>
           <button
             onClick={() => handleNavClick("/about")}
