@@ -90,8 +90,8 @@ export const staggerContainer: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05, // Reduced from 0.15 for faster mobile performance
-      delayChildren: 0.1,     // Reduced from 0.2 for faster mobile performance
+      staggerChildren: 0.1,  // Balanced speed - not too fast, not too slow
+      delayChildren: 0.15,   // Slight initial delay for polish
     },
   },
 }
