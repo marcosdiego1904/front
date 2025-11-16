@@ -532,6 +532,10 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  height: 100%;
 }
 
 .rank-card:hover {
@@ -552,7 +556,8 @@
 .rank-card-icon {
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
 }
 
 .icon-bg {
@@ -588,14 +593,16 @@
   color: #2C3E50;
   text-align: center;
   margin-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 .rank-card-range {
   font-size: 0.875rem;
   color: rgba(107, 114, 128, 1);
   text-align: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   font-family: 'Nunito Sans', sans-serif;
+  flex-shrink: 0;
 }
 
 .rank-card-phrase {
@@ -604,8 +611,13 @@
   font-style: italic;
   color: rgba(107, 114, 128, 1);
   text-align: center;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  line-height: 1.6;
+  margin-bottom: auto;
+  padding: 0 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .rank-status {
@@ -613,7 +625,10 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(229, 231, 235, 0.5);
+  flex-shrink: 0;
 }
 
 .rank-status span {
