@@ -25,6 +25,9 @@ import PrivacyPolicy from "../pages/learnsection/support/PrivacyPolicy";
 // Import Subscriptions page
 import Subscriptions from "./pages/Subscriptions";
 
+// Import Ranks page
+import RanksPage from "../pages/learnsection/RanksPage/RanksPage";
+
 // En src/index.tsx o App.tsx
 import './styles/global-design-system.css';
 
@@ -56,7 +59,8 @@ const AppRoutes = () => {
     { path: "/", element: <Home /> },
     { path: "/learn", element: <LearnSection /> },
     { path: "/bible-search", element: <BibleSearch /> }, // ← NUEVA RUTA
-    
+    { path: "/ranks", element: <RanksPage /> }, // ← RANKS PAGE
+
     // About and Support routes
     { path: "/about", element: <AboutPage /> },
     { path: "/support", element: <SupportPage /> },
@@ -89,7 +93,7 @@ const Layout = () => {
   const isHomePage = location.pathname === '/';
 
   // Pages that should use HomepageNavigation
-  const usesHomepageNav = ['/', '/bible-search', '/about', '/support', '/subscriptions'].includes(location.pathname);
+  const usesHomepageNav = ['/', '/bible-search', '/ranks', '/about', '/support', '/subscriptions'].includes(location.pathname);
 
   // Pages that should have NO navbar at all (they have their own navbar)
   const noNavbar = ['/learn', '/login', '/register', '/forgot-password', '/dashboard'].includes(location.pathname);
