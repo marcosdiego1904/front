@@ -105,14 +105,6 @@ export default function HomepageNavigation() {
               >
                 Go Premium
               </button>
-              {isAuthenticated && (
-                <button
-                  onClick={() => handleNavClick("/dashboard")}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
-                >
-                  Dashboard
-                </button>
-              )}
             </div>
           </div>
 
@@ -203,14 +195,6 @@ export default function HomepageNavigation() {
           >
             Go Premium
           </button>
-          {isAuthenticated && (
-            <button
-              onClick={() => handleNavClick("/dashboard")}
-              className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100/60 rounded-lg transition-all duration-200 no-underline"
-            >
-              Dashboard
-            </button>
-          )}
 
           <div className="pt-3 border-t border-gray-200/50 mt-3">
             {!isAuthenticated ? (
