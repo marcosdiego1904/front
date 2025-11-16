@@ -7,10 +7,12 @@ import {
   fadeInUp,
   scaleInSpring,
   defaultViewport,
+  mobileViewport,
   cardHover,
   buttonHover,
   buttonTap,
 } from "@/lib/animations"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface Struggle {
   id: string
@@ -52,6 +54,7 @@ const struggles: Struggle[] = [
 export default function TurningPointSection() {
   const [selectedStruggle, setSelectedStruggle] = useState<string | null>(null)
   const [isRevealed, setIsRevealed] = useState(false)
+  const isMobile = useIsMobile()
 
   const handleStruggleSelect = (struggleId: string) => {
     setSelectedStruggle(struggleId)
@@ -80,10 +83,10 @@ export default function TurningPointSection() {
   return (
     <motion.section
       id="turning-point-section"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white"
+      className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white"
       initial="hidden"
       whileInView="visible"
-      viewport={defaultViewport}
+      viewport={isMobile ? mobileViewport : defaultViewport}
       variants={staggerContainer}
     >
       {/* Background Elements */}
