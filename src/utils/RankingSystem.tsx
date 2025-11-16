@@ -24,83 +24,67 @@ export interface BiblicalRank {
 // Collection of all biblical ranks
 export const biblicalRanks: BiblicalRank[] = [
   {
-    level: "Saul Level",
-    icon: <SaulIcon />,
-    phrase: "You have taken the first step on the path of knowledge.",
-    minVerses: 1,
-    maxVerses: 5,
-    nextLevel: "Nicodemus Level"
-  },
-  {
-    level: "Nicodemus Level",
+    level: "Nicodemus",
     icon: <NicodemusIcon />,
-    phrase: "Like Nicodemus, you sought answers and have begun to find wisdom in His word.",
-    minVerses: 6,
-    maxVerses: 10,
-    nextLevel: "Thomas Level"
+    phrase: "Like Nicodemus, you've come seeking truth. You asked the question: 'How can I grow?' This is where transformation begins.",
+    minVerses: 1,
+    maxVerses: 3,
+    nextLevel: "Thomas"
   },
   {
-    level: "Thomas Level",
+    level: "Thomas",
     icon: <ThomasIcon />,
-    phrase: "Like Thomas, you seek evidence and deepen your understanding. Faith grows with each verse!",
-    minVerses: 11,
-    maxVerses: 15,
-    nextLevel: "Disciple Level"
+    phrase: "Like Thomas, you seek evidence. You're building your faith one verse at a time. Doubt isn't weakness—it's the path to unshakeable belief.",
+    minVerses: 4,
+    maxVerses: 8,
+    nextLevel: "Peter"
   },
   {
-    level: "Disciple Level",
-    icon: <DiscipleIcon />,
-    phrase: "You have moved from doubt to following. You now walk as a disciple, with His word guiding your steps.",
-    minVerses: 16,
-    maxVerses: 25,
-    nextLevel: "Apostle Level"
+    level: "Peter",
+    icon: <PeterIcon />,
+    phrase: "Like Peter, you're passionate and committed, even when you stumble. You've left the boat. You're walking on water, learning to trust.",
+    minVerses: 9,
+    maxVerses: 16,
+    nextLevel: "John"
   },
   {
-    level: "Apostle Level",
-    icon: <ApostleIcon />,
-    phrase: "From follower to messenger. Like the apostles, you now carry the Word in your heart.",
-    minVerses: 26,
-    maxVerses: 35,
-    nextLevel: "Prophet Level"
+    level: "John",
+    icon: <JohnIcon />,
+    phrase: "Like John, you're drawing close. You're understanding what it means to be loved and to love. Scripture is becoming personal.",
+    minVerses: 17,
+    maxVerses: 27,
+    nextLevel: "Paul"
   },
   {
-    level: "Prophet Level",
-    icon: <ProphetIcon />,
-    phrase: "Your understanding deepens. Like the prophets, you begin to see beyond the words.",
-    minVerses: 36,
-    maxVerses: 45,
-    nextLevel: "Daniel Level"
-  },
-  {
-    level: "Daniel Level",
-    icon: <DanielIcon />,
-    phrase: "The wisdom and discernment of Daniel now accompany you. Mysteries are revealed before your eyes.",
-    minVerses: 46,
-    maxVerses: 55,
-    nextLevel: "David Level"
-  },
-  {
-    level: "David Level",
-    icon: <DavidIcon />,
-    phrase: "Your heart, like David's, beats to the rhythm of Scripture. The Word has become your song.",
-    minVerses: 56,
-    maxVerses: 65,
-    nextLevel: "Paul Level"
-  },
-  {
-    level: "Paul Level",
+    level: "Paul",
     icon: <PaulIcon />,
-    phrase: "Like Paul, you have experienced a transformation. What began as knowledge is now part of who you are.",
-    minVerses: 66,
-    maxVerses: 75,
-    nextLevel: "Solomon Level"
+    phrase: "Like Paul on the Damascus road, you've experienced transformation. What began as knowledge is now part of who you are. You're a new creation.",
+    minVerses: 28,
+    maxVerses: 40,
+    nextLevel: "David"
   },
   {
-    level: "Solomon Level",
+    level: "David",
+    icon: <DavidIcon />,
+    phrase: "Like David, your heart beats to the rhythm of Scripture. You don't just know the Word—you sing it, dance it, live it. A heart after God's own.",
+    minVerses: 41,
+    maxVerses: 55,
+    nextLevel: "Daniel"
+  },
+  {
+    level: "Daniel",
+    icon: <DanielIcon />,
+    phrase: "Like Daniel in the lion's den, nothing shakes you. You've hidden the Word so deep that trials can't remove it. Your faith is unshakeable.",
+    minVerses: 56,
+    maxVerses: 75,
+    nextLevel: "Solomon"
+  },
+  {
+    level: "Solomon",
     icon: <SolomonIcon />,
-    phrase: "The wisdom of Solomon is yours. You have treasured the Word and it has enriched you with understanding.",
+    phrase: "Like Solomon, you possess wisdom beyond measure. You've treasured the Word above gold. You are among the elite few who have climbed this mountain.",
     minVerses: 76,
-    maxVerses: Infinity,
+    maxVerses: 100,
     nextLevel: null
   }
 ];
@@ -140,9 +124,9 @@ export function calculateUserRank(versesCount: number): {
   // Calcular el porcentaje de progreso dentro del nivel actual
   let progress = 0;
   const levelRange = currentRank.maxVerses - currentRank.minVerses + 1;
-  
-  if (levelRange === Infinity) {
-    // Para el nivel máximo con versesCount infinito
+
+  // Si el usuario ha superado el máximo del último nivel (100 versos), progreso es 100%
+  if (versesCount >= 100 && currentRank.level === "Solomon") {
     progress = 100;
   } else {
     const versesInCurrentLevel = versesCount - currentRank.minVerses + 1;
@@ -179,62 +163,50 @@ export function canLevelUp(versesCount: number): boolean {
 }
 
 // Biblical Rank Icons
-function SaulIcon() {
-  return (
-    <img src={Paths} className="rank-icon" alt="Saul Level" />
-  );
-}
-
 function NicodemusIcon() {
   return (
-    <img src={lantern} className="rank-icon" alt="Nicodemus Level" />
+    <img src={lantern} className="rank-icon" alt="Nicodemus - The Seeker" />
   );
 }
 
 function ThomasIcon() {
   return (
-    <img src={hello} className="rank-icon" alt="Thomas Level" />
+    <img src={hello} className="rank-icon" alt="Thomas - The Doubter" />
   );
 }
 
-function DiscipleIcon() {
+function PeterIcon() {
   return (
-    <img src={christian} className="rank-icon" alt="Disciple Level" />
+    <img src={boat} className="rank-icon" alt="Peter - The Follower" />
   );
 }
 
-function ApostleIcon() {
+function JohnIcon() {
   return (
-    <img src={boat} className="rank-icon" alt="Apostle Level" />
-  );
-}
-
-function ProphetIcon() {
-  return (
-    <img src={scroll} className="rank-icon" alt="Prophet Level" />
-  );
-}
-
-function DanielIcon() {
-  return (
-    <img src={lion} className="rank-icon" alt="Daniel Level" />
-  );
-}
-
-function DavidIcon() {
-  return (
-    <img src={heart} className="rank-icon" alt="David Level" />
+    <img src={christian} className="rank-icon" alt="John - The Beloved" />
   );
 }
 
 function PaulIcon() {
   return (
-    <img src={weakness} className="rank-icon" alt="Paul Level" />
+    <img src={weakness} className="rank-icon" alt="Paul - The Transformed" />
+  );
+}
+
+function DavidIcon() {
+  return (
+    <img src={heart} className="rank-icon" alt="David - The Worshipper" />
+  );
+}
+
+function DanielIcon() {
+  return (
+    <img src={lion} className="rank-icon" alt="Daniel - The Faithful" />
   );
 }
 
 function SolomonIcon() {
   return (
-    <img src={crown} className="rank-icon" alt="Solomon Level" />
+    <img src={crown} className="rank-icon" alt="Solomon - The Wise King" />
   );
 }

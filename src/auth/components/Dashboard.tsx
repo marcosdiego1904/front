@@ -626,8 +626,39 @@ const Dashboard: React.FC = () => {
                 canLevelUp={canLevelUp(memorizedVerses.length)}
               />
             )}
+
+            {/* View Full Journey Button */}
+            <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+              <button
+                onClick={() => navigate('/ranks')}
+                className="view-ranks-button"
+                style={{
+                  background: 'linear-gradient(to right, #F59E0B, #F97316)',
+                  color: 'white',
+                  padding: '0.75rem 2rem',
+                  borderRadius: '0.75rem',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
+                  transition: 'all 0.3s ease',
+                  fontFamily: "'Nunito Sans', sans-serif"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.3)';
+                }}
+              >
+                View Full Journey →
+              </button>
+            </div>
           </div>
-          
+
           {/* Memorized Verses Section - add ref */}
           <div ref={memorizedVersesRef} id="memorizedVerses" className="memorized-verses-section">
             <div className="section-header">

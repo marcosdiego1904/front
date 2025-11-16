@@ -90,8 +90,8 @@ export const staggerContainer: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+      staggerChildren: 0.1,  // Balanced speed - not too fast, not too slow
+      delayChildren: 0.15,   // Slight initial delay for polish
     },
   },
 }
@@ -254,8 +254,14 @@ export const floatingAnimationSlow = {
 
 export const defaultViewport = {
   once: true,
-  amount: 0.3,
-  margin: "0px 0px -100px 0px",
+  amount: 0.2,  // Reduced from 0.3 for better mobile performance
+  margin: "0px 0px 0px 0px",  // Changed from -100px to prevent premature triggering
+}
+
+export const mobileViewport = {
+  once: true,
+  amount: 0.15,  // Even more conservative for mobile
+  margin: "0px 0px 50px 0px",  // Trigger slightly after visible for better performance
 }
 
 export const viewportSmall = {
