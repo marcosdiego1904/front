@@ -24,6 +24,13 @@ const BibleSearch: React.FC = () => {
   React.useEffect(() => {
     const checkPremiumStatus = async () => {
       if (user && token) {
+        // TEMPORARY: Grant premium to creator account for testing
+        if (user.email === 'marcosdiego1904@gmail.com') {
+          setIsPremium(true);
+          console.log('✅ Creator account detected - Premium access granted');
+          return;
+        }
+
         try {
           const status = await getSubscriptionStatus(token);
           setIsPremium(status.hasSubscription);
