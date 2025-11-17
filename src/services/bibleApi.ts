@@ -430,15 +430,39 @@ class BibleApiService {
       }
 
       // Clean up the text (remove reference, translation name, verse numbers, etc.)
-      const cleanedText = verseText
-        // Remove the verse reference at the beginning (e.g., "Philippians 4:6-7, NLT")
-        .replace(/^[\w\s]+\d+:\d+(-\d+)?,\s*(NLT|NIV|KJV|ESV|NASB)\s*/i, '')
-        // Remove standalone verse numbers (e.g., "6Don't" -> "Don't" or " 7Then" -> " Then")
-        .replace(/\b\d+(?=[A-Z])/g, '') // Remove numbers directly before capital letters (e.g., "6Don't")
-        .replace(/\s+\d+(?=[A-Z])/g, ' ') // Remove numbers with spaces before capital letters
-        .replace(/\[\d+\]/g, '') // Remove footnote markers like [1]
-        .replace(/\s+/g, ' ')    // Normalize whitespace
-        .trim();
+      let cleanedText = verseText;
+
+      // Step 1: Remove book references at the start (various formats)
+      // Matches: "Psalm 23", "John 3:16", "Philippians 4:6-7", "Genesis 1", "1 John 3:16-17", etc.
+      cleanedText = cleanedText.replace(/^(\d+\s+)?[A-Z][a-z]+(\s+[A-Z][a-z]+)*\s+\d+(:(\d+)(-\d+)?)?\s*/i, '');
+
+      // Step 2: Remove translation names (NLT, NIV, KJV, etc.)
+      cleanedText = cleanedText.replace(/^,?\s*(NLT|NIV|KJV|ESV|NASB|NKJV|MSG|AMP|CSB|HCSB)\s*/i, '');
+
+      // Step 3: Remove common Psalm titles and attributions (often capitalized phrases before the verse)
+      // Matches: "The Lord Is My Shepherd", "A psalm of David.", "Of David.", etc.
+      cleanedText = cleanedText.replace(/^([A-Z][a-z]+(\s+[A-Z][a-z]+)*\.?\s*)+/g, (match) => {
+        // Only remove if it's likely a title (contains multiple capital words or ends with a period)
+        if (match.split(/\s+/).filter(w => /^[A-Z]/.test(w)).length > 2 || match.includes('.')) {
+          return '';
+        }
+        return match;
+      });
+
+      // Step 4: Remove verse numbers that appear inline (e.g., "6Don't" -> "Don't")
+      cleanedText = cleanedText.replace(/\b\d+(?=[A-Z])/g, ''); // "6Don't" -> "Don't"
+      cleanedText = cleanedText.replace(/\s+\d+(?=[A-Z])/g, ' '); // " 7Then" -> " Then"
+
+      // Step 5: Remove footnote markers like [1], [2], etc.
+      cleanedText = cleanedText.replace(/\[\d+\]/g, '');
+
+      // Step 6: Normalize whitespace and trim
+      cleanedText = cleanedText.replace(/\s+/g, ' ').trim();
+
+      // Step 7: Ensure first character is uppercase (in case we removed too much)
+      if (cleanedText.length > 0) {
+        cleanedText = cleanedText.charAt(0).toUpperCase() + cleanedText.slice(1);
+      }
 
       return {
         id: 800000 + Math.floor(Math.random() * 99999),
