@@ -5,13 +5,14 @@ export interface BibleTranslation {
   id: string;
   name: string;
   fullName: string;
-  apiSource: 'bible-api';
+  apiSource: 'bible-api' | 'rapidapi-niv' | 'nlt-api';
   description: string;
   readingLevel: string;
   approach: string;
   bestFor: string;
   year: string;
   features: string[];
+  premium: boolean; // Premium-only translation flag
 }
 
 export interface BibleApiResponse {
@@ -42,8 +43,9 @@ class BibleApiService {
   // ✅ Base URL for bible-api.com
   private readonly BASE_URL = 'https://bible-api.com';
 
-  // ✅ Multiple translations available (con identificadores corregidos)
+  // ✅ Multiple translations available (free + premium)
   private translations: BibleTranslation[] = [
+    // FREE TRANSLATIONS
     {
       id: 'kjv',
       name: 'KJV',
@@ -60,7 +62,8 @@ class BibleApiService {
         'Time-tested accuracy and reliability',
         'Rich vocabulary that enhances understanding',
         'Preferred by many churches and theologians'
-      ]
+      ],
+      premium: false
     },
     {
       id: 'web',
@@ -78,7 +81,8 @@ class BibleApiService {
         'Accurate translation from original languages',
         'Great for new believers and casual reading',
         'No copyright restrictions'
-      ]
+      ],
+      premium: false
     },
     {
       id: 'asv',
@@ -96,7 +100,47 @@ class BibleApiService {
         'Excellent for cross-referencing and word studies',
         'Foundation for many modern translations',
         'Maintains original text structure'
-      ]
+      ],
+      premium: false
+    },
+    // PREMIUM TRANSLATIONS
+    {
+      id: 'niv',
+      name: 'NIV',
+      fullName: 'New International Version',
+      apiSource: 'rapidapi-niv',
+      description: 'The world\'s most popular modern Bible translation, balancing readability with accuracy.',
+      readingLevel: 'Grade 7-8 (Easy to read)',
+      approach: 'Dynamic equivalence (Thought-for-thought translation)',
+      bestFor: 'General reading, study, memorization, contemporary worship',
+      year: '1978 (updated 2011)',
+      features: [
+        'Most widely read modern translation worldwide',
+        'Clear, natural English that flows beautifully',
+        'Trusted by millions of Christians globally',
+        'Perfect balance of accuracy and readability',
+        'Ideal for memorization and daily devotions'
+      ],
+      premium: true
+    },
+    {
+      id: 'nlt',
+      name: 'NLT',
+      fullName: 'New Living Translation',
+      apiSource: 'nlt-api',
+      description: 'A dynamic, easy-to-understand translation that brings Scripture to life in contemporary language.',
+      readingLevel: 'Grade 6 (Very easy to read)',
+      approach: 'Dynamic equivalence (Meaning-for-meaning translation)',
+      bestFor: 'New believers, devotional reading, understanding difficult passages',
+      year: '1996 (updated 2015)',
+      features: [
+        'Crystal-clear modern English',
+        'Makes complex passages easy to understand',
+        'Excellent for new Christians and young readers',
+        'Smooth, natural reading experience',
+        'Great for devotional and inspirational reading'
+      ],
+      premium: true
     }
   ];
 
@@ -124,40 +168,60 @@ class BibleApiService {
   }
 
   /**
-   * Busca un versículo usando bible-api.com
+   * Busca un versículo (con soporte para traducciones premium)
    */
-  async searchVerse(reference: string, translationId: string = this.defaultTranslation): Promise<SearchedVerse> {
+  async searchVerse(reference: string, translationId: string = this.defaultTranslation, isPremiumUser: boolean = false): Promise<SearchedVerse> {
     try {
       const translation = this.translations.find(t => t.id === translationId) || this.translations[0];
       const cleanedReference = this.cleanReference(reference);
-      
+
+      // Check premium access
+      if (translation.premium && !isPremiumUser) {
+        throw new Error(`${translation.name} is a premium translation. Upgrade to Pro to access NIV, NLT, and more!`);
+      }
+
       console.log(`🔍 Searching for verse: ${cleanedReference} in ${translation.name}`);
-      
-      const verseData = await this.searchWithBibleApi(cleanedReference, translation);
+
+      let verseData: SearchedVerse;
+
+      // Route to appropriate API based on source
+      switch (translation.apiSource) {
+        case 'bible-api':
+          verseData = await this.searchWithBibleApi(cleanedReference, translation);
+          break;
+        case 'rapidapi-niv':
+          verseData = await this.searchWithRapidApiNIV(cleanedReference, translation);
+          break;
+        case 'nlt-api':
+          verseData = await this.searchWithNLTApi(cleanedReference, translation);
+          break;
+        default:
+          throw new Error(`Unsupported API source: ${translation.apiSource}`);
+      }
 
       console.log(`✅ Found verse in ${translation.name}:`, verseData.text_nlt.substring(0, 50) + '...');
       return verseData;
-      
+
     } catch (error) {
       console.error('Bible API Error:', error);
-      
+
       if (error instanceof Error) {
         // Errores específicos
         if (error.name === 'AbortError') {
           throw new Error('Request timed out. Please try again.');
         }
-        
+
         if (error.message.includes('404')) {
           throw new Error('Verse not found. Please check your reference format (e.g., "John 3:16").');
         }
-        
+
         if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
           throw new Error('Unable to connect to Bible API. Please check your internet connection.');
         }
-        
+
         throw error;
       }
-      
+
       throw new Error('An unexpected error occurred while searching for the verse.');
     }
   }
@@ -208,6 +272,125 @@ class BibleApiService {
     }
 
     return this.transformBibleApiResponse(data, translation);
+  }
+
+  /**
+   * Busca usando RapidAPI NIV
+   */
+  private async searchWithRapidApiNIV(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
+    // Parse the reference (e.g., "John 3:16" -> Book=John, Chapter=3, Verse=16)
+    const parsedRef = this.parseReference(reference);
+
+    const url = `https://niv-bible.p.rapidapi.com/row?Book=${parsedRef.book}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
+
+    console.log('🌐 RapidAPI NIV URL:', url);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
+        'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
+        'Accept': 'application/json',
+      },
+      signal: AbortSignal.timeout(10000)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('RapidAPI NIV Response Error:', errorText);
+      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('📋 RapidAPI NIV Response:', data);
+
+    // RapidAPI NIV returns an array of verses
+    if (!data || data.length === 0) {
+      throw new Error('No verse found for this reference.');
+    }
+
+    const verseData = Array.isArray(data) ? data[0] : data;
+
+    return {
+      id: 800000 + Math.floor(Math.random() * 99999),
+      verse_reference: `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`,
+      text_nlt: verseData.verse || verseData.text || '',
+      context_nlt: '',
+      translation: translation,
+    };
+  }
+
+  /**
+   * Busca usando NLT API
+   */
+  private async searchWithNLTApi(reference: string, translation: BibleTranslation): Promise<SearchedVerse> {
+    // NLT API uses references like "John.3.16" or "John.1"
+    const formattedRef = reference.replace(/\s+/g, '.').replace(/:/g, '.');
+
+    const url = `https://api.nlt.to/api/passages?ref=${encodeURIComponent(formattedRef)}&version=NLT&key=e109f896-e965-4dcf-aeda-cf5af78098cf`;
+
+    console.log('🌐 NLT API URL:', url);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      signal: AbortSignal.timeout(10000)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('NLT API Response Error:', errorText);
+      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+    }
+
+    // NLT API returns HTML by default, but we can parse it
+    const html = await response.text();
+    console.log('📋 NLT API Response (HTML):', html.substring(0, 200));
+
+    // Extract text from HTML response
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Get the verse text (NLT API wraps verses in specific tags)
+    const verseText = doc.body.textContent?.trim() || '';
+
+    if (!verseText) {
+      throw new Error('No verse found for this reference.');
+    }
+
+    // Clean up the text (remove extra whitespace, reference numbers, etc.)
+    const cleanedText = verseText
+      .replace(/\[\d+\]/g, '') // Remove footnote markers like [1]
+      .replace(/\s+/g, ' ')    // Normalize whitespace
+      .trim();
+
+    return {
+      id: 800000 + Math.floor(Math.random() * 99999),
+      verse_reference: reference.trim(),
+      text_nlt: cleanedText,
+      context_nlt: '',
+      translation: translation,
+    };
+  }
+
+  /**
+   * Analiza una referencia bíblica en sus componentes
+   */
+  private parseReference(reference: string): { book: string; chapter: number; verse: number } {
+    // Match patterns like "John 3:16", "1 John 3:16", "Psalm 23:1"
+    const match = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)$/);
+
+    if (!match) {
+      throw new Error(`Invalid reference format: ${reference}. Use format like "John 3:16"`);
+    }
+
+    const book = match[1].trim();
+    const chapter = parseInt(match[2], 10);
+    const verse = parseInt(match[3], 10);
+
+    return { book, chapter, verse };
   }
 
   /**
