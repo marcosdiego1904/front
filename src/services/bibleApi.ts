@@ -429,8 +429,13 @@ class BibleApiService {
         throw new Error('No verse found for this reference in NLT.');
       }
 
-      // Clean up the text (remove extra whitespace, reference numbers, etc.)
+      // Clean up the text (remove reference, translation name, verse numbers, etc.)
       const cleanedText = verseText
+        // Remove the verse reference at the beginning (e.g., "Philippians 4:6-7, NLT")
+        .replace(/^[\w\s]+\d+:\d+(-\d+)?,\s*(NLT|NIV|KJV|ESV|NASB)\s*/i, '')
+        // Remove standalone verse numbers (e.g., "6Don't" -> "Don't" or " 7Then" -> " Then")
+        .replace(/\b\d+(?=[A-Z])/g, '') // Remove numbers directly before capital letters (e.g., "6Don't")
+        .replace(/\s+\d+(?=[A-Z])/g, ' ') // Remove numbers with spaces before capital letters
         .replace(/\[\d+\]/g, '') // Remove footnote markers like [1]
         .replace(/\s+/g, ' ')    // Normalize whitespace
         .trim();
