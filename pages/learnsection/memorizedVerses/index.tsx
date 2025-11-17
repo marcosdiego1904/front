@@ -103,6 +103,15 @@ const MemorizedVerses = () => {
     setFilteredVerses(result);
   }, [searchQuery, selectedBook, sortBy, verses]);
 
+  // Old Testament books
+  const OLD_TESTAMENT_BOOKS = [
+    'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth',
+    '1 Samuel', '2 Samuel', '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra',
+    'Nehemiah', 'Esther', 'Job', 'Psalms', 'Psalm', 'Proverbs', 'Ecclesiastes', 'Song of Solomon',
+    'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos',
+    'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi'
+  ];
+
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -116,14 +125,65 @@ const MemorizedVerses = () => {
     }
   };
 
+  const extractBookName = (reference: string): string => {
+    // Handle references like "1 John 3:16" or "Psalms 23:1"
+    const parts = reference.split(':')[0].trim().split(' ');
+    // If starts with number, include it (e.g., "1 John")
+    if (parts.length > 1 && /^\d/.test(parts[0])) {
+      return `${parts[0]} ${parts[1]}`;
+    }
+    return parts[0];
+  };
+
   const getBooks = () => {
-    const books = new Set(verses.map(v => v.verse_reference.split(' ')[0]));
+    const books = new Set(verses.map(v => extractBookName(v.verse_reference)));
     return Array.from(books).sort();
   };
 
   const getUniqueBooks = () => {
-    const books = new Set(verses.map(v => v.verse_reference.split(' ')[0]));
+    const books = new Set(verses.map(v => extractBookName(v.verse_reference)));
     return books.size;
+  };
+
+  const getTestamentStats = () => {
+    const books = verses.map(v => extractBookName(v.verse_reference));
+    const uniqueBooks = new Set(books);
+
+    let otBooks = 0;
+    let ntBooks = 0;
+
+    uniqueBooks.forEach(book => {
+      if (OLD_TESTAMENT_BOOKS.includes(book)) {
+        otBooks++;
+      } else {
+        ntBooks++;
+      }
+    });
+
+    return { otBooks, ntBooks };
+  };
+
+  const getMostMemorizedBook = () => {
+    if (verses.length === 0) return { book: 'N/A', count: 0 };
+
+    const bookCounts: { [key: string]: number } = {};
+
+    verses.forEach(verse => {
+      const book = extractBookName(verse.verse_reference);
+      bookCounts[book] = (bookCounts[book] || 0) + 1;
+    });
+
+    let maxBook = '';
+    let maxCount = 0;
+
+    Object.entries(bookCounts).forEach(([book, count]) => {
+      if (count > maxCount) {
+        maxBook = book;
+        maxCount = count;
+      }
+    });
+
+    return { book: maxBook, count: maxCount };
   };
 
   const toggleExpand = (id: number) => {
@@ -133,6 +193,8 @@ const MemorizedVerses = () => {
   const versesCount = verses.length;
   const rankInfo = calculateUserRank(versesCount);
   const uniqueBooks = getUniqueBooks();
+  const { otBooks, ntBooks } = getTestamentStats();
+  const mostMemorized = getMostMemorizedBook();
 
   if (!isAuthenticated) {
     return (
@@ -160,13 +222,14 @@ const MemorizedVerses = () => {
           <p className="collection-subtitle">Your treasure of memorized Scripture</p>
 
           <div className="collection-stats">
+            {/* Row 1 */}
             <div className="stat-card-collection">
               <div className="stat-icon-collection">
                 <BookOpen />
               </div>
               <div className="stat-content-collection">
                 <div className="stat-value-collection">{versesCount}</div>
-                <div className="stat-label-collection">Verses</div>
+                <div className="stat-label-collection">Total Verses</div>
               </div>
             </div>
 
@@ -184,7 +247,32 @@ const MemorizedVerses = () => {
               <div className="stat-icon-collection">📖</div>
               <div className="stat-content-collection">
                 <div className="stat-value-collection">{uniqueBooks}</div>
-                <div className="stat-label-collection">Books</div>
+                <div className="stat-label-collection">Books Covered</div>
+              </div>
+            </div>
+
+            {/* Row 2 */}
+            <div className="stat-card-collection">
+              <div className="stat-icon-collection">📜</div>
+              <div className="stat-content-collection">
+                <div className="stat-value-collection">{otBooks}</div>
+                <div className="stat-label-collection">OT Books</div>
+              </div>
+            </div>
+
+            <div className="stat-card-collection">
+              <div className="stat-icon-collection">✝️</div>
+              <div className="stat-content-collection">
+                <div className="stat-value-collection">{ntBooks}</div>
+                <div className="stat-label-collection">NT Books</div>
+              </div>
+            </div>
+
+            <div className="stat-card-collection">
+              <div className="stat-icon-collection">⭐</div>
+              <div className="stat-content-collection">
+                <div className="stat-value-collection">{mostMemorized.book}</div>
+                <div className="stat-label-collection">Most Memorized ({mostMemorized.count})</div>
               </div>
             </div>
           </div>

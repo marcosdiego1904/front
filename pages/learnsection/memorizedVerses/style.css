@@ -39,16 +39,22 @@
   margin-bottom: 2rem;
 }
 
-/* Stats Cards */
+/* Stats Cards - 2 Rows of 3 */
 .collection-stats {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 1.5rem;
-  max-width: 56rem;
+  max-width: 64rem;
   margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
+  .collection-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
   .collection-stats {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -274,7 +280,8 @@
   font-size: 1.125rem;
   font-weight: 700;
   font-family: 'Lora', serif;
-  color: #2C3E50;
+  color: #D97706;
+  /* Rich amber color for better visibility against light amber gradient */
 }
 
 .expand-btn {
