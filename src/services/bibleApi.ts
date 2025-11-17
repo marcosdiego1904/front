@@ -281,18 +281,15 @@ class BibleApiService {
     // Parse the reference (e.g., "John 3:16" -> Book=John, Chapter=3, Verse=16)
     const parsedRef = this.parseReference(reference);
 
-    console.log('🌐 RapidAPI NIV - Parsed reference:', parsedRef);
-
     try {
       let allVerses: any[] = [];
 
       // If it's a verse range, fetch all verses in the range
       if (parsedRef.endVerse) {
-        console.log(`📖 Fetching verse range: ${parsedRef.verse}-${parsedRef.endVerse}`);
+        console.log(`📖 Fetching NIV verse range: ${parsedRef.verse}-${parsedRef.endVerse}`);
 
         for (let v = parsedRef.verse; v <= parsedRef.endVerse; v++) {
           const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${v}`;
-          console.log(`🌐 Fetching verse ${v}:`, url);
 
           const response = await fetch(url, {
             method: 'GET',
@@ -311,7 +308,6 @@ class BibleApiService {
           }
 
           const data = await response.json();
-          console.log(`📋 NIV API Response for verse ${v}:`, JSON.stringify(data, null, 2));
 
           if (Array.isArray(data)) {
             allVerses.push(...data);
@@ -322,7 +318,7 @@ class BibleApiService {
       } else {
         // Single verse
         const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
-        console.log('🌐 RapidAPI NIV URL:', url);
+        console.log('🌐 Fetching NIV verse:', url);
 
         const response = await fetch(url, {
           method: 'GET',
@@ -341,8 +337,6 @@ class BibleApiService {
         }
 
         const data = await response.json();
-        console.log('📋 RapidAPI NIV Response:', JSON.stringify(data, null, 2));
-        console.log('📋 NIV Response keys:', Object.keys(Array.isArray(data) ? data[0] || {} : data));
 
         allVerses = Array.isArray(data) ? data : [data];
       }
@@ -351,23 +345,21 @@ class BibleApiService {
         throw new Error('No verse found for this reference in NIV.');
       }
 
-      // Extract text from all verses - try all possible field names
+      // Extract text from all verses - NIV API has nested structure
       const verseTexts = allVerses.map(verseData => {
-        // Try multiple possible field names
-        const text = verseData.verse ||
-                     verseData.text ||
-                     verseData.content ||
-                     verseData.Verse ||
-                     verseData.Text ||
-                     verseData.Content ||
-                     '';
+        // NIV API structure: { "Text": { "21888": "actual verse text" } }
+        // We need to extract the text from the nested object
 
-        if (!text) {
-          console.error('❌ NIV verse data structure:', JSON.stringify(verseData, null, 2));
-          console.error('❌ Available fields:', Object.keys(verseData));
+        if (verseData.Text && typeof verseData.Text === 'object') {
+          // Get the first value from the Text object
+          const textValues = Object.values(verseData.Text);
+          if (textValues.length > 0) {
+            return textValues[0] as string;
+          }
         }
 
-        return text;
+        // Fallback to direct properties
+        return verseData.verse || verseData.text || verseData.content || '';
       }).filter(Boolean);
 
       if (verseTexts.length === 0) {
@@ -425,7 +417,6 @@ class BibleApiService {
 
       // NLT API returns HTML by default, but we can parse it
       const html = await response.text();
-      console.log('📋 NLT API Response (HTML):', html.substring(0, 200));
 
       // Extract text from HTML response
       const parser = new DOMParser();
