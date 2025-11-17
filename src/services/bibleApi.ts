@@ -418,6 +418,12 @@ class BibleApiService {
       // NLT API returns HTML by default, but we can parse it
       const html = await response.text();
 
+      // ============================================
+      // DEBUG: Log raw HTML response
+      // ============================================
+      console.log('🔍 NLT API RAW HTML RESPONSE:', html);
+      console.log('📏 HTML Length:', html.length);
+
       // Extract text from HTML response
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
@@ -425,9 +431,23 @@ class BibleApiService {
       // Get the verse text (NLT API wraps verses in specific tags)
       const verseText = doc.body.textContent?.trim() || '';
 
+      // ============================================
+      // DEBUG: Log extracted text before cleaning
+      // ============================================
+      console.log('📝 EXTRACTED TEXT (before cleaning):', verseText);
+      console.log('📝 Text Length:', verseText.length);
+      console.log('📝 First 200 chars:', verseText.substring(0, 200));
+
       if (!verseText) {
         throw new Error('No verse found for this reference in NLT.');
       }
+
+      // Analyze the structure
+      console.log('🔬 ANALYZING TEXT STRUCTURE:');
+      const lines = verseText.split('\n').filter(l => l.trim());
+      lines.forEach((line, i) => {
+        console.log(`  Line ${i}: "${line.trim()}"`);
+      });
 
       // Clean up the text (remove reference, translation name, verse numbers, etc.)
       let cleanedText = verseText;
@@ -435,23 +455,28 @@ class BibleApiService {
       // Step 1: Remove book references at the start (various formats)
       // Matches: "Psalm 23", "John 3:16", "Philippians 4:6-7", "Genesis 1", "1 John 3:16-17", etc.
       cleanedText = cleanedText.replace(/^(\d+\s+)?[A-Z][a-z]+(\s+[A-Z][a-z]+)*\s+\d+(:(\d+)(-\d+)?)?\s*/i, '');
+      console.log('✂️ After Step 1 (remove book ref):', cleanedText.substring(0, 100));
 
       // Step 2: Remove translation names (NLT, NIV, KJV, etc.)
       cleanedText = cleanedText.replace(/^,?\s*(NLT|NIV|KJV|ESV|NASB|NKJV|MSG|AMP|CSB|HCSB)\s*/i, '');
+      console.log('✂️ After Step 2 (remove translation):', cleanedText.substring(0, 100));
 
       // Step 3: Remove common Psalm titles and attributions (often capitalized phrases before the verse)
       // Matches: "The Lord Is My Shepherd", "A psalm of David.", "Of David.", etc.
       cleanedText = cleanedText.replace(/^([A-Z][a-z]+(\s+[A-Z][a-z]+)*\.?\s*)+/g, (match) => {
         // Only remove if it's likely a title (contains multiple capital words or ends with a period)
         if (match.split(/\s+/).filter(w => /^[A-Z]/.test(w)).length > 2 || match.includes('.')) {
+          console.log('✂️ Step 3 removing title:', match);
           return '';
         }
         return match;
       });
+      console.log('✂️ After Step 3 (remove titles):', cleanedText.substring(0, 100));
 
       // Step 4: Remove verse numbers that appear inline (e.g., "6Don't" -> "Don't")
       cleanedText = cleanedText.replace(/\b\d+(?=[A-Z])/g, ''); // "6Don't" -> "Don't"
       cleanedText = cleanedText.replace(/\s+\d+(?=[A-Z])/g, ' '); // " 7Then" -> " Then"
+      console.log('✂️ After Step 4 (remove inline verse numbers):', cleanedText.substring(0, 100));
 
       // Step 5: Remove footnote markers like [1], [2], etc.
       cleanedText = cleanedText.replace(/\[\d+\]/g, '');
@@ -463,6 +488,12 @@ class BibleApiService {
       if (cleanedText.length > 0) {
         cleanedText = cleanedText.charAt(0).toUpperCase() + cleanedText.slice(1);
       }
+
+      // ============================================
+      // DEBUG: Final result
+      // ============================================
+      console.log('✅ FINAL CLEANED TEXT:', cleanedText);
+      console.log('═══════════════════════════════════════════════════');
 
       return {
         id: 800000 + Math.floor(Math.random() * 99999),
