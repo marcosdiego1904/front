@@ -8,6 +8,7 @@ export interface User {
     email: string;
     created_at?: string;
     last_login?: string;
+    isPremium?: boolean;  // Premium subscription status
   }
   
   export interface AuthResponse {

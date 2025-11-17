@@ -5,13 +5,14 @@ import { BibleTranslation } from '../../../src/services/bibleApi';
 interface TranslationInfoProps {
   translations: BibleTranslation[];
   selectedTranslation: string;
+  isPremium?: boolean;
 }
 
-const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selectedTranslation }) => {
+const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selectedTranslation, isPremium = false }) => {
   const [showInfo, setShowInfo] = useState(false);
-  
+
   const selectedTranslationData = translations.find(t => t.id === selectedTranslation);
-  
+
   if (!selectedTranslationData) return null;
 
   return (
@@ -27,6 +28,19 @@ const TranslationInfo: React.FC<TranslationInfoProps> = ({ translations, selecte
       
       {showInfo && (
         <div className="translation-info-details-wrapper">
+          {selectedTranslationData.premium && (
+            <div style={{
+              backgroundColor: '#ffc107',
+              color: '#16223d',
+              padding: '0.5rem 1rem',
+              borderRadius: '8px',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              marginBottom: '1rem'
+            }}>
+              🔒 PREMIUM TRANSLATION {isPremium ? '- UNLOCKED' : ''}
+            </div>
+          )}
           <div className="translation-info-grid">
             <div>
               <strong>Full Name:</strong>

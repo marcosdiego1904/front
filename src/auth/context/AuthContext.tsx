@@ -10,6 +10,7 @@ interface User {
   firstName?: string; // Added these properties to match
   lastName?: string;  // what your UserProfile component expects
   bio?: string;
+  isPremium?: boolean; // Premium subscription status
 }
 
 interface AuthContextType {

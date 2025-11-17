@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import bibleApiService, { SearchedVerse } from '../../../src/services/bibleApi';
 import TranslationInfo from './TranslationInfo';
+import { useAuth } from '../../../src/auth/context/AuthContext';
+import { getSubscriptionStatus } from '../../../src/services/stripeApi';
 
 const BibleSearch: React.FC = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -13,7 +15,29 @@ const BibleSearch: React.FC = () => {
   const [showComparison, setShowComparison] = useState(false);
   const [comparisonVerses, setComparisonVerses] = useState<SearchedVerse[]>([]);
   const [showSearchHelp, setShowSearchHelp] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
   const navigate = useNavigate();
+  const { user, token } = useAuth();
+
+  // Check premium status on mount
+  React.useEffect(() => {
+    const checkPremiumStatus = async () => {
+      if (user && token) {
+        try {
+          const status = await getSubscriptionStatus(token);
+          setIsPremium(status.hasSubscription);
+        } catch (err) {
+          console.error('Failed to check premium status:', err);
+          setIsPremium(user.isPremium || false);
+        }
+      } else {
+        setIsPremium(false);
+      }
+    };
+
+    checkPremiumStatus();
+  }, [user, token]);
 
   // Obtener todas las traducciones disponibles
   const availableTranslations = bibleApiService.getAvailableTranslations();
@@ -32,10 +56,10 @@ const BibleSearch: React.FC = () => {
 
     // Usar la traducción personalizada si se proporciona, si no usar la seleccionada
     const translationToUse = customTranslation || selectedTranslation;
-    console.log('🔍 Searching with translation:', translationToUse);
+    console.log('🔍 Searching with translation:', translationToUse, '(Premium:', isPremium, ')');
 
     try {
-      const verse = await bibleApiService.searchVerse(searchInput, translationToUse);
+      const verse = await bibleApiService.searchVerse(searchInput, translationToUse, isPremium);
       setSearchedVerse(verse);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to search verse. Please try again.');
@@ -75,6 +99,14 @@ const BibleSearch: React.FC = () => {
   };
 
   const handleTranslationChange = (translationId: string) => {
+    const translation = availableTranslations.find(t => t.id === translationId);
+
+    // Check if translation is premium and user is not premium
+    if (translation?.premium && !isPremium) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
     setSelectedTranslation(translationId);
     setError(null);
     // Si hay un verso buscado, búscalo de nuevo con la nueva traducción
@@ -83,11 +115,11 @@ const BibleSearch: React.FC = () => {
       // Limpiar el verso actual para mostrar loading
       setSearchedVerse(null);
       setIsLoading(true);
-      
+
       // Small delay to allow state to update, then search with new translation
       setTimeout(async () => {
         try {
-          const verse = await bibleApiService.searchVerse(searchInput, translationId);
+          const verse = await bibleApiService.searchVerse(searchInput, translationId, isPremium);
           setSearchedVerse(verse);
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Failed to search verse with new translation.');
@@ -138,9 +170,10 @@ const BibleSearch: React.FC = () => {
     setComparisonVerses([]);
 
     try {
-      // Fetch all 3 translations in parallel
-      const promises = availableTranslations.map(translation =>
-        bibleApiService.searchVerse(searchInput, translation.id)
+      // Fetch all accessible translations in parallel (free + premium if user has access)
+      const accessibleTranslations = availableTranslations.filter(t => !t.premium || isPremium);
+      const promises = accessibleTranslations.map(translation =>
+        bibleApiService.searchVerse(searchInput, translation.id, isPremium)
       );
 
       const results = await Promise.all(promises);
@@ -196,11 +229,11 @@ const BibleSearch: React.FC = () => {
             >
               {availableTranslations.map((translation) => (
                 <option key={translation.id} value={translation.id}>
-                  {translation.name} - {translation.fullName}
+                  {translation.name} - {translation.fullName} {translation.premium ? '🔒 PRO' : ''}
                 </option>
               ))}
             </select>
-            <TranslationInfo selectedTranslation={selectedTranslation} translations={availableTranslations} />
+            <TranslationInfo selectedTranslation={selectedTranslation} translations={availableTranslations} isPremium={isPremium} />
           </div>
         </div>
 
@@ -327,6 +360,34 @@ const BibleSearch: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="upgrade-modal-overlay" onClick={() => setShowUpgradeModal(false)}>
+          <div className="upgrade-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="upgrade-modal-close" onClick={() => setShowUpgradeModal(false)}>×</button>
+            <div className="upgrade-modal-icon">🔒</div>
+            <h2 className="upgrade-modal-title">Unlock Premium Translations</h2>
+            <p className="upgrade-modal-description">
+              NIV and NLT are premium translations available exclusively to Pro members.
+            </p>
+            <div className="upgrade-modal-benefits">
+              <div className="upgrade-benefit">✓ NIV - World's most popular modern translation</div>
+              <div className="upgrade-benefit">✓ NLT - Crystal-clear contemporary English</div>
+              <div className="upgrade-benefit">✓ Unlimited verses</div>
+              <div className="upgrade-benefit">✓ All 10 ranks unlocked</div>
+              <div className="upgrade-benefit">✓ Advanced analytics</div>
+            </div>
+            <button
+              className="upgrade-modal-cta"
+              onClick={() => navigate('/subscriptions')}
+            >
+              Upgrade to Pro - $9.99/mo
+            </button>
+            <p className="upgrade-modal-footer">30-day money-back guarantee • Cancel anytime</p>
           </div>
         </div>
       )}
@@ -1019,6 +1080,163 @@ const BibleSearch: React.FC = () => {
         .tooltip-section span {
           color: #6c757d;
           font-size: 0.8rem;
+        }
+
+        /* Upgrade Modal Styles */
+        .upgrade-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.75);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2000;
+          padding: 1rem;
+          animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .upgrade-modal {
+          background: white;
+          border-radius: 20px;
+          max-width: 500px;
+          width: 100%;
+          padding: 2.5rem;
+          position: relative;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .upgrade-modal-close {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: none;
+          border: none;
+          font-size: 2rem;
+          color: #6c757d;
+          cursor: pointer;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: all 0.2s ease;
+        }
+
+        .upgrade-modal-close:hover {
+          background-color: #f8f9fa;
+          color: #16223d;
+        }
+
+        .upgrade-modal-icon {
+          font-size: 4rem;
+          text-align: center;
+          margin-bottom: 1rem;
+        }
+
+        .upgrade-modal-title {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #16223d;
+          text-align: center;
+          margin-bottom: 1rem;
+          font-family: 'Lora', serif;
+        }
+
+        .upgrade-modal-description {
+          text-align: center;
+          color: #6c757d;
+          font-size: 1.125rem;
+          margin-bottom: 2rem;
+          line-height: 1.6;
+        }
+
+        .upgrade-modal-benefits {
+          background-color: #f8f9fa;
+          border-radius: 12px;
+          padding: 1.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .upgrade-benefit {
+          color: #16223d;
+          font-size: 1rem;
+          padding: 0.5rem 0;
+          font-weight: 500;
+        }
+
+        .upgrade-benefit:not(:last-child) {
+          border-bottom: 1px solid #e9ecef;
+        }
+
+        .upgrade-modal-cta {
+          width: 100%;
+          padding: 1.25rem 2rem;
+          background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+          color: #16223d;
+          border: none;
+          border-radius: 12px;
+          font-size: 1.25rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .upgrade-modal-cta:hover {
+          background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+          box-shadow: 0 6px 28px rgba(255, 193, 7, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .upgrade-modal-cta:active {
+          transform: translateY(0);
+        }
+
+        .upgrade-modal-footer {
+          text-align: center;
+          color: #6c757d;
+          font-size: 0.875rem;
+          margin-top: 1rem;
+          margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+          .upgrade-modal {
+            padding: 2rem 1.5rem;
+          }
+
+          .upgrade-modal-title {
+            font-size: 1.5rem;
+          }
+
+          .upgrade-modal-description {
+            font-size: 1rem;
+          }
+
+          .upgrade-modal-icon {
+            font-size: 3rem;
+          }
         }
       `}</style>
     </div>
