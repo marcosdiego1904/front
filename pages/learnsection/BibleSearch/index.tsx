@@ -23,7 +23,12 @@ const BibleSearch: React.FC = () => {
   // Check premium status on mount
   React.useEffect(() => {
     const checkPremiumStatus = async () => {
+      console.log('🔍 Checking premium status for user:', user);
+
       if (user && token) {
+        console.log('👤 User email:', user.email);
+        console.log('🔐 User data:', JSON.stringify(user, null, 2));
+
         // TEMPORARY: Grant premium to creator account for testing
         if (user.email === 'marcosdiego1904@gmail.com') {
           setIsPremium(true);
@@ -33,12 +38,14 @@ const BibleSearch: React.FC = () => {
 
         try {
           const status = await getSubscriptionStatus(token);
+          console.log('💳 Stripe subscription status:', status);
           setIsPremium(status.hasSubscription);
         } catch (err) {
           console.error('Failed to check premium status:', err);
           setIsPremium(user.isPremium || false);
         }
       } else {
+        console.log('❌ No user or token found');
         setIsPremium(false);
       }
     };
