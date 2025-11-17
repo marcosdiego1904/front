@@ -243,7 +243,7 @@ const BibleSearch: React.FC = () => {
             >
               {availableTranslations.map((translation) => (
                 <option key={translation.id} value={translation.id}>
-                  {translation.name} - {translation.fullName} {translation.premium ? '🔒 PRO' : ''}
+                  {translation.name} - {translation.fullName} {translation.premium && !isPremium ? '🔒 PRO' : ''}
                 </option>
               ))}
             </select>
