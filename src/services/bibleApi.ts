@@ -281,43 +281,60 @@ class BibleApiService {
     // Parse the reference (e.g., "John 3:16" -> Book=John, Chapter=3, Verse=16)
     const parsedRef = this.parseReference(reference);
 
-    const url = `https://niv-bible.p.rapidapi.com/row?Book=${parsedRef.book}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
+    const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
 
     console.log('🌐 RapidAPI NIV URL:', url);
+    console.log('📦 RapidAPI NIV Request:', parsedRef);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
-        'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
-        'Accept': 'application/json',
-      },
-      signal: AbortSignal.timeout(10000)
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
+          'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
+          'Accept': 'application/json',
+        },
+        signal: AbortSignal.timeout(30000) // Increased to 30 seconds
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('RapidAPI NIV Response Error:', errorText);
-      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('RapidAPI NIV Response Error:', errorText);
+        throw new Error(`NIV API returned ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('📋 RapidAPI NIV Response:', data);
+
+      // RapidAPI NIV returns an array of verses
+      if (!data || (Array.isArray(data) && data.length === 0)) {
+        throw new Error('No verse found for this reference in NIV.');
+      }
+
+      const verseData = Array.isArray(data) ? data[0] : data;
+
+      // Extract text from various possible field names
+      const verseText = verseData.verse || verseData.text || verseData.content || '';
+
+      if (!verseText) {
+        console.error('NIV API response missing verse text:', verseData);
+        throw new Error('NIV API returned invalid data format.');
+      }
+
+      return {
+        id: 800000 + Math.floor(Math.random() * 99999),
+        verse_reference: `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`,
+        text_nlt: verseText,
+        context_nlt: '',
+        translation: translation,
+      };
+    } catch (error) {
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        console.error('⏱️ NIV API timeout - API is slow or unreachable');
+        throw new Error('NIV API timed out. The service may be slow or unavailable. Please try again or use a different translation.');
+      }
+      throw error;
     }
-
-    const data = await response.json();
-    console.log('📋 RapidAPI NIV Response:', data);
-
-    // RapidAPI NIV returns an array of verses
-    if (!data || data.length === 0) {
-      throw new Error('No verse found for this reference.');
-    }
-
-    const verseData = Array.isArray(data) ? data[0] : data;
-
-    return {
-      id: 800000 + Math.floor(Math.random() * 99999),
-      verse_reference: `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`,
-      text_nlt: verseData.verse || verseData.text || '',
-      context_nlt: '',
-      translation: translation,
-    };
   }
 
   /**
@@ -331,48 +348,56 @@ class BibleApiService {
 
     console.log('🌐 NLT API URL:', url);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-      signal: AbortSignal.timeout(10000)
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+        signal: AbortSignal.timeout(30000) // Increased to 30 seconds
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('NLT API Response Error:', errorText);
-      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('NLT API Response Error:', errorText);
+        throw new Error(`NLT API returned ${response.status}: ${response.statusText}`);
+      }
+
+      // NLT API returns HTML by default, but we can parse it
+      const html = await response.text();
+      console.log('📋 NLT API Response (HTML):', html.substring(0, 200));
+
+      // Extract text from HTML response
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      // Get the verse text (NLT API wraps verses in specific tags)
+      const verseText = doc.body.textContent?.trim() || '';
+
+      if (!verseText) {
+        throw new Error('No verse found for this reference in NLT.');
+      }
+
+      // Clean up the text (remove extra whitespace, reference numbers, etc.)
+      const cleanedText = verseText
+        .replace(/\[\d+\]/g, '') // Remove footnote markers like [1]
+        .replace(/\s+/g, ' ')    // Normalize whitespace
+        .trim();
+
+      return {
+        id: 800000 + Math.floor(Math.random() * 99999),
+        verse_reference: reference.trim(),
+        text_nlt: cleanedText,
+        context_nlt: '',
+        translation: translation,
+      };
+    } catch (error) {
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        console.error('⏱️ NLT API timeout - API is slow or unreachable');
+        throw new Error('NLT API timed out. The service may be slow or unavailable. Please try again or use a different translation.');
+      }
+      throw error;
     }
-
-    // NLT API returns HTML by default, but we can parse it
-    const html = await response.text();
-    console.log('📋 NLT API Response (HTML):', html.substring(0, 200));
-
-    // Extract text from HTML response
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    // Get the verse text (NLT API wraps verses in specific tags)
-    const verseText = doc.body.textContent?.trim() || '';
-
-    if (!verseText) {
-      throw new Error('No verse found for this reference.');
-    }
-
-    // Clean up the text (remove extra whitespace, reference numbers, etc.)
-    const cleanedText = verseText
-      .replace(/\[\d+\]/g, '') // Remove footnote markers like [1]
-      .replace(/\s+/g, ' ')    // Normalize whitespace
-      .trim();
-
-    return {
-      id: 800000 + Math.floor(Math.random() * 99999),
-      verse_reference: reference.trim(),
-      text_nlt: cleanedText,
-      context_nlt: '',
-      translation: translation,
-    };
   }
 
   /**
