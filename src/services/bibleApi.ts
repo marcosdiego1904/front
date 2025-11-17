@@ -436,7 +436,6 @@ class BibleApiService {
       // ============================================
       console.log('📝 EXTRACTED TEXT (before cleaning):', verseText);
       console.log('📝 Text Length:', verseText.length);
-      console.log('📝 First 200 chars:', verseText.substring(0, 200));
 
       if (!verseText) {
         throw new Error('No verse found for this reference in NLT.');
@@ -449,42 +448,59 @@ class BibleApiService {
         console.log(`  Line ${i}: "${line.trim()}"`);
       });
 
-      // Clean up the text (remove reference, translation name, verse numbers, etc.)
+      // ============================================
+      // CLEANING STRATEGY (based on API response analysis):
+      // Line 0: Always "BookName Chapter:Verse, NLT" -> REMOVE
+      // Line 1+: May contain chapter headers, titles, attributions, actual verse text
+      // ============================================
+
       let cleanedText = verseText;
 
-      // Step 1: Remove book references at the start (various formats)
-      // Matches: "Psalm 23", "John 3:16", "Philippians 4:6-7", "Genesis 1", "1 John 3:16-17", etc.
-      cleanedText = cleanedText.replace(/^(\d+\s+)?[A-Z][a-z]+(\s+[A-Z][a-z]+)*\s+\d+(:(\d+)(-\d+)?)?\s*/i, '');
-      console.log('✂️ After Step 1 (remove book ref):', cleanedText.substring(0, 100));
+      // STEP 1: Remove the first line (always the header like "Philippians 4:6-7, NLT")
+      const textLines = cleanedText.split('\n');
+      if (textLines.length > 0) {
+        textLines.shift(); // Remove first line
+        cleanedText = textLines.join('\n');
+      }
+      console.log('✂️ After Step 1 (remove header line):', cleanedText.substring(0, 100));
 
-      // Step 2: Remove translation names (NLT, NIV, KJV, etc.)
-      cleanedText = cleanedText.replace(/^,?\s*(NLT|NIV|KJV|ESV|NASB|NKJV|MSG|AMP|CSB|HCSB)\s*/i, '');
-      console.log('✂️ After Step 2 (remove translation):', cleanedText.substring(0, 100));
+      // STEP 2: Remove chapter headers (e.g., "Psalm 23", "Genesis 1")
+      // These are standalone lines with just book name and number
+      cleanedText = cleanedText.replace(/^\s*(\d+\s+)?[A-Z][a-z]+\s+\d+\s*$/gm, '');
+      console.log('✂️ After Step 2 (remove chapter headers):', cleanedText.substring(0, 100));
 
-      // Step 3: Remove common Psalm titles and attributions (often capitalized phrases before the verse)
-      // Matches: "The Lord Is My Shepherd", "A psalm of David.", "Of David.", etc.
-      cleanedText = cleanedText.replace(/^([A-Z][a-z]+(\s+[A-Z][a-z]+)*\.?\s*)+/g, (match) => {
-        // Only remove if it's likely a title (contains multiple capital words or ends with a period)
-        if (match.split(/\s+/).filter(w => /^[A-Z]/.test(w)).length > 2 || match.includes('.')) {
-          console.log('✂️ Step 3 removing title:', match);
-          return '';
-        }
-        return match;
-      });
-      console.log('✂️ After Step 3 (remove titles):', cleanedText.substring(0, 100));
+      // STEP 3: Remove Psalm titles (e.g., "The Lord Is My Shepherd")
+      // These are lines with multiple capitalized words, often at the start
+      cleanedText = cleanedText.replace(/^\s*([A-Z][a-z]+\s+){2,}[A-Z][a-z]+\s*$/gm, '');
+      console.log('✂️ After Step 3 (remove psalm titles):', cleanedText.substring(0, 100));
 
-      // Step 4: Remove verse numbers that appear inline (e.g., "6Don't" -> "Don't")
-      cleanedText = cleanedText.replace(/\b\d+(?=[A-Z])/g, ''); // "6Don't" -> "Don't"
-      cleanedText = cleanedText.replace(/\s+\d+(?=[A-Z])/g, ' '); // " 7Then" -> " Then"
-      console.log('✂️ After Step 4 (remove inline verse numbers):', cleanedText.substring(0, 100));
+      // STEP 4: Remove attributions (e.g., "A psalm of David.", "Of David.")
+      cleanedText = cleanedText.replace(/^\s*[A-Z].*?\bDavid\b.*?\.?\s*$/gim, '');
+      cleanedText = cleanedText.replace(/^\s*[A-Z].*?\bpsalm\b.*?\.?\s*$/gim, '');
+      console.log('✂️ After Step 4 (remove attributions):', cleanedText.substring(0, 100));
 
-      // Step 5: Remove footnote markers like [1], [2], etc.
-      cleanedText = cleanedText.replace(/\[\d+\]/g, '');
+      // STEP 5: Remove verse numbers at the start of lines (e.g., "1The Lord" -> "The Lord")
+      cleanedText = cleanedText.replace(/^\s*\d+/gm, '');
+      cleanedText = cleanedText.replace(/\b\d+(?=[A-Z"])/g, ''); // Also catch mid-line like "7Then"
+      console.log('✂️ After Step 5 (remove verse numbers):', cleanedText.substring(0, 100));
 
-      // Step 6: Normalize whitespace and trim
+      // STEP 6: Remove footnote markers and footnote text
+      // Pattern: "*3:16 Or alternative text here." or just "*"
+      cleanedText = cleanedText.replace(/\*\d+:\d+[^.]*\./g, ''); // Remove "*3:16 Or text."
+      cleanedText = cleanedText.replace(/\*/g, ''); // Remove remaining asterisks
+      cleanedText = cleanedText.replace(/\[\d+\]/g, ''); // Remove bracket footnotes like [1]
+      console.log('✂️ After Step 6 (remove footnotes):', cleanedText.substring(0, 100));
+
+      // STEP 7: Remove empty lines and normalize whitespace
+      cleanedText = cleanedText
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .join(' ');
       cleanedText = cleanedText.replace(/\s+/g, ' ').trim();
+      console.log('✂️ After Step 7 (normalize whitespace):', cleanedText.substring(0, 100));
 
-      // Step 7: Ensure first character is uppercase (in case we removed too much)
+      // STEP 8: Ensure proper capitalization
       if (cleanedText.length > 0) {
         cleanedText = cleanedText.charAt(0).toUpperCase() + cleanedText.slice(1);
       }
