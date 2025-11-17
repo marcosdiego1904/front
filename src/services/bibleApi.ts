@@ -281,50 +281,110 @@ class BibleApiService {
     // Parse the reference (e.g., "John 3:16" -> Book=John, Chapter=3, Verse=16)
     const parsedRef = this.parseReference(reference);
 
-    const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
-
-    console.log('🌐 RapidAPI NIV URL:', url);
-    console.log('📦 RapidAPI NIV Request:', parsedRef);
+    console.log('🌐 RapidAPI NIV - Parsed reference:', parsedRef);
 
     try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
-          'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
-          'Accept': 'application/json',
-        },
-        signal: AbortSignal.timeout(30000) // Increased to 30 seconds
-      });
+      let allVerses: any[] = [];
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('RapidAPI NIV Response Error:', errorText);
-        throw new Error(`NIV API returned ${response.status}: ${response.statusText}`);
+      // If it's a verse range, fetch all verses in the range
+      if (parsedRef.endVerse) {
+        console.log(`📖 Fetching verse range: ${parsedRef.verse}-${parsedRef.endVerse}`);
+
+        for (let v = parsedRef.verse; v <= parsedRef.endVerse; v++) {
+          const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${v}`;
+          console.log(`🌐 Fetching verse ${v}:`, url);
+
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
+              'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
+              'Accept': 'application/json',
+            },
+            signal: AbortSignal.timeout(30000)
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`RapidAPI NIV Response Error for verse ${v}:`, errorText);
+            throw new Error(`NIV API returned ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          console.log(`📋 NIV API Response for verse ${v}:`, JSON.stringify(data, null, 2));
+
+          if (Array.isArray(data)) {
+            allVerses.push(...data);
+          } else {
+            allVerses.push(data);
+          }
+        }
+      } else {
+        // Single verse
+        const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
+        console.log('🌐 RapidAPI NIV URL:', url);
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
+            'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
+            'Accept': 'application/json',
+          },
+          signal: AbortSignal.timeout(30000)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('RapidAPI NIV Response Error:', errorText);
+          throw new Error(`NIV API returned ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('📋 RapidAPI NIV Response:', JSON.stringify(data, null, 2));
+        console.log('📋 NIV Response keys:', Object.keys(Array.isArray(data) ? data[0] || {} : data));
+
+        allVerses = Array.isArray(data) ? data : [data];
       }
 
-      const data = await response.json();
-      console.log('📋 RapidAPI NIV Response:', data);
-
-      // RapidAPI NIV returns an array of verses
-      if (!data || (Array.isArray(data) && data.length === 0)) {
+      if (allVerses.length === 0) {
         throw new Error('No verse found for this reference in NIV.');
       }
 
-      const verseData = Array.isArray(data) ? data[0] : data;
+      // Extract text from all verses - try all possible field names
+      const verseTexts = allVerses.map(verseData => {
+        // Try multiple possible field names
+        const text = verseData.verse ||
+                     verseData.text ||
+                     verseData.content ||
+                     verseData.Verse ||
+                     verseData.Text ||
+                     verseData.Content ||
+                     '';
 
-      // Extract text from various possible field names
-      const verseText = verseData.verse || verseData.text || verseData.content || '';
+        if (!text) {
+          console.error('❌ NIV verse data structure:', JSON.stringify(verseData, null, 2));
+          console.error('❌ Available fields:', Object.keys(verseData));
+        }
 
-      if (!verseText) {
-        console.error('NIV API response missing verse text:', verseData);
-        throw new Error('NIV API returned invalid data format.');
+        return text;
+      }).filter(Boolean);
+
+      if (verseTexts.length === 0) {
+        console.error('NIV API response missing verse text. Full response:', allVerses);
+        throw new Error('NIV API returned data but verse text field is missing. Please check console for details.');
       }
+
+      const combinedText = verseTexts.join(' ');
+
+      const verseRef = parsedRef.endVerse
+        ? `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}-${parsedRef.endVerse}`
+        : `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`;
 
       return {
         id: 800000 + Math.floor(Math.random() * 99999),
-        verse_reference: `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`,
-        text_nlt: verseText,
+        verse_reference: verseRef,
+        text_nlt: combinedText,
         context_nlt: '',
         translation: translation,
       };
@@ -403,19 +463,29 @@ class BibleApiService {
   /**
    * Analiza una referencia bíblica en sus componentes
    */
-  private parseReference(reference: string): { book: string; chapter: number; verse: number } {
-    // Match patterns like "John 3:16", "1 John 3:16", "Psalm 23:1"
-    const match = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)$/);
+  private parseReference(reference: string): { book: string; chapter: number; verse: number; endVerse?: number } {
+    // Match patterns like "John 3:16", "1 John 3:16", "Psalm 23:1", or "John 3:16-17"
+    const singleVerseMatch = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)$/);
+    const rangeMatch = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)-(\d+)$/);
 
-    if (!match) {
-      throw new Error(`Invalid reference format: ${reference}. Use format like "John 3:16"`);
+    if (rangeMatch) {
+      // Verse range like "Philippians 4:6-7"
+      const book = rangeMatch[1].trim();
+      const chapter = parseInt(rangeMatch[2], 10);
+      const verse = parseInt(rangeMatch[3], 10);
+      const endVerse = parseInt(rangeMatch[4], 10);
+
+      return { book, chapter, verse, endVerse };
+    } else if (singleVerseMatch) {
+      // Single verse like "John 3:16"
+      const book = singleVerseMatch[1].trim();
+      const chapter = parseInt(singleVerseMatch[2], 10);
+      const verse = parseInt(singleVerseMatch[3], 10);
+
+      return { book, chapter, verse };
+    } else {
+      throw new Error(`Invalid reference format: ${reference}. Use format like "John 3:16" or "John 3:16-17"`);
     }
-
-    const book = match[1].trim();
-    const chapter = parseInt(match[2], 10);
-    const verse = parseInt(match[3], 10);
-
-    return { book, chapter, verse };
   }
 
   /**
