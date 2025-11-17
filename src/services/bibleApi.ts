@@ -351,15 +351,23 @@ class BibleApiService {
         throw new Error('No verse found for this reference in NIV.');
       }
 
-      // Extract text from all verses - try all possible field names
+      // Extract text from all verses - NIV API has nested structure
       const verseTexts = allVerses.map(verseData => {
-        // Try multiple possible field names
+        // NIV API structure: { "Text": { "21888": "actual verse text" } }
+        // We need to extract the text from the nested object
+
+        if (verseData.Text && typeof verseData.Text === 'object') {
+          // Get the first value from the Text object
+          const textValues = Object.values(verseData.Text);
+          if (textValues.length > 0) {
+            return textValues[0] as string;
+          }
+        }
+
+        // Fallback to direct properties
         const text = verseData.verse ||
                      verseData.text ||
                      verseData.content ||
-                     verseData.Verse ||
-                     verseData.Text ||
-                     verseData.Content ||
                      '';
 
         if (!text) {
