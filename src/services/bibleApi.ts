@@ -376,7 +376,9 @@ class BibleApiService {
       return {
         id: 800000 + Math.floor(Math.random() * 99999),
         verse_reference: verseRef,
-        text_nlt: combinedText,
+        text_nlt: combinedText
+          .replace(/[""]/g, '"') // Convert smart quotes to regular quotes
+          .replace(/['']/g, "'"), // Convert smart apostrophes to regular apostrophes
         context_nlt: '',
         translation: translation,
       };
@@ -479,6 +481,8 @@ class BibleApiService {
       // Final cleanup
       cleanedText = cleanedText
         .replace(/\s+/g, ' ') // Normalize whitespace
+        .replace(/[""]/g, '"') // Convert smart quotes to regular quotes
+        .replace(/['']/g, "'") // Convert smart apostrophes to regular apostrophes
         .trim();
 
       console.log('✅ NLT verse extracted:', cleanedText);
@@ -581,7 +585,11 @@ class BibleApiService {
     return {
       id: bibleSearchId,
       verse_reference: verseReference.trim(),
-      text_nlt: verseText.replace(/(\r\n|\n|\r)/gm, " ").trim(),
+      text_nlt: verseText
+        .replace(/(\r\n|\n|\r)/gm, " ")
+        .replace(/[""]/g, '"') // Convert smart quotes to regular quotes
+        .replace(/['']/g, "'") // Convert smart apostrophes to regular apostrophes
+        .trim(),
       context_nlt: '', // Set to empty string to avoid displaying extra info
       translation: translation,
     };
