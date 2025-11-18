@@ -21,7 +21,7 @@ const PRICING_PLANS = [
     description: 'Perfect to get started',
     features: [
       { text: 'Up to 10 verses total', included: true },
-      { text: 'Proven 6-step learning method', included: true },
+      { text: 'Proven 4-step learning method', included: true },
       { text: 'Ranks 1-3 unlocked (Saul, Nicodemus, Thomas)', included: true },
       { text: '5 topic categories (Faith, Hope, Love, Strength, Peace)', included: true },
       { text: 'Progress tracking', included: true },
@@ -223,7 +223,7 @@ const Subscriptions = () => {
           </p>
 
           <p className="text-slate-400 text-lg mb-8">
-            Proven 6-step method. Used by thousands. Built for believers who actually want to grow.
+            Proven 4-step method. Used by thousands. Built for believers who actually want to grow.
           </p>
 
           {/* Social Proof */}
@@ -237,7 +237,7 @@ const Subscriptions = () => {
               <div className="text-sm text-slate-400">Saul → Solomon</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-amber-400">6 Steps</div>
+              <div className="text-3xl font-bold text-amber-400">4 Steps</div>
               <div className="text-sm text-slate-400">Proven method</div>
             </div>
           </div>
