@@ -11,6 +11,9 @@
   left: 0;
   right: 0;
   z-index: 100;
+  padding-top: max(env(safe-area-inset-top), 0px);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 .breakdown-navbar-container {
@@ -93,7 +96,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 18rem;
+  width: min(18rem, 85vw);
   background: white;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   z-index: 200;
@@ -222,6 +225,9 @@
   min-height: 100vh;
   width: 100vw;
   padding: 0;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
   margin: 0;
   background: linear-gradient(to bottom right, #FEFCF8, #FEF7EE, #FEFCF8);
   position: fixed;
@@ -230,6 +236,8 @@
   right: 0;
   bottom: 0;
   overflow: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -250,9 +258,7 @@
    CARD
    ======================================== */
 .breakdown-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 24px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   padding: 1.5rem;
@@ -260,6 +266,17 @@
   max-width: 1152px;
   margin: 0 auto;
   animation: fadeInUp 1s ease-out forwards;
+}
+
+/* Apply backdrop blur only when supported and motion is allowed */
+@supports (backdrop-filter: blur(4px)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .breakdown-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+  }
 }
 
 @keyframes fadeInUp {
@@ -369,12 +386,12 @@
 
 @media (max-width: 640px) {
   .breakdown-progress-step {
-    width: 32px;
-    height: 32px;
-    font-size: 0.75rem;
+    width: 40px;
+    height: 40px;
+    font-size: 0.8125rem;
   }
   .breakdown-progress-text {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -636,10 +653,45 @@
   .breakdown-reset-button,
   .breakdown-skip-button {
     font-size: 0.875rem;
-    padding: 0.625rem 1rem;
+    padding: 0.75rem 1.25rem;
+    min-height: 48px;
   }
 
   .breakdown-action-buttons {
     flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus indicators for keyboard navigation */
+.breakdown-navbar-button:focus-visible,
+.breakdown-drawer-link:focus-visible,
+.breakdown-drawer-cta-button:focus-visible,
+.breakdown-back-button:focus-visible,
+.breakdown-continue-button:focus-visible,
+.breakdown-reset-button:focus-visible,
+.breakdown-skip-button:focus-visible,
+.breakdown-fragment-prev-button:focus-visible,
+.breakdown-fragment-next-button:focus-visible {
+  outline: 3px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .breakdown-card {
+    animation: none;
   }
 }
