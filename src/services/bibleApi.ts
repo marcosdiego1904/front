@@ -418,7 +418,7 @@ class BibleApiService {
       // NLT API returns HTML by default - parse it properly using DOM structure
       const html = await response.text();
 
-      console.log('🔍 NLT API - Parsing HTML response');
+      console.log('🔍 NLT API - Raw HTML for debugging:', html);
 
       // Extract text from HTML response using DOM parsing
       const parser = new DOMParser();
@@ -438,11 +438,16 @@ class BibleApiService {
       let cleanedText = '';
 
       verseExports.forEach((verseExport) => {
+        console.log('📝 Original verse_export HTML:', verseExport.innerHTML);
+
         // Clone the element so we can modify it without affecting the original
         const clone = verseExport.cloneNode(true) as HTMLElement;
 
         // Remove verse numbers (<span class="vn">)
-        clone.querySelectorAll('.vn').forEach(vn => vn.remove());
+        clone.querySelectorAll('.vn').forEach(vn => {
+          console.log('🗑️ Removing verse number:', vn.textContent);
+          vn.remove();
+        });
 
         // Remove chapter numbers
         clone.querySelectorAll('.chapter-number').forEach(cn => cn.remove());
@@ -458,6 +463,9 @@ class BibleApiService {
         clone.querySelectorAll('.tn').forEach(tn => tn.remove()); // Footnote text
         clone.querySelectorAll('.a-tn').forEach(a => a.remove()); // Footnote markers
 
+        console.log('📝 After removing elements:', clone.innerHTML);
+        console.log('📝 Text content before cleanup:', clone.textContent);
+
         // Get the cleaned text content
         const text = clone.textContent?.trim() || '';
 
@@ -466,12 +474,14 @@ class BibleApiService {
         }
       });
 
+      console.log('🔍 Combined text before final cleanup:', cleanedText);
+
       // Final cleanup
       cleanedText = cleanedText
         .replace(/\s+/g, ' ') // Normalize whitespace
         .trim();
 
-      console.log('✅ NLT verse extracted:', cleanedText.substring(0, 100) + '...');
+      console.log('✅ NLT verse extracted:', cleanedText);
 
       if (!cleanedText) {
         throw new Error('No verse text found after cleaning NLT response.');
