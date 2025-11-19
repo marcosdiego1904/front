@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import React from "react";
-import { Menu, X, RotateCcw, SkipForward, Check, Edit3 } from "lucide-react";
-import { useAuth } from "../../../src/auth/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import logo from "../../../src/oil-lamp.png";
+import { RotateCcw, SkipForward, Check, Edit3 } from "lucide-react";
+import HomepageNavigation from "../../../src/components/homepage-navigation";
 import "./style.css";
 
 interface Step {
@@ -51,28 +49,6 @@ const WriteFromMemorySection = ({
   onSkip
 }: Props) => {
   const [userInput, setUserInput] = useState("");
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-
-  const handleNavClick = (path: string) => {
-    navigate(path);
-    setDrawerOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-    setDrawerOpen(false);
-  };
-
-  const handleStartClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/register");
-    }
-    setDrawerOpen(false);
-  };
 
   // Normalize and split the verse & user input into words
   const words = cleanText(verse).split(/\s+/);
@@ -86,87 +62,7 @@ const WriteFromMemorySection = ({
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="write-navbar">
-        <div className="write-navbar-container">
-          <div className="write-navbar-content">
-            <button
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              className="write-navbar-button"
-              aria-label="Open navigation menu"
-              aria-expanded={drawerOpen}
-            >
-              <Menu className="h-5 w-5" aria-hidden="true" />
-              <span>Lamp to My Feet</span>
-              <img src={logo} alt="" aria-hidden="true" className="write-navbar-logo" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Drawer overlay */}
-      <div
-        className={`write-drawer-overlay ${drawerOpen ? "write-drawer-overlay-open" : ""}`}
-        onClick={() => setDrawerOpen(false)}
-      ></div>
-
-      {/* Drawer sidebar */}
-      <aside className={`write-drawer ${drawerOpen ? "write-drawer-open" : ""}`}>
-        <div className="write-drawer-header">
-          <div className="write-drawer-header-content" onClick={() => handleNavClick("/")}>
-            <span className="write-drawer-title">Lamp to My Feet</span>
-            <img src={logo} alt="Lamp Icon" className="write-drawer-logo" />
-          </div>
-          <button
-            onClick={() => setDrawerOpen(false)}
-            className="write-drawer-close"
-            aria-label="Close navigation menu"
-          >
-            <X className="h-5 w-5" aria-hidden="true" />
-          </button>
-        </div>
-
-        <nav className="write-drawer-nav">
-          <button onClick={() => handleNavClick("/")} className="write-drawer-link">
-            Home
-          </button>
-          <button onClick={() => handleNavClick("/bible-search")} className="write-drawer-link">
-            Bible Search
-          </button>
-          <button onClick={() => handleNavClick("/about")} className="write-drawer-link">
-            About
-          </button>
-          <button onClick={() => handleNavClick("/support")} className="write-drawer-link">
-            Support Us
-          </button>
-          {isAuthenticated && (
-            <button onClick={() => handleNavClick("/dashboard")} className="write-drawer-link">
-              Dashboard
-            </button>
-          )}
-
-          <div className="write-drawer-divider">
-            {!isAuthenticated ? (
-              <>
-                <button onClick={handleLoginClick} className="write-drawer-link">
-                  Log In
-                </button>
-                <div className="write-drawer-cta">
-                  <button onClick={handleStartClick} className="write-drawer-cta-button">
-                    Start for Free
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="write-drawer-cta">
-                <button onClick={() => handleNavClick("/dashboard")} className="write-drawer-cta-button">
-                  Dashboard
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-      </aside>
+      <HomepageNavigation />
 
       <main className="write-main-container">
         {/* Decorative background orbs */}

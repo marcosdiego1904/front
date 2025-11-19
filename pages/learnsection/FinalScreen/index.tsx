@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../src/auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Menu, X, Check, RotateCcw, Home, User } from "lucide-react";
+import { Check, RotateCcw, Home, User } from "lucide-react";
 import axios from "axios";
 import API_BASE_URL from "../../../src/config/api";
-import logo from "../../../src/oil-lamp.png";
+import HomepageNavigation from "../../../src/components/homepage-navigation";
 import "./style.css";
 
 interface Step {
@@ -39,7 +39,6 @@ interface SaveVerseResponse {
 const FinalScreen = ({ onRestart, prevStep, verse, currentStep, totalSteps, steps, onReset }: Props) => {
   const { isAuthenticated, getAuthHeader } = useAuth();
   const navigate = useNavigate();
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [saveStatus, setSaveStatus] = useState<{
     isSaving: boolean;
     success: boolean | null;
@@ -49,25 +48,6 @@ const FinalScreen = ({ onRestart, prevStep, verse, currentStep, totalSteps, step
     success: null,
     message: "",
   });
-
-  const handleNavClick = (path: string) => {
-    navigate(path);
-    setDrawerOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-    setDrawerOpen(false);
-  };
-
-  const handleStartClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/register");
-    }
-    setDrawerOpen(false);
-  };
 
   // Save the verse to the user's profile if they're authenticated
   useEffect(() => {
@@ -131,84 +111,7 @@ const FinalScreen = ({ onRestart, prevStep, verse, currentStep, totalSteps, step
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="final-navbar">
-        <div className="final-navbar-container">
-          <div className="final-navbar-content">
-            <button
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              className="final-navbar-button"
-            >
-              <Menu className="h-5 w-5" />
-              <span>Lamp to My Feet</span>
-              <img src={logo} alt="Lamp Icon" className="final-navbar-logo" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Drawer overlay */}
-      <div
-        className={`final-drawer-overlay ${drawerOpen ? "final-drawer-overlay-open" : ""}`}
-        onClick={() => setDrawerOpen(false)}
-      ></div>
-
-      {/* Drawer sidebar */}
-      <aside className={`final-drawer ${drawerOpen ? "final-drawer-open" : ""}`}>
-        <div className="final-drawer-header">
-          <div className="final-drawer-header-content" onClick={() => handleNavClick("/")}>
-            <span className="final-drawer-title">Lamp to My Feet</span>
-            <img src={logo} alt="Lamp Icon" className="final-drawer-logo" />
-          </div>
-          <button
-            onClick={() => setDrawerOpen(false)}
-            className="final-drawer-close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="final-drawer-nav">
-          <button onClick={() => handleNavClick("/")} className="final-drawer-link">
-            Home
-          </button>
-          <button onClick={() => handleNavClick("/bible-search")} className="final-drawer-link">
-            Bible Search
-          </button>
-          <button onClick={() => handleNavClick("/about")} className="final-drawer-link">
-            About
-          </button>
-          <button onClick={() => handleNavClick("/support")} className="final-drawer-link">
-            Support Us
-          </button>
-          {isAuthenticated && (
-            <button onClick={() => handleNavClick("/dashboard")} className="final-drawer-link">
-              Dashboard
-            </button>
-          )}
-
-          <div className="final-drawer-divider">
-            {!isAuthenticated ? (
-              <>
-                <button onClick={handleLoginClick} className="final-drawer-link">
-                  Log In
-                </button>
-                <div className="final-drawer-cta">
-                  <button onClick={handleStartClick} className="final-drawer-cta-button">
-                    Start for Free
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="final-drawer-cta">
-                <button onClick={() => handleNavClick("/dashboard")} className="final-drawer-cta-button">
-                  Dashboard
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-      </aside>
+      <HomepageNavigation />
 
       <main className="final-main-container">
         {/* Decorative background orbs */}
