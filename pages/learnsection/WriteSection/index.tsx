@@ -28,12 +28,26 @@ interface Props {
 
 // Helper function to clean text (removes punctuation, trims spaces, ignores case & quotes)
 // Enhanced to handle all quote types, em dashes, and other special characters
-const cleanText = (text: string) =>
-  text
-    .replace(/[.,;:!?"""''`—–\-]/g, "") // Remove punctuation including all quote types
-    .replace(/\s+/g, " ") // Normalize whitespace
-    .trim()
-    .toLowerCase();
+const cleanText = (text: string) => {
+  let cleaned = text;
+
+  // Remove all types of quotation marks (using explicit Unicode code points for reliability)
+  cleaned = cleaned.replace(/[\u201C\u201D]/g, ""); // Curly double quotes ""
+  cleaned = cleaned.replace(/[\u2018\u2019]/g, ""); // Curly single quotes ''
+  cleaned = cleaned.replace(/["'`]/g, "");           // Straight quotes and backticks
+
+  // Remove common punctuation
+  cleaned = cleaned.replace(/[.,;:!?]/g, "");
+
+  // Remove dashes (em dash, en dash, hyphen)
+  cleaned = cleaned.replace(/[\u2014\u2013\-]/g, "");
+
+  // Normalize all whitespace to single spaces
+  cleaned = cleaned.replace(/\s+/g, " ");
+
+  // Trim and convert to lowercase
+  return cleaned.trim().toLowerCase();
+};
 
 const WriteFromMemorySection = ({
   verse,
@@ -71,8 +85,20 @@ const WriteFromMemorySection = ({
   };
 
   // Normalize and split the verse & user input into words
-  const words = cleanText(verse).split(/\s+/);
-  const userWords = cleanText(userInput).split(/\s+/);
+  const cleanedVerse = cleanText(verse);
+  const cleanedUserInput = cleanText(userInput);
+
+  // Debug logging (remove in production)
+  if (userInput && process.env.NODE_ENV === 'development') {
+    console.log('🔍 WriteSection Debug:');
+    console.log('  Original verse:', verse.substring(0, 50) + '...');
+    console.log('  Cleaned verse:', cleanedVerse.substring(0, 50) + '...');
+    console.log('  User typed:', userInput.substring(0, 50) + '...');
+    console.log('  Cleaned user:', cleanedUserInput.substring(0, 50) + '...');
+  }
+
+  const words = cleanedVerse.split(/\s+/);
+  const userWords = cleanedUserInput.split(/\s+/);
 
   // Check if each word is correct
   const isCorrect = (index: number) => words[index] === (userWords[index] || "");
