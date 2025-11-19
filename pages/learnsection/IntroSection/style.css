@@ -224,6 +224,7 @@
   min-height: 100vh;
   width: 100vw;
   padding: 0;
+  padding-top: 4rem; /* Account for fixed navbar height */
   margin: 0;
   background: linear-gradient(to bottom right, #FEFCF8, #FEF7EE, #FEFCF8);
   position: fixed;
