@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import React from "react";
-import { ChevronDown, Menu, X, RotateCcw, SkipForward, Check } from "lucide-react";
-import { useAuth } from "../../../src/auth/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import logo from "../../../src/oil-lamp.png";
+import { ChevronDown, RotateCcw, SkipForward, Check } from "lucide-react";
+import HomepageNavigation from "../../../src/components/homepage-navigation";
 import "./style.css";
 
 interface Step {
@@ -38,109 +36,11 @@ const ReadAloudSection = ({
   onSkip
 }: Props) => {
   const [showInfo, setShowInfo] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-
-  const handleNavClick = (path: string) => {
-    navigate(path);
-    setDrawerOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-    setDrawerOpen(false);
-  };
-
-  const handleStartClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/register");
-    }
-    setDrawerOpen(false);
-  };
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="read-navbar">
-        <div className="read-navbar-container">
-          <div className="read-navbar-content">
-            <button
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              className="read-navbar-button"
-            >
-              <Menu className="h-5 w-5" />
-              <span>Lamp to My Feet</span>
-              <img src={logo} alt="Lamp Icon" className="read-navbar-logo" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Drawer overlay */}
-      <div
-        className={`read-drawer-overlay ${drawerOpen ? "read-drawer-overlay-open" : ""}`}
-        onClick={() => setDrawerOpen(false)}
-      ></div>
-
-      {/* Drawer sidebar */}
-      <aside className={`read-drawer ${drawerOpen ? "read-drawer-open" : ""}`}>
-        <div className="read-drawer-header">
-          <div className="read-drawer-header-content" onClick={() => handleNavClick("/")}>
-            <span className="read-drawer-title">Lamp to My Feet</span>
-            <img src={logo} alt="Lamp Icon" className="read-drawer-logo" />
-          </div>
-          <button
-            onClick={() => setDrawerOpen(false)}
-            className="read-drawer-close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="read-drawer-nav">
-          <button onClick={() => handleNavClick("/")} className="read-drawer-link">
-            Home
-          </button>
-          <button onClick={() => handleNavClick("/bible-search")} className="read-drawer-link">
-            Bible Search
-          </button>
-          <button onClick={() => handleNavClick("/about")} className="read-drawer-link">
-            About
-          </button>
-          <button onClick={() => handleNavClick("/support")} className="read-drawer-link">
-            Support Us
-          </button>
-          {isAuthenticated && (
-            <button onClick={() => handleNavClick("/dashboard")} className="read-drawer-link">
-              Dashboard
-            </button>
-          )}
-
-          <div className="read-drawer-divider">
-            {!isAuthenticated ? (
-              <>
-                <button onClick={handleLoginClick} className="read-drawer-link">
-                  Log In
-                </button>
-                <div className="read-drawer-cta">
-                  <button onClick={handleStartClick} className="read-drawer-cta-button">
-                    Start for Free
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="read-drawer-cta">
-                <button onClick={() => handleNavClick("/dashboard")} className="read-drawer-cta-button">
-                  Dashboard
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-      </aside>
+      {/* Homepage Navigation */}
+      <HomepageNavigation />
 
       <main className="read-main-container">
         {/* Decorative background orbs */}

@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import React from "react";
-import { Menu, X, RotateCcw, SkipForward, Check, Lightbulb } from "lucide-react";
-import { useAuth } from "../../../src/auth/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import logo from "../../../src/oil-lamp.png";
+import { RotateCcw, SkipForward, Check, Lightbulb } from "lucide-react";
+import HomepageNavigation from "../../../src/components/homepage-navigation";
 import "./style.css";
 
 interface Step {
@@ -84,28 +82,6 @@ const FillInTheBlanksSection = ({
 }: Props) => {
   const { hiddenVerse, answers, answerIndices } = hideWords(verse);
   const [userAnswers, setUserAnswers] = useState<string[]>(Array(answers.length).fill(""));
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-
-  const handleNavClick = (path: string) => {
-    navigate(path);
-    setDrawerOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-    setDrawerOpen(false);
-  };
-
-  const handleStartClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/register");
-    }
-    setDrawerOpen(false);
-  };
 
   const handleChange = (answerIndex: number, value: string) => {
     const newAnswers = [...userAnswers];
@@ -126,84 +102,7 @@ const FillInTheBlanksSection = ({
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="fillblanks-navbar">
-        <div className="fillblanks-navbar-container">
-          <div className="fillblanks-navbar-content">
-            <button
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              className="fillblanks-navbar-button"
-            >
-              <Menu className="h-5 w-5" />
-              <span>Lamp to My Feet</span>
-              <img src={logo} alt="Lamp Icon" className="fillblanks-navbar-logo" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Drawer overlay */}
-      <div
-        className={`fillblanks-drawer-overlay ${drawerOpen ? "fillblanks-drawer-overlay-open" : ""}`}
-        onClick={() => setDrawerOpen(false)}
-      ></div>
-
-      {/* Drawer sidebar */}
-      <aside className={`fillblanks-drawer ${drawerOpen ? "fillblanks-drawer-open" : ""}`}>
-        <div className="fillblanks-drawer-header">
-          <div className="fillblanks-drawer-header-content" onClick={() => handleNavClick("/")}>
-            <span className="fillblanks-drawer-title">Lamp to My Feet</span>
-            <img src={logo} alt="Lamp Icon" className="fillblanks-drawer-logo" />
-          </div>
-          <button
-            onClick={() => setDrawerOpen(false)}
-            className="fillblanks-drawer-close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="fillblanks-drawer-nav">
-          <button onClick={() => handleNavClick("/")} className="fillblanks-drawer-link">
-            Home
-          </button>
-          <button onClick={() => handleNavClick("/bible-search")} className="fillblanks-drawer-link">
-            Bible Search
-          </button>
-          <button onClick={() => handleNavClick("/about")} className="fillblanks-drawer-link">
-            About
-          </button>
-          <button onClick={() => handleNavClick("/support")} className="fillblanks-drawer-link">
-            Support Us
-          </button>
-          {isAuthenticated && (
-            <button onClick={() => handleNavClick("/dashboard")} className="fillblanks-drawer-link">
-              Dashboard
-            </button>
-          )}
-
-          <div className="fillblanks-drawer-divider">
-            {!isAuthenticated ? (
-              <>
-                <button onClick={handleLoginClick} className="fillblanks-drawer-link">
-                  Log In
-                </button>
-                <div className="fillblanks-drawer-cta">
-                  <button onClick={handleStartClick} className="fillblanks-drawer-cta-button">
-                    Start for Free
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="fillblanks-drawer-cta">
-                <button onClick={() => handleNavClick("/dashboard")} className="fillblanks-drawer-cta-button">
-                  Dashboard
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-      </aside>
+      <HomepageNavigation />
 
       <main className="fillblanks-main-container">
         {/* Decorative background orbs */}

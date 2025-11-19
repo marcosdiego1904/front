@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import React from "react";
-import { Menu, X, RotateCcw, SkipForward, Check, ChevronLeft, ChevronRight } from "lucide-react";
-import { useAuth } from "../../../src/auth/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import logo from "../../../src/oil-lamp.png";
+import { RotateCcw, SkipForward, Check, ChevronLeft, ChevronRight } from "lucide-react";
+import HomepageNavigation from "../../../src/components/homepage-navigation";
 import "./style.css";
 
 interface Step {
@@ -44,28 +42,6 @@ const VerseBreakdownSection = ({
 }: Props) => {
   const verseParts = fragmentVerse(verse);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-
-  const handleNavClick = (path: string) => {
-    navigate(path);
-    setDrawerOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-    setDrawerOpen(false);
-  };
-
-  const handleStartClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/register");
-    }
-    setDrawerOpen(false);
-  };
 
   const nextFragment = () => {
     if (currentIndex < verseParts.length - 1) {
@@ -81,84 +57,8 @@ const VerseBreakdownSection = ({
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="breakdown-navbar">
-        <div className="breakdown-navbar-container">
-          <div className="breakdown-navbar-content">
-            <button
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              className="breakdown-navbar-button"
-            >
-              <Menu className="h-5 w-5" />
-              <span>Lamp to My Feet</span>
-              <img src={logo} alt="Lamp Icon" className="breakdown-navbar-logo" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Drawer overlay */}
-      <div
-        className={`breakdown-drawer-overlay ${drawerOpen ? "breakdown-drawer-overlay-open" : ""}`}
-        onClick={() => setDrawerOpen(false)}
-      ></div>
-
-      {/* Drawer sidebar */}
-      <aside className={`breakdown-drawer ${drawerOpen ? "breakdown-drawer-open" : ""}`}>
-        <div className="breakdown-drawer-header">
-          <div className="breakdown-drawer-header-content" onClick={() => handleNavClick("/")}>
-            <span className="breakdown-drawer-title">Lamp to My Feet</span>
-            <img src={logo} alt="Lamp Icon" className="breakdown-drawer-logo" />
-          </div>
-          <button
-            onClick={() => setDrawerOpen(false)}
-            className="breakdown-drawer-close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="breakdown-drawer-nav">
-          <button onClick={() => handleNavClick("/")} className="breakdown-drawer-link">
-            Home
-          </button>
-          <button onClick={() => handleNavClick("/bible-search")} className="breakdown-drawer-link">
-            Bible Search
-          </button>
-          <button onClick={() => handleNavClick("/about")} className="breakdown-drawer-link">
-            About
-          </button>
-          <button onClick={() => handleNavClick("/support")} className="breakdown-drawer-link">
-            Support Us
-          </button>
-          {isAuthenticated && (
-            <button onClick={() => handleNavClick("/dashboard")} className="breakdown-drawer-link">
-              Dashboard
-            </button>
-          )}
-
-          <div className="breakdown-drawer-divider">
-            {!isAuthenticated ? (
-              <>
-                <button onClick={handleLoginClick} className="breakdown-drawer-link">
-                  Log In
-                </button>
-                <div className="breakdown-drawer-cta">
-                  <button onClick={handleStartClick} className="breakdown-drawer-cta-button">
-                    Start for Free
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="breakdown-drawer-cta">
-                <button onClick={() => handleNavClick("/dashboard")} className="breakdown-drawer-cta-button">
-                  Dashboard
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-      </aside>
+      {/* Homepage Navigation */}
+      <HomepageNavigation />
 
       <main className="breakdown-main-container">
         {/* Decorative background orbs */}
