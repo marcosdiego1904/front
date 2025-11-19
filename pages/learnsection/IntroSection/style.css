@@ -27,6 +27,13 @@
   justify-content: center;
 }
 
+@media (max-width: 640px) {
+  .intro-main-container {
+    align-items: flex-start; /* Prevent jumping when address bar hides */
+    padding-top: calc(4rem + max(env(safe-area-inset-top), 0px) + 1rem);
+  }
+}
+
 /* Content wrapper - centers the card */
 .intro-content-wrapper {
   max-width: 1536px;
