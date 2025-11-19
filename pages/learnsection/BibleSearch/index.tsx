@@ -4,8 +4,12 @@ import bibleApiService, { SearchedVerse } from '../../../src/services/bibleApi';
 import TranslationInfo from './TranslationInfo';
 import { useAuth } from '../../../src/auth/context/AuthContext';
 import { getSubscriptionStatus } from '../../../src/services/stripeApi';
+import { useSEO, seoTemplates } from '../../../src/hooks/useSEO';
 
 const BibleSearch: React.FC = () => {
+  // Apply SEO meta tags for Bible Search page
+  useSEO(seoTemplates.bibleSearch);
+
   const [searchInput, setSearchInput] = useState('');
   const [searchedVerse, setSearchedVerse] = useState<SearchedVerse | null>(null);
   const [isLoading, setIsLoading] = useState(false);

@@ -1,45 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage - Highest Priority -->
   <url>
     <loc>https://lamptomyfeet.co/</loc>
-    <lastmod>2025-06-10</lastmod>
+    <lastmod>2025-11-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  <url>
-    <loc>https://lamptomyfeet.co/learn</loc>
-    <lastmod>2025-06-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
+
+  <!-- Core Learning Pages - High Priority -->
   <url>
     <loc>https://lamptomyfeet.co/bible-search</loc>
-    <lastmod>2025-06-10</lastmod>
+    <lastmod>2025-11-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
+
+  <url>
+    <loc>https://lamptomyfeet.co/learn</loc>
+    <lastmod>2025-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://lamptomyfeet.co/ranks</loc>
+    <lastmod>2025-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Information Pages - Medium Priority -->
   <url>
     <loc>https://lamptomyfeet.co/about</loc>
-    <lastmod>2025-06-10</lastmod>
+    <lastmod>2025-11-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
+
   <url>
     <loc>https://lamptomyfeet.co/support</loc>
-    <lastmod>2025-06-10</lastmod>
+    <lastmod>2025-11-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.70</priority>
   </url>
+
+  <url>
+    <loc>https://lamptomyfeet.co/subscriptions</loc>
+    <lastmod>2025-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <!-- Legal Pages - Lower Priority -->
   <url>
     <loc>https://lamptomyfeet.co/terms</loc>
-    <lastmod>2025-06-10</lastmod>
+    <lastmod>2025-11-19</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.40</priority>
   </url>
+
   <url>
     <loc>https://lamptomyfeet.co/privacy</loc>
-    <lastmod>2025-06-10</lastmod>
+    <lastmod>2025-11-19</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.40</priority>
   </url>
+
+  <!-- Authentication Pages (Public) - Lower Priority -->
+  <url>
+    <loc>https://lamptomyfeet.co/login</loc>
+    <lastmod>2025-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+  </url>
+
+  <url>
+    <loc>https://lamptomyfeet.co/register</loc>
+    <lastmod>2025-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+  </url>
+
 </urlset>

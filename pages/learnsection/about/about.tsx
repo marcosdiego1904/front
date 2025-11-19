@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./constStyle.css";
+import { useSEO, seoTemplates } from "../../../src/hooks/useSEO";
 
 // Definiciones de tipos
 interface SectionProps {
@@ -131,6 +132,9 @@ const Testimonial: React.FC<TestimonialProps> = ({ quote, initials, name, title 
 );
 
 const AboutPage: React.FC = () => {
+  // Apply SEO meta tags for About page
+  useSEO(seoTemplates.about);
+
   // Texto del "video" - primera parte visible y texto completo
   const videoPreviewText = "Hello! I'm so glad you're here. If you've found Lamp to my feet, you've probably already taken the wonderful step of memorizing your first verse, and that... that really excites me. Scripture memorization changed my spiritual life, and I built this app to help you experience that same transformation.";
   
