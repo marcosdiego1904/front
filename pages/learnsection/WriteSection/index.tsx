@@ -26,14 +26,18 @@ interface Props {
   onSkip: () => void;
 }
 
-// Helper function to clean text (removes punctuation, trims spaces, ignores case & quotes)
-// Enhanced to handle all quote types, em dashes, and other special characters
-const cleanText = (text: string) =>
-  text
-    .replace(/[.,;:!?"""''`—–\-]/g, "") // Remove punctuation including all quote types
+// Helper function to normalize text for comparison
+// Removes all punctuation except apostrophes, normalizes whitespace, and converts to lowercase
+// This ensures users don't need to type quotes, periods, or other punctuation
+const cleanText = (text: string) => {
+  if (!text) return "";
+
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s']/g, "") // Remove all non-word characters except apostrophes
     .replace(/\s+/g, " ") // Normalize whitespace
-    .trim()
-    .toLowerCase();
+    .trim();
+};
 
 const WriteFromMemorySection = ({
   verse,
