@@ -14,6 +14,8 @@ import {
   cardHover
 } from "@/lib/animations"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { useAuth } from "@/auth/context/AuthContext"
+import { getSubscriptionStatus } from "@/services/stripeApi"
 
 export default function HeroSection() {
   const [searchValue, setSearchValue] = useState("")
@@ -22,11 +24,36 @@ export default function HeroSection() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTopicPopover, setActiveTopicPopover] = useState<string | null>(null)
+  const [isPremium, setIsPremium] = useState(false)
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const isMobile = useIsMobile()
+  const { user, token } = useAuth()
 
   const availableTranslations = bibleApiService.getAvailableTranslations()
+
+  // Check premium status
+  useEffect(() => {
+    const checkPremiumStatus = async () => {
+      if (user && token) {
+        // TEMPORARY: Grant premium to creator account for testing
+        if (user.email === 'marcosdiego1904@gmail.com') {
+          setIsPremium(true);
+          return;
+        }
+
+        try {
+          const status = await getSubscriptionStatus(token);
+          setIsPremium(status.hasSubscription);
+        } catch (error) {
+          console.error('Error checking premium status:', error);
+          setIsPremium(false);
+        }
+      }
+    };
+    checkPremiumStatus();
+  }, [user, token])
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -45,6 +72,17 @@ export default function HeroSection() {
     }
   }, [activeTopicPopover])
 
+  const handleTranslationChange = (translationId: string) => {
+    const translation = availableTranslations.find(t => t.id === translationId);
+
+    if (translation?.premium && !isPremium) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    setSelectedTranslation(translationId);
+  };
+
   const handleSearch = async () => {
     if (!searchValue.trim()) return
 
@@ -59,7 +97,7 @@ export default function HeroSection() {
     setError(null)
 
     try {
-      const verse = await bibleApiService.searchVerse(searchValue, selectedTranslation)
+      const verse = await bibleApiService.searchVerse(searchValue, selectedTranslation, isPremium)
 
       // Navigate to Learn page with the verse
       const normalizedVerse = {
@@ -296,12 +334,12 @@ export default function HeroSection() {
               <select
                 id="version-select"
                 value={selectedTranslation}
-                onChange={(e) => setSelectedTranslation(e.target.value)}
+                onChange={(e) => handleTranslationChange(e.target.value)}
                 className="w-full sm:w-auto text-sm px-4 py-2 rounded-lg border border-gray-300 bg-white/90 backdrop-blur-sm text-[#2C3E50] shadow-sm hover:bg-white hover:border-amber-400 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent cursor-pointer font-medium"
               >
                 {availableTranslations.map((translation) => (
                   <option key={translation.id} value={translation.id}>
-                    {translation.name} - {translation.fullName}
+                    {translation.name} - {translation.fullName} {translation.premium && !isPremium ? '🔒 PRO' : ''}
                   </option>
                 ))}
               </select>
@@ -456,6 +494,76 @@ export default function HeroSection() {
           </motion.svg>
         </motion.div>
       </motion.div>
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[200] p-4"
+          onClick={() => setShowUpgradeModal(false)}
+        >
+          <motion.div
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"
+            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          >
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">🔒</span>
+              </div>
+              <h2 className="text-2xl font-bold text-[#2C3E50] mb-2">Unlock Premium Translations</h2>
+              <p className="text-[#2C3E50]/70">
+                NIV and NLT are premium translations available exclusively to Pro members.
+              </p>
+            </div>
+
+            <div className="space-y-3 mb-6">
+              <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
+                <span className="text-xl">✓</span>
+                <div>
+                  <p className="font-semibold text-[#2C3E50]">NIV - New International Version</p>
+                  <p className="text-sm text-[#2C3E50]/70">World's most popular modern translation</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
+                <span className="text-xl">✓</span>
+                <div>
+                  <p className="font-semibold text-[#2C3E50]">NLT - New Living Translation</p>
+                  <p className="text-sm text-[#2C3E50]/70">Crystal-clear contemporary English</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
+                <span className="text-xl">✓</span>
+                <div>
+                  <p className="font-semibold text-[#2C3E50]">Unlimited Verse Memorization</p>
+                  <p className="text-sm text-[#2C3E50]/70">No limits on your learning journey</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => navigate('/subscriptions')}
+              className="w-full py-4 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              Upgrade to Pro - $9.99/mo
+            </button>
+
+            <p className="text-center text-sm text-[#2C3E50]/50 mt-4">
+              Cancel anytime. No questions asked.
+            </p>
+          </motion.div>
+        </div>
+      )}
     </motion.section>
   )
 }

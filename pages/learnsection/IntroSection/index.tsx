@@ -70,10 +70,12 @@ const IntroSection = ({
             <button
               onClick={() => setDrawerOpen(!drawerOpen)}
               className="intro-navbar-button"
+              aria-label="Open navigation menu"
+              aria-expanded={drawerOpen}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
               <span>Lamp to My Feet</span>
-              <img src={logo} alt="Lamp Icon" className="intro-navbar-logo" />
+              <img src={logo} alt="" aria-hidden="true" className="intro-navbar-logo" />
             </button>
           </div>
         </div>
@@ -95,8 +97,9 @@ const IntroSection = ({
           <button
             onClick={() => setDrawerOpen(false)}
             className="intro-drawer-close"
+            aria-label="Close navigation menu"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -273,10 +276,11 @@ const IntroSection = ({
             <button
               onClick={() => navigate(-1)}
               className="intro-return-button"
+              aria-label="Return to previous page"
             >
-              <ArrowLeft className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" />
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span className="hidden sm:inline">Return to Home</span>
-              <span className="sm:hidden">Home</span>
+              <span className="sm:hidden">Back</span>
             </button>
 
             {/* Center: Start Learning (Primary CTA) */}
@@ -289,20 +293,20 @@ const IntroSection = ({
               <button
                 onClick={onReset}
                 className="intro-reset-button"
-                title="Reset"
+                aria-label="Reset lesson to beginning"
               >
-                <RotateCcw className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-180" />
-                <span className="hidden sm:inline">Reset</span>
+                <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                <span>Reset</span>
               </button>
 
               {currentStep < totalSteps - 1 && (
                 <button
                   onClick={onSkip}
                   className="intro-skip-button"
-                  title="Skip to End"
+                  aria-label="Skip to final step"
                 >
-                  <span className="hidden sm:inline">Skip</span>
-                  <SkipForward className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  <span>Skip</span>
+                  <SkipForward className="w-4 h-4" aria-hidden="true" />
                 </button>
               )}
             </div>

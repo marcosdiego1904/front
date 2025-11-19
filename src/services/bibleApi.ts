@@ -281,43 +281,114 @@ class BibleApiService {
     // Parse the reference (e.g., "John 3:16" -> Book=John, Chapter=3, Verse=16)
     const parsedRef = this.parseReference(reference);
 
-    const url = `https://niv-bible.p.rapidapi.com/row?Book=${parsedRef.book}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
+    try {
+      let allVerses: any[] = [];
 
-    console.log('🌐 RapidAPI NIV URL:', url);
+      // If it's a verse range, fetch all verses in the range
+      if (parsedRef.endVerse) {
+        console.log(`📖 Fetching NIV verse range: ${parsedRef.verse}-${parsedRef.endVerse}`);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
-        'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
-        'Accept': 'application/json',
-      },
-      signal: AbortSignal.timeout(10000)
-    });
+        for (let v = parsedRef.verse; v <= parsedRef.endVerse; v++) {
+          const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${v}`;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('RapidAPI NIV Response Error:', errorText);
-      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
+              'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
+              'Accept': 'application/json',
+            },
+            signal: AbortSignal.timeout(30000)
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`RapidAPI NIV Response Error for verse ${v}:`, errorText);
+            throw new Error(`NIV API returned ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+
+          if (Array.isArray(data)) {
+            allVerses.push(...data);
+          } else {
+            allVerses.push(data);
+          }
+        }
+      } else {
+        // Single verse
+        const url = `https://niv-bible.p.rapidapi.com/row?Book=${encodeURIComponent(parsedRef.book)}&Chapter=${parsedRef.chapter}&Verse=${parsedRef.verse}`;
+        console.log('🌐 Fetching NIV verse:', url);
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': '563ea39f66msh0512ba3143fdccfp1bb39fjsnde81db4498b1',
+            'x-rapidapi-host': 'niv-bible.p.rapidapi.com',
+            'Accept': 'application/json',
+          },
+          signal: AbortSignal.timeout(30000)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('RapidAPI NIV Response Error:', errorText);
+          throw new Error(`NIV API returned ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        allVerses = Array.isArray(data) ? data : [data];
+      }
+
+      if (allVerses.length === 0) {
+        throw new Error('No verse found for this reference in NIV.');
+      }
+
+      // Extract text from all verses - NIV API has nested structure
+      const verseTexts = allVerses.map(verseData => {
+        // NIV API structure: { "Text": { "21888": "actual verse text" } }
+        // We need to extract the text from the nested object
+
+        if (verseData.Text && typeof verseData.Text === 'object') {
+          // Get the first value from the Text object
+          const textValues = Object.values(verseData.Text);
+          if (textValues.length > 0) {
+            return textValues[0] as string;
+          }
+        }
+
+        // Fallback to direct properties
+        return verseData.verse || verseData.text || verseData.content || '';
+      }).filter(Boolean);
+
+      if (verseTexts.length === 0) {
+        console.error('NIV API response missing verse text. Full response:', allVerses);
+        throw new Error('NIV API returned data but verse text field is missing. Please check console for details.');
+      }
+
+      const combinedText = verseTexts.join(' ');
+
+      const verseRef = parsedRef.endVerse
+        ? `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}-${parsedRef.endVerse}`
+        : `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`;
+
+      return {
+        id: 800000 + Math.floor(Math.random() * 99999),
+        verse_reference: verseRef,
+        text_nlt: combinedText
+          .replace(/[""]/g, '"') // Convert smart quotes to regular quotes
+          .replace(/['']/g, "'"), // Convert smart apostrophes to regular apostrophes
+        context_nlt: '',
+        translation: translation,
+      };
+    } catch (error) {
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        console.error('⏱️ NIV API timeout - API is slow or unreachable');
+        throw new Error('NIV API timed out. The service may be slow or unavailable. Please try again or use a different translation.');
+      }
+      throw error;
     }
-
-    const data = await response.json();
-    console.log('📋 RapidAPI NIV Response:', data);
-
-    // RapidAPI NIV returns an array of verses
-    if (!data || data.length === 0) {
-      throw new Error('No verse found for this reference.');
-    }
-
-    const verseData = Array.isArray(data) ? data[0] : data;
-
-    return {
-      id: 800000 + Math.floor(Math.random() * 99999),
-      verse_reference: `${parsedRef.book} ${parsedRef.chapter}:${parsedRef.verse}`,
-      text_nlt: verseData.verse || verseData.text || '',
-      context_nlt: '',
-      translation: translation,
-    };
   }
 
   /**
@@ -331,66 +402,137 @@ class BibleApiService {
 
     console.log('🌐 NLT API URL:', url);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-      signal: AbortSignal.timeout(10000)
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+        signal: AbortSignal.timeout(30000) // Increased to 30 seconds
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('NLT API Response Error:', errorText);
-      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('NLT API Response Error:', errorText);
+        throw new Error(`NLT API returned ${response.status}: ${response.statusText}`);
+      }
+
+      // NLT API returns HTML by default - parse it properly using DOM structure
+      const html = await response.text();
+
+      console.log('🔍 NLT API - Raw HTML for debugging:', html);
+
+      // Extract text from HTML response using DOM parsing
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      // ============================================
+      // ROBUST SOLUTION: Extract from verse_export tags only
+      // ============================================
+
+      // Find all <verse_export> elements (these contain the actual verse content)
+      const verseExports = doc.querySelectorAll('verse_export');
+
+      if (verseExports.length === 0) {
+        throw new Error('No verse content found in NLT API response.');
+      }
+
+      let cleanedText = '';
+
+      verseExports.forEach((verseExport) => {
+        console.log('📝 Original verse_export HTML:', verseExport.innerHTML);
+
+        // Clone the element so we can modify it without affecting the original
+        const clone = verseExport.cloneNode(true) as HTMLElement;
+
+        // Remove verse numbers (<span class="vn">)
+        clone.querySelectorAll('.vn').forEach(vn => {
+          console.log('🗑️ Removing verse number:', vn.textContent);
+          vn.remove();
+        });
+
+        // Remove chapter numbers
+        clone.querySelectorAll('.chapter-number').forEach(cn => cn.remove());
+
+        // Remove subheadings/titles
+        clone.querySelectorAll('.subhead').forEach(sh => sh.remove());
+        clone.querySelectorAll('h3, h4').forEach(h => h.remove());
+
+        // Remove psalm titles
+        clone.querySelectorAll('.psa-title').forEach(pt => pt.remove());
+
+        // Remove footnote markers and footnote text
+        clone.querySelectorAll('.tn').forEach(tn => tn.remove()); // Footnote text
+        clone.querySelectorAll('.a-tn').forEach(a => a.remove()); // Footnote markers
+
+        console.log('📝 After removing elements:', clone.innerHTML);
+        console.log('📝 Text content before cleanup:', clone.textContent);
+
+        // Get the cleaned text content
+        const text = clone.textContent?.trim() || '';
+
+        if (text) {
+          cleanedText += text + ' ';
+        }
+      });
+
+      console.log('🔍 Combined text before final cleanup:', cleanedText);
+
+      // Final cleanup
+      cleanedText = cleanedText
+        .replace(/\s+/g, ' ') // Normalize whitespace
+        .replace(/[""]/g, '"') // Convert smart quotes to regular quotes
+        .replace(/['']/g, "'") // Convert smart apostrophes to regular apostrophes
+        .trim();
+
+      console.log('✅ NLT verse extracted:', cleanedText);
+
+      if (!cleanedText) {
+        throw new Error('No verse text found after cleaning NLT response.');
+      }
+
+      return {
+        id: 800000 + Math.floor(Math.random() * 99999),
+        verse_reference: reference.trim(),
+        text_nlt: cleanedText,
+        context_nlt: '',
+        translation: translation,
+      };
+    } catch (error) {
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        console.error('⏱️ NLT API timeout - API is slow or unreachable');
+        throw new Error('NLT API timed out. The service may be slow or unavailable. Please try again or use a different translation.');
+      }
+      throw error;
     }
-
-    // NLT API returns HTML by default, but we can parse it
-    const html = await response.text();
-    console.log('📋 NLT API Response (HTML):', html.substring(0, 200));
-
-    // Extract text from HTML response
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    // Get the verse text (NLT API wraps verses in specific tags)
-    const verseText = doc.body.textContent?.trim() || '';
-
-    if (!verseText) {
-      throw new Error('No verse found for this reference.');
-    }
-
-    // Clean up the text (remove extra whitespace, reference numbers, etc.)
-    const cleanedText = verseText
-      .replace(/\[\d+\]/g, '') // Remove footnote markers like [1]
-      .replace(/\s+/g, ' ')    // Normalize whitespace
-      .trim();
-
-    return {
-      id: 800000 + Math.floor(Math.random() * 99999),
-      verse_reference: reference.trim(),
-      text_nlt: cleanedText,
-      context_nlt: '',
-      translation: translation,
-    };
   }
 
   /**
    * Analiza una referencia bíblica en sus componentes
    */
-  private parseReference(reference: string): { book: string; chapter: number; verse: number } {
-    // Match patterns like "John 3:16", "1 John 3:16", "Psalm 23:1"
-    const match = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)$/);
+  private parseReference(reference: string): { book: string; chapter: number; verse: number; endVerse?: number } {
+    // Match patterns like "John 3:16", "1 John 3:16", "Psalm 23:1", or "John 3:16-17"
+    const singleVerseMatch = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)$/);
+    const rangeMatch = reference.match(/^(\d?\s*[A-Za-z]+)\s+(\d+):(\d+)-(\d+)$/);
 
-    if (!match) {
-      throw new Error(`Invalid reference format: ${reference}. Use format like "John 3:16"`);
+    if (rangeMatch) {
+      // Verse range like "Philippians 4:6-7"
+      const book = rangeMatch[1].trim();
+      const chapter = parseInt(rangeMatch[2], 10);
+      const verse = parseInt(rangeMatch[3], 10);
+      const endVerse = parseInt(rangeMatch[4], 10);
+
+      return { book, chapter, verse, endVerse };
+    } else if (singleVerseMatch) {
+      // Single verse like "John 3:16"
+      const book = singleVerseMatch[1].trim();
+      const chapter = parseInt(singleVerseMatch[2], 10);
+      const verse = parseInt(singleVerseMatch[3], 10);
+
+      return { book, chapter, verse };
+    } else {
+      throw new Error(`Invalid reference format: ${reference}. Use format like "John 3:16" or "John 3:16-17"`);
     }
-
-    const book = match[1].trim();
-    const chapter = parseInt(match[2], 10);
-    const verse = parseInt(match[3], 10);
-
-    return { book, chapter, verse };
   }
 
   /**
@@ -443,7 +585,11 @@ class BibleApiService {
     return {
       id: bibleSearchId,
       verse_reference: verseReference.trim(),
-      text_nlt: verseText.replace(/(\r\n|\n|\r)/gm, " ").trim(),
+      text_nlt: verseText
+        .replace(/(\r\n|\n|\r)/gm, " ")
+        .replace(/[""]/g, '"') // Convert smart quotes to regular quotes
+        .replace(/['']/g, "'") // Convert smart apostrophes to regular apostrophes
+        .trim(),
       context_nlt: '', // Set to empty string to avoid displaying extra info
       translation: translation,
     };

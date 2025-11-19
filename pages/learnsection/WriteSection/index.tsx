@@ -26,9 +26,18 @@ interface Props {
   onSkip: () => void;
 }
 
-// Helper function to clean text (removes punctuation, trims spaces, ignores case & quotes)
-const cleanText = (text: string) =>
-  text.replace(/[.,;:!?"""'`]/g, "").trim().toLowerCase();
+// Helper function to normalize text for comparison
+// Removes all punctuation except apostrophes, normalizes whitespace, and converts to lowercase
+// This ensures users don't need to type quotes, periods, or other punctuation
+const cleanText = (text: string) => {
+  if (!text) return "";
+
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s']/g, "") // Remove all non-word characters except apostrophes
+    .replace(/\s+/g, " ") // Normalize whitespace
+    .trim();
+};
 
 const WriteFromMemorySection = ({
   verse,
@@ -84,10 +93,12 @@ const WriteFromMemorySection = ({
             <button
               onClick={() => setDrawerOpen(!drawerOpen)}
               className="write-navbar-button"
+              aria-label="Open navigation menu"
+              aria-expanded={drawerOpen}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
               <span>Lamp to My Feet</span>
-              <img src={logo} alt="Lamp Icon" className="write-navbar-logo" />
+              <img src={logo} alt="" aria-hidden="true" className="write-navbar-logo" />
             </button>
           </div>
         </div>
@@ -109,8 +120,9 @@ const WriteFromMemorySection = ({
           <button
             onClick={() => setDrawerOpen(false)}
             className="write-drawer-close"
+            aria-label="Close navigation menu"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -244,7 +256,7 @@ const WriteFromMemorySection = ({
 
             {/* Action Bar */}
             <div className="write-action-bar">
-              <button onClick={prevStep} className="write-back-button">
+              <button onClick={prevStep} className="write-back-button" aria-label="Go back to previous step">
                 ← Back
               </button>
 
@@ -257,15 +269,15 @@ const WriteFromMemorySection = ({
               </button>
 
               <div className="write-action-buttons">
-                <button onClick={onReset} className="write-reset-button" title="Reset">
-                  <RotateCcw className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-180" />
-                  <span className="hidden sm:inline">Reset</span>
+                <button onClick={onReset} className="write-reset-button" aria-label="Reset lesson to beginning">
+                  <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                  <span>Reset</span>
                 </button>
 
                 {currentStep < totalSteps - 1 && (
-                  <button onClick={onSkip} className="write-skip-button" title="Skip to End">
-                    <span className="hidden sm:inline">Skip</span>
-                    <SkipForward className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  <button onClick={onSkip} className="write-skip-button" aria-label="Skip to final step">
+                    <span>Skip</span>
+                    <SkipForward className="w-4 h-4" aria-hidden="true" />
                   </button>
                 )}
               </div>
