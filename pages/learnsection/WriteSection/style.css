@@ -265,6 +265,15 @@
   }
 }
 
+@media (max-width: 640px) {
+  .write-content-wrapper {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0.75rem;
+    gap: 1rem;
+  }
+}
+
 /* ========================================
    CARD
    ======================================== */
@@ -327,10 +336,13 @@
 
 @media (max-width: 640px) {
   .write-main-container {
-    padding: 4.5rem 1rem 1.5rem;
+    padding-top: calc(4rem + max(env(safe-area-inset-top), 0px) + 1rem);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 1.5rem;
   }
   .write-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 16px;
   }
 }
@@ -342,6 +354,13 @@
   margin-bottom: 1.25rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+}
+
+@media (max-width: 640px) {
+  .write-progress-section {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
 }
 
 .write-progress-bar-wrapper {
@@ -419,12 +438,16 @@
 
 @media (max-width: 640px) {
   .write-progress-step {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     font-size: 0.75rem;
   }
   .write-progress-text {
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+  .write-progress-steps {
+    gap: 0.25rem;
   }
 }
 

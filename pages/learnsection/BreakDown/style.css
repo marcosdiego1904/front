@@ -255,6 +255,14 @@
   z-index: 10;
 }
 
+@media (max-width: 640px) {
+  .breakdown-content-wrapper {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
 /* ========================================
    CARD
    ======================================== */
@@ -303,6 +311,15 @@
   }
 }
 
+@media (max-width: 640px) {
+  .breakdown-main-container {
+    padding-top: calc(4rem + max(env(safe-area-inset-top), 0px) + 1rem);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
 /* ========================================
    PROGRESS TIMELINE
    ======================================== */
@@ -310,6 +327,13 @@
   margin-bottom: 1.25rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+}
+
+@media (max-width: 640px) {
+  .breakdown-progress-section {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
 }
 
 .breakdown-progress-bar-wrapper {
@@ -387,12 +411,16 @@
 
 @media (max-width: 640px) {
   .breakdown-progress-step {
-    width: 40px;
-    height: 40px;
-    font-size: 0.8125rem;
+    width: 36px;
+    height: 36px;
+    font-size: 0.75rem;
   }
   .breakdown-progress-text {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+  .breakdown-progress-steps {
+    gap: 0.25rem;
   }
 }
 
