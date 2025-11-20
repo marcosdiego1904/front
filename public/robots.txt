@@ -1,0 +1,37 @@
+# Lamp to My Feet - Bible Verse Memorization Platform
+# https://lamptomyfeet.co
+
+User-agent: *
+Allow: /
+
+# Block private/protected areas
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /api/
+Disallow: /memorized-verses/
+Disallow: /*.json$
+Disallow: /*/preview
+
+# Explicitly allow important public pages
+Allow: /$
+Allow: /learn$
+Allow: /bible-search$
+Allow: /ranks$
+Allow: /about$
+Allow: /support$
+Allow: /subscriptions$
+Allow: /terms$
+Allow: /privacy$
+
+# Block common bot spam
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://lamptomyfeet.co/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

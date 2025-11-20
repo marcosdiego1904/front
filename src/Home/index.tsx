@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react"
 import HeroSection from "@/components/hero-section"
+import { useSEO, seoTemplates } from "@/hooks/useSEO"
 
 // Lazy load sections below the fold for better performance
 const TurningPointSection = lazy(() => import("@/components/turning-point-section"))
@@ -10,6 +11,9 @@ const SocialProofSection = lazy(() => import("@/components/social-proof-section"
 const GettingStartedSection = lazy(() => import("@/components/getting-started-section"))
 
 export default function Home() {
+  // Apply SEO meta tags for homepage
+  useSEO(seoTemplates.home);
+
   return (
     <main className="min-h-screen">
       {/* HeroSection loads immediately for fast initial paint */}
