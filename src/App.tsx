@@ -31,6 +31,9 @@ import RanksPage from "../pages/learnsection/RanksPage/RanksPage";
 // Import Memorized Verses page
 import MemorizedVerses from "../pages/learnsection/memorizedVerses";
 
+// Import Challenge page
+import ChallengePage from "../pages/Challenge";
+
 // En src/index.tsx o App.tsx
 import './styles/global-design-system.css';
 
@@ -68,6 +71,7 @@ const AppRoutes = () => {
     { path: "/about", element: <AboutPage /> },
     { path: "/support", element: <SupportPage /> },
     { path: "/subscriptions", element: <Subscriptions /> },
+    { path: "/challenge", element: <ChallengePage /> },
 
     // New Terms and Privacy routes
     { path: "/terms", element: <TermsOfService /> },
@@ -100,7 +104,7 @@ const Layout = () => {
   const isHomePage = location.pathname === '/';
 
   // Pages that should use HomepageNavigation (redesigned pages with homepage design system)
-  const usesHomepageNav = ['/', '/bible-search', '/ranks', '/about', '/support', '/subscriptions', '/dashboard', '/profile', '/memorized-verses'].includes(location.pathname);
+  const usesHomepageNav = ['/', '/bible-search', '/ranks', '/about', '/support', '/subscriptions', '/dashboard', '/profile', '/memorized-verses', '/challenge'].includes(location.pathname);
 
   // Pages that should have NO navbar at all (learning flow, auth pages)
   const noNavbar = ['/learn', '/login', '/register', '/forgot-password'].includes(location.pathname);
