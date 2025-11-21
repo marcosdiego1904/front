@@ -106,12 +106,14 @@ export default function HomepageNavigation() {
               >
                 Support Us
               </button>
-              <button
-                onClick={() => handleNavClick("/subscriptions")}
-                className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 rounded-lg transition-all duration-200 no-underline font-semibold shadow-md hover:shadow-lg"
-              >
-                Go Premium
-              </button>
+              {isAuthenticated && (
+                <button
+                  onClick={() => handleNavClick("/subscriptions")}
+                  className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 rounded-lg transition-all duration-200 no-underline font-semibold shadow-md hover:shadow-lg"
+                >
+                  Go Premium
+                </button>
+              )}
             </div>
           </div>
 
@@ -196,12 +198,14 @@ export default function HomepageNavigation() {
           >
             Support Us
           </button>
-          <button
-            onClick={() => handleNavClick("/subscriptions")}
-            className="block w-full text-left px-4 py-3 text-base font-medium bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 rounded-lg transition-all duration-200 no-underline font-semibold shadow-md"
-          >
-            Go Premium
-          </button>
+          {isAuthenticated && (
+            <button
+              onClick={() => handleNavClick("/subscriptions")}
+              className="block w-full text-left px-4 py-3 text-base font-medium bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 hover:from-amber-400 hover:to-amber-300 rounded-lg transition-all duration-200 no-underline font-semibold shadow-md"
+            >
+              Go Premium
+            </button>
+          )}
 
           <div className="pt-3 border-t border-gray-200/50 mt-3">
             {!isAuthenticated ? (
