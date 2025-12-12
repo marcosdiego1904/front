@@ -89,29 +89,40 @@ const Register: React.FC = () => {
   
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
-    
+
     if (!formData.username.trim()) {
       errors.username = 'Username is required';
     } else if (formData.username.length < 3) {
       errors.username = 'Username must be at least 3 characters';
+    } else if (formData.username.length > 30) {
+      errors.username = 'Username must be less than 30 characters';
     }
-    
+
     if (!formData.email.trim()) {
       errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = 'Email is invalid';
     }
-    
+
+    // SECURITY: Stronger password validation
     if (!formData.password) {
       errors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 12) {
+      errors.password = 'Password must be at least 12 characters';
+    } else if (!/(?=.*[a-z])/.test(formData.password)) {
+      errors.password = 'Password must contain at least one lowercase letter';
+    } else if (!/(?=.*[A-Z])/.test(formData.password)) {
+      errors.password = 'Password must contain at least one uppercase letter';
+    } else if (!/(?=.*\d)/.test(formData.password)) {
+      errors.password = 'Password must contain at least one number';
+    } else if (!/(?=.*[@$!%*?&])/.test(formData.password)) {
+      errors.password = 'Password must contain at least one special character (@$!%*?&)';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
