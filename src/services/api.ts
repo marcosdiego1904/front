@@ -12,7 +12,9 @@ export const getCategories = async () => {
     const response = await api.get("/categories");
     return response.data;
   } catch (error) {
-    console.error("Error fetching categories:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error fetching categories:", error);
+    }
     return [];
   }
 };
@@ -22,7 +24,9 @@ export const getSubcategories = async (categoryId: number) => {
     const response = await api.get(`/subcategories/${categoryId}`);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching subcategories for category ${categoryId}:`, error);
+    if (import.meta.env.DEV) {
+      console.error(`Error fetching subcategories for category ${categoryId}:`, error);
+    }
     return [];
   }
 };
@@ -32,7 +36,9 @@ export const getVerses = async (subcategoryId: number) => {
     const response = await api.get(`/verses/${subcategoryId}`);
     return response.data;
   } catch (error) {
-    console.error("Error obteniendo versículos:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error obteniendo versículos:", error);
+    }
     return [];
   }
 };
@@ -55,7 +61,9 @@ export const saveMemorizedVerse = async (
     });
     return response.data;
   } catch (error) {
-    console.error("Error saving memorized verse:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error saving memorized verse:", error);
+    }
     throw error;
   }
 };
@@ -69,7 +77,9 @@ export const getMemorizedVerses = async (token: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error fetching memorized verses:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error fetching memorized verses:", error);
+    }
     throw error;
   }
 };
@@ -80,7 +90,9 @@ export const getVerseById = async (verseId: number) => {
     const response = await api.get(`/verse/${verseId}`);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching verse with ID ${verseId}:`, error);
+    if (import.meta.env.DEV) {
+      console.error(`Error fetching verse with ID ${verseId}:`, error);
+    }
     return null;
   }
 };
