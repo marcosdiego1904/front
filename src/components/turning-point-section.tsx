@@ -381,9 +381,10 @@ export default function TurningPointSection() {
                             <Button
                               size="lg"
                               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                              className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-nunito-sans font-semibold text-base px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-emerald-500/20"
+                              className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-nunito-sans font-semibold text-sm sm:text-base px-4 sm:px-8 py-3 rounded-xl transform transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl mb-3 border border-emerald-500/20 w-full sm:w-auto"
                             >
-                              Learn Your First Life-Changing Verse — Free
+                              <span className="hidden sm:inline">Learn Your First Life-Changing Verse — Free</span>
+                              <span className="sm:hidden">Learn Your First Verse — Free</span>
                             </Button>
                           </motion.div>
 
