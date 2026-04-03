@@ -223,7 +223,7 @@ export default function HeroSection() {
       )}
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full py-20 pb-64">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full py-20 pb-16">
         <motion.div
           className="space-y-12 text-center"
           variants={staggerContainer}
@@ -274,7 +274,7 @@ export default function HeroSection() {
             variants={fadeInUp}
           >
             <div
-              className={`flex flex-col sm:flex-row items-stretch bg-white border-[3px] sm:rounded-full rounded-2xl overflow-hidden transition-all duration-300 ${isSearchFocused ? "shadow-[0_6px_28px_rgba(217,119,6,0.35)] -translate-y-0.5" : "shadow-[0_4px_20px_rgba(217,119,6,0.2)]"}`}
+              className={`flex flex-col sm:flex-row items-stretch bg-white border-[3px] sm:rounded-full rounded-2xl overflow-hidden transition-all duration-300 min-w-0 ${isSearchFocused ? "shadow-[0_6px_28px_rgba(217,119,6,0.35)] -translate-y-0.5" : "shadow-[0_4px_20px_rgba(217,119,6,0.2)]"}`}
               style={{ borderColor: 'rgb(217, 119, 6)' }}
             >
                 <div className="flex items-center flex-1">
@@ -306,19 +306,19 @@ export default function HeroSection() {
                 <motion.button
                   onClick={handleSearch}
                   disabled={isLoading || !searchValue.trim()}
-                  className="relative overflow-hidden px-8 sm:px-10 py-4 sm:py-[1.125rem] bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-base sm:text-lg font-bold transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed border-t-2 sm:border-t-0 sm:border-l-2 border-emerald-500/30"
+                  className="relative overflow-hidden px-6 sm:px-10 py-4 sm:py-[1.125rem] bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-sm sm:text-lg font-bold transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed border-t-2 sm:border-t-0 sm:border-l-2 border-emerald-500/30 flex-shrink-0"
                   whileHover={!isLoading && searchValue.trim() ? buttonHover : {}}
                   whileTap={!isLoading && searchValue.trim() ? buttonTap : {}}
                 >
-                  <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                  <span className="relative z-10 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
                     {isLoading ? (
-                      'Searching...'
+                      <span className="text-sm sm:text-base">Searching...</span>
                     ) : (
                       <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        Search
+                        <span className="hidden sm:inline">Search</span>
                       </>
                     )}
                   </span>
@@ -459,41 +459,6 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator - positioned relative to full section for perfect centering */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        variants={fadeInUp}
-      >
-        <motion.div
-          className="flex flex-col items-center gap-2 text-[#2C3E50]/50"
-          animate={{
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <span className="text-sm">Scroll to learn more</span>
-          <motion.svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            animate={{
-              y: [0, 5, 0],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </motion.svg>
-        </motion.div>
-      </motion.div>
 
       {/* Upgrade Modal */}
       {showUpgradeModal && (
